@@ -3,3 +3,17 @@ __pycache__/
 .ipynb_checkpoints/
 *.safetensors
 *.bin
+
+# Etiquetado LLM fallido (404 del modelo), se guarda solo como referencia local
+datos/etiquetas_llm_fallido.csv
+datos/etiquetas_llm_progreso.csv
+
+# Artefactos de entrenamiento (no versionar)
+checkpoint-*/
+*.pt
+*.pth
+training_args.bin
+optimizer.pt
+scheduler.pt
+rng_state*.pth
+ver_desacuerdos.py

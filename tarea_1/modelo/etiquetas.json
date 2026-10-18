@@ -1,0 +1,14 @@
+{
+  "id2label": {
+    "0": "politica",
+    "1": "economia",
+    "2": "deportes",
+    "3": "ciencia_tecnologia"
+  },
+  "label2id": {
+    "politica": 0,
+    "economia": 1,
+    "deportes": 2,
+    "ciencia_tecnologia": 3
+  }
+}

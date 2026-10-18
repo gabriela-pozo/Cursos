@@ -1,0 +1,13 @@
+{
+  "f1_macro_test": 0.7841,
+  "accuracy_test": 0.8103,
+  "zero_shot_accuracy_40": 0.825,
+  "zero_shot_f1_macro_40": 0.8202,
+  "acuerdo_llm_humano_de_20": 16,
+  "acuerdo_llm_vs_seccion": 0.9195,
+  "modelo_base": "distilbert-base-multilingual-cased",
+  "modelo_llm": "gemini-3.5-flash-lite",
+  "n_train": 269,
+  "n_val": 58,
+  "n_test": 58
+}
