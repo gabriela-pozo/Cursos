@@ -1,0 +1,8 @@
+# Dashboard (Parte 3). Versiones de pandas, plotly y scikit-learn = las usadas en el desarrollo.
+streamlit==1.65.0
+pandas==3.0.3
+plotly==7.1.0
+scikit-learn==1.9.1
+
+# Opcional: para usar el modelo con fine-tuning en vez del respaldo ligero (TF-IDF).
+# Instalar aparte (ver README):  torch (CPU) + transformers==5.20.1
