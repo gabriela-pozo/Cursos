@@ -39,12 +39,7 @@ El LLM (`gemini-3.5-flash-lite`) coincide con la sección de El Comercio en el 9
 pip install -r requirements.txt
 streamlit run app.py
 ```
-Sin torch, el clasificador en vivo usa un **respaldo ligero** (TF-IDF + regresión logística) y la app lo indica. Para usar el modelo con fine-tuning:
-```bash
-pip install torch --index-url https://download.pytorch.org/whl/cpu
-pip install transformers==5.20.1
-```
-El modelo se descarga de Hugging Face Hub (`REPO_HF` en `app.py`); los pesos no se versionan por el límite de 100 MB de GitHub.
+`requirements.txt` ya incluye torch (CPU) y transformers. El clasificador en vivo usa el modelo con fine-tuning, que se descarga de Hugging Face Hub (`REPO_HF` en `app.py`); si la descarga falla, usa un **respaldo ligero** (TF-IDF + regresión logística) y la app lo indica. Los pesos no se versionan por el límite de 100 MB de GitHub.
 
 ## Análisis de entidades (NER)
 [`03_ner.ipynb`](03_ner.ipynb) extrae personas, organizaciones y lugares de los titulares con `mrm8488/bert-spanish-cased-finetuned-ner` (`datos/entidades.csv`).
@@ -53,8 +48,8 @@ Hallazgo principal: política es la categoría más concentrada (Keiko Fujimori 
 ## Estructura
 ```
 01_recoleccion.ipynb   02_clasificacion.ipynb   03_ner.ipynb   app.py   requirements.txt
-datos/  noticias.csv · etiquetas_llm.csv · split.csv · predicciones_test.csv
-modelo/ metricas.json · etiquetas.json · matriz_confusion.png
+datos/  noticias.csv · etiquetas_llm.csv · split.csv · predicciones_test.csv · entidades.csv
+modelo/ metricas.json · etiquetas.json · matriz_confusion.png · ner_top_entidades.png
 ```
 
 **Dashboard en vivo:** https://titulares-pe-gabriela.streamlit.app

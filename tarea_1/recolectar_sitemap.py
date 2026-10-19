@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # Cambia el correo por el tuyo (buena practica: identificarte ante el sitio).
-UA = "CursoDS-Tarea1/1.0 (proyecto academico; contacto: TU_CORREO@ejemplo.com)"
+UA = "CursoDS-Tarea1/1.0 (proyecto academico; contacto: github.com/gabriela-pozo)"
 HEADERS = {"User-Agent": UA}
 PAUSA = 1.5
 RUTA = Path("datos/raw/acumulado.csv")
