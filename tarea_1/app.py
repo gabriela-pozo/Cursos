@@ -87,10 +87,10 @@ def clasificador():
 
 
 def main():
-    st.set_page_config(page_title="Titulares peruanos", page_icon="📰", layout="wide")
+    st.set_page_config(page_title="Titulares peruanos", layout="wide")
     df, metricas = noticias(), metricas_modelo()
 
-    st.title("📰 Clasificador de titulares peruanos")
+    st.title("Clasificador de titulares peruanos")
     st.caption("Tarea 1 · Titulares de El Comercio (descargados el 17 y 18 de octubre de 2026) "
                "clasificados en política, economía, deportes y ciencia y tecnología.")
 
