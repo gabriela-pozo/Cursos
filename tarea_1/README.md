@@ -43,7 +43,7 @@ streamlit run app.py
 
 ## Análisis de entidades (NER)
 [`03_ner.ipynb`](03_ner.ipynb) extrae personas, organizaciones y lugares de los titulares con `mrm8488/bert-spanish-cased-finetuned-ner` (`datos/entidades.csv`).
-Hallazgo principal: política es la categoría más concentrada (Keiko Fujimori en 11 titulares; Senado en 12 y Congreso en 9), mientras que en economía ninguna persona aparece más de una vez.
+Hallazgo principal: política es la categoría más concentrada (Keiko Fujimori en 11 titulares; Senado en 12 y Congreso en 9), mientras que en economía ninguna persona aparece más de una vez. Los resultados también se muestran en el dashboard, en la sección "Entidades más mencionadas (NER)".
 
 ## Estructura
 ```

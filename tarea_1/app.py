@@ -16,6 +16,9 @@ NOMBRES = {"politica": "Política", "economia": "Economía", "deportes": "Deport
 # Paleta Okabe-Ito (apta para daltonismo), fija por categoría en todos los gráficos.
 COLORES = {"Política": "#0072B2", "Economía": "#E69F00", "Deportes": "#009E73", "Ciencia y tecnología": "#CC79A7"}
 ORDEN = {"categoria": list(NOMBRES.values())}
+TIPOS_NER = {"Personas (PER)": ("PER", "la persona más mencionada"),
+             "Organizaciones (ORG)": ("ORG", "la organización más mencionada"),
+             "Lugares (LOC)": ("LOC", "el lugar más mencionado")}
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
          "noviembre", "diciembre"]
 REPO_HF = "gabriela-pozo/noticias-pe-distilbert"  # modelo publicado en Hugging Face Hub
@@ -27,6 +30,16 @@ def leer_noticias(ruta=BASE / "datos" / "noticias.csv"):
     df["fecha"] = pd.to_datetime(df["fecha"], errors="coerce")
     df["categoria"] = df["etiqueta"].map(NOMBRES)
     return df
+
+
+def leer_entidades(ruta=BASE / "datos" / "entidades.csv"):
+    """Entidades extraídas en 03_ner.ipynb; DataFrame vacío si el archivo no existe o está vacío."""
+    try:
+        ent = pd.read_csv(ruta)
+    except (FileNotFoundError, pd.errors.EmptyDataError):
+        return pd.DataFrame(columns=["url", "etiqueta", "entidad", "tipo", "score", "categoria"])
+    ent["categoria"] = ent["etiqueta"].map(NOMBRES)
+    return ent
 
 
 def leer_metricas(ruta=BASE / "modelo" / "metricas.json"):
@@ -90,6 +103,11 @@ def noticias():
 
 
 @st.cache_data
+def entidades():
+    return leer_entidades()
+
+
+@st.cache_data
 def metricas_modelo():
     return leer_metricas()
 
@@ -148,6 +166,33 @@ def main():
                                 "url": st.column_config.LinkColumn("enlace", display_text="abrir")})
     st.download_button("Descargar selección en CSV", filtrado.to_csv(index=False).encode("utf-8"),
                        "noticias_filtradas.csv", "text/csv")
+
+    # --- entidades (NER)
+    st.subheader("Entidades más mencionadas (NER)")
+    st.markdown("Modelo `mrm8488/bert-spanish-cased-finetuned-ner` aplicado a los titulares; "
+                "solo entidades con score de 0.80 o más.")
+    ent = entidades()
+    if ent.empty:
+        st.info("No se encontró `datos/entidades.csv`: ejecuta `03_ner.ipynb` para generarlo.")
+    else:
+        eleccion = st.radio("Tipo de entidad", list(TIPOS_NER), horizontal=True)
+        tipo, frase = TIPOS_NER[eleccion]
+        sel = ent[(ent["tipo"] == tipo) & ent["categoria"].isin(categorias)]
+        conteo = sel.groupby(["entidad", "categoria"])["url"].nunique().reset_index(name="titulares")
+        total = conteo.groupby("entidad")["titulares"].sum().sort_values(ascending=False, kind="stable")
+        if total.empty:
+            st.info("No hay entidades de ese tipo en las categorías seleccionadas.")
+        else:
+            top = total.head(10).index
+            titulo = f"{total.index[0]} es {frase}: {total.iloc[0]} titulares"
+            fig4 = px.bar(conteo[conteo["entidad"].isin(top)], x="titulares", y="entidad", color="categoria",
+                          orientation="h", title=titulo, color_discrete_map=COLORES,
+                          category_orders={**ORDEN, "entidad": list(top)})
+            fig4.update_layout(xaxis_title="Titulares", yaxis_title=None, legend_title=None)
+            st.plotly_chart(fig4, width="stretch")
+        st.caption("Limitación: el modelo se entrenó con noticias españolas del año 2000 (CoNLL-2002) y puede fallar "
+                   "con nombres o partidos peruanos; las variantes de una misma entidad se cuentan por separado, "
+                   "por lo que los conteos son aproximados.")
 
     # --- clasificador en vivo
     st.subheader("Clasifica un titular")
