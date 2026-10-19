@@ -13,6 +13,11 @@ BASE = Path(__file__).parent
 ETIQUETAS = ["politica", "economia", "deportes", "ciencia_tecnologia"]
 NOMBRES = {"politica": "Política", "economia": "Economía", "deportes": "Deportes",
            "ciencia_tecnologia": "Ciencia y tecnología"}
+# Paleta Okabe-Ito (apta para daltonismo), fija por categoría en todos los gráficos.
+COLORES = {"Política": "#0072B2", "Economía": "#E69F00", "Deportes": "#009E73", "Ciencia y tecnología": "#CC79A7"}
+ORDEN = {"categoria": list(NOMBRES.values())}
+MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre",
+         "noviembre", "diciembre"]
 REPO_HF = "gabriela-pozo/noticias-pe-distilbert"  # modelo publicado en Hugging Face Hub
 
 
@@ -71,6 +76,14 @@ def titulo_analitico(df):
     return f"{cuenta.index[0]} concentra el {cuenta.iloc[0] / len(df):.0%} de las {len(df)} noticias seleccionadas"
 
 
+def titulo_por_dia(por_dia):
+    total = por_dia.groupby("fecha")["noticias"].sum()
+    if total.empty:
+        return "Publicaciones por día y categoría"
+    dia = total.idxmax()
+    return f"El {dia.day} de {MESES[dia.month - 1]} fue el día con más publicaciones: {total.max()} noticias"
+
+
 @st.cache_data
 def noticias():
     return leer_noticias()
@@ -114,20 +127,26 @@ def main():
     # --- gráficos
     izq, der = st.columns(2)
     por_categoria = filtrado["categoria"].value_counts().rename_axis("categoria").reset_index(name="noticias")
-    fig1 = px.bar(por_categoria, x="categoria", y="noticias", text="noticias", title=titulo_analitico(filtrado))
-    fig1.update_layout(xaxis_title=None, yaxis_title="Noticias")
+    fig1 = px.bar(por_categoria, x="categoria", y="noticias", text="noticias", title=titulo_analitico(filtrado),
+                  color="categoria", color_discrete_map=COLORES, category_orders=ORDEN)
+    # texto oscuro fuera de la barra: se lee igual sobre el naranja y el rosa claros
+    fig1.update_traces(textposition="outside", textfont_color="#1f1f1f", cliponaxis=False)
+    fig1.update_layout(xaxis_title=None, yaxis_title="Noticias", showlegend=False)
     izq.plotly_chart(fig1, width="stretch")
 
     por_dia = filtrado.groupby([filtrado["fecha"].dt.date.rename("fecha"), "categoria"]).size().reset_index(name="noticias")
-    fig2 = px.bar(por_dia, x="fecha", y="noticias", color="categoria", title="Publicaciones por día y categoría")
+    fig2 = px.bar(por_dia, x="fecha", y="noticias", color="categoria", title=titulo_por_dia(por_dia),
+                  color_discrete_map=COLORES, category_orders=ORDEN)
     fig2.update_layout(xaxis_title=None, yaxis_title="Noticias", legend_title=None)
     der.plotly_chart(fig2, width="stretch")
 
     # --- tabla
     st.subheader("Noticias")
     st.dataframe(filtrado[["fecha", "medio", "categoria", "titular", "bajada", "url"]], width="stretch", hide_index=True,
-                 column_config={"url": st.column_config.LinkColumn("enlace", display_text="abrir")})
-    st.download_button("⬇️ Descargar selección en CSV", filtrado.to_csv(index=False).encode("utf-8"),
+                 column_config={"fecha": st.column_config.DateColumn("fecha", format="YYYY-MM-DD"),
+                                "categoria": st.column_config.TextColumn("categoría"),
+                                "url": st.column_config.LinkColumn("enlace", display_text="abrir")})
+    st.download_button("Descargar selección en CSV", filtrado.to_csv(index=False).encode("utf-8"),
                        "noticias_filtradas.csv", "text/csv")
 
     # --- clasificador en vivo
@@ -138,10 +157,13 @@ def main():
         probs = predecir(texto.strip())
         mejor = max(probs, key=probs.get)
         st.success(f"Categoría: **{NOMBRES.get(mejor, mejor)}** · probabilidad {probs[mejor]:.0%}")
+        if probs[mejor] < 0.50:
+            st.warning("Confianza baja: el titular puede ser ambiguo o tratar varios temas.")
         tabla = pd.DataFrame({"categoria": [NOMBRES.get(k, k) for k in probs], "probabilidad": list(probs.values())})
-        fig3 = px.bar(tabla.sort_values("probabilidad"), x="probabilidad", y="categoria", orientation="h",
-                      range_x=[0, 1], title="Probabilidad por categoría")
-        fig3.update_layout(yaxis_title=None)
+        fig3 = px.bar(tabla, x="probabilidad", y="categoria", orientation="h", range_x=[0, 1],
+                      title="Probabilidad por categoría", color="categoria", color_discrete_map=COLORES,
+                      category_orders=ORDEN)
+        fig3.update_layout(yaxis_title=None, yaxis_autorange="reversed", showlegend=False)
         st.plotly_chart(fig3, width="stretch")
         st.caption(f"Modelo usado: {nombre_modelo}")
 

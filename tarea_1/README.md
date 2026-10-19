@@ -26,8 +26,8 @@ Tarea 1 · Ciencia de datos con Python · Estudiante: Gabriela (@gabriela-pozo)
 El LLM (`gemini-3.5-flash-lite`) coincide con la sección de El Comercio en el 91.95 % de los 385 titulares. Zero-shot y fine-tuning se evaluaron sobre conjuntos distintos (40 y 58 titulares), así que la comparación es orientativa.
 
 ## Hallazgos
-1. **El zero-shot no es peor que el fine-tuning:** F1 macro 0.820 frente a 0.784 (3.6 puntos a favor del zero-shot). Con solo 269 ejemplos de entrenamiento y un test de 58, la diferencia está dentro del ruido: un solo error cambia la accuracy en 1.7 puntos.
-2. **El fine-tuning falla sobre todo en ciencia y tecnología:** F1 0.50, con recall de 0.33 (5 de 15 acertados). 7 de esos 15 titulares se clasificaron como economía, por lo que economía tiene la menor precisión (0.667). Política, deportes y economía alcanzan recall de 0.93 a 1.00.
+1. **El zero-shot no es peor que el fine-tuning:** F1 macro 0.820 frente a 0.784 (3.6 puntos a favor del zero-shot); en los mismos 40 titulares, 0.820 frente a 0.789. Con solo 269 ejemplos de entrenamiento y un test de 58, la diferencia está dentro del ruido: un solo error cambia la accuracy en 1.7 puntos.
+2. **El fine-tuning falla sobre todo en ciencia y tecnología:** F1 0.50, con recall de 0.33 (5 de 15 acertados). Siete de esos 15 titulares se clasificaron como economía, por lo que economía tiene la menor precisión (0.667). Política, deportes y economía alcanzan recall de 0.93 a 1.00.
 
 ## Limitaciones
 1. **Una sola fuente y poco volumen:** 385 titulares de un medio y de dos días; el conjunto de test tiene solo 58, por lo que las métricas tienen mucha incertidumbre y no generalizan a otros medios ni épocas.
