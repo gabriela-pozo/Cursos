@@ -6,3 +6,7 @@ scikit-learn==1.9.1
 
 # Opcional: para usar el modelo con fine-tuning en vez del respaldo ligero (TF-IDF).
 # Instalar aparte (ver README):  torch (CPU) + transformers==5.20.1
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu
+transformers==5.20.1
