@@ -46,13 +46,13 @@ pip install transformers==5.20.1
 ```
 El modelo se descarga de Hugging Face Hub (`REPO_HF` en `app.py`); los pesos no se versionan por el límite de 100 MB de GitHub.
 
-## Extra: NER
+## Análisis de entidades (NER)
 [`03_ner.ipynb`](03_ner.ipynb) extrae personas, organizaciones y lugares de los titulares con `mrm8488/bert-spanish-cased-finetuned-ner` (`datos/entidades.csv`).
 Hallazgo principal: política es la categoría más concentrada (Keiko Fujimori en 11 titulares; Senado en 12 y Congreso en 9), mientras que en economía ninguna persona aparece más de una vez.
 
 ## Estructura
 ```
-01_recoleccion.ipynb   02_clasificacion.ipynb   app.py   requirements.txt
+01_recoleccion.ipynb   02_clasificacion.ipynb   03_ner.ipynb   app.py   requirements.txt
 datos/  noticias.csv · etiquetas_llm.csv · split.csv · predicciones_test.csv
 modelo/ metricas.json · etiquetas.json · matriz_confusion.png
 ```
