@@ -1,9 +1,9 @@
 # Entrega · Sesión 15 · Del texto a tu voz: reels con modelos abiertos
 
-**Archivos de la entrega:** carpeta `entrega_subir/`.
-
-**Autora:** Gabriela · **Fecha:** 24 de octubre de 2026
-**Texto fuente:** Síntesis del Reporte de Inflación, BCRP, setiembre de 2026 (5 páginas)
+**Nombre:** Gabriela  
+**Texto que usaste:** Síntesis del Reporte de Inflación, BCRP, setiembre de 2026 (5 páginas), de mi carrera  
+**Link de tu repo:** https://github.com/gabriela-pozo/Cursos/tree/main/tarea_3  
+**Fecha:** 24 de octubre de 2026
 
 ## 1. Qué entrego
 
