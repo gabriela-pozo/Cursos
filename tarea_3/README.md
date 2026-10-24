@@ -5,7 +5,7 @@
 **Link de tu repo:** https://github.com/gabriela-pozo/Cursos/tree/main/tarea_3  
 **Fecha:** 24 de octubre de 2026
 
-## 1. Qué entrego
+## 1. Archivos de la entrega: del texto a tu voz
 
 | Archivo | Qué es |
 |---|---|
@@ -20,7 +20,7 @@ Nivel que busco: **Excelente** (reel y posts revisados, correcciones explicadas 
 
 El reel no se publica para no dejar mi voz pública; lo presento en clase.
 
-## 2. Cómo lo hice
+## 2. ¿Cómo lo hice?
 
 1. Generé el prompt con `guion.py` a partir del PDF y lo pegué en chat.qwen.ai y en chat.deepseek.com, con el mismo prompt y el mismo texto.
 2. Revisé los dos guiones escena por escena contra el informe.
@@ -72,7 +72,7 @@ Clasifiqué los problemas en cinco tipos:
 
 `guion.py` marcó **«ok» en las 6 escenas de Qwen y en las 7 de DeepSeek**, porque todas las cifras sí aparecen en el informe. Pero había frases falsas, inventadas o mal atribuidas, incluida una escena sin cifra que mencionaba un tablero inexistente. La verificación automática valida números, no afirmaciones. La revisión humana contra la fuente es la que detectó los errores, y fue necesaria antes de narrar.
 
-## 7. Problemas técnicos en Windows y cómo los resolví
+## 7. Problemas técnicos en Windows
 
 - **`UnicodeDecodeError` al leer `guion.json`:** `guion.py` lo escribió en la codificación ANSI de Windows y no en UTF-8. Lo resolví activando `PYTHONUTF8=1` en la terminal y guardando el guion corregido en UTF-8.
 - **Rutas de Mac en los comandos del README:** usé `.venv\Scripts\python` en lugar de `.venv/bin/python` y no usé `--device mps`.
