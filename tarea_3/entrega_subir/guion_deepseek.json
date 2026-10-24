@@ -1,0 +1,60 @@
+{
+  "titulo": "Inflación sube a 4,44 %",
+  "escenas": [
+    {
+      "frase": "La inflación interanual subió a cuatro coma cuarenta y cuatro por ciento en agosto de dos mil veintiséis, según el reporte del BCRP.",
+      "cifra": "4,44 %",
+      "etiqueta": "Inflación interanual a agosto 2026",
+      "cifra_en_texto": true
+    },
+    {
+      "frase": "El alza se explica por alimentos como pescado fresco, huevos y carne de pollo, con datos a agosto de dos mil veintiséis.",
+      "cifra": "+4,37 %",
+      "etiqueta": "Alimentos y energía",
+      "cifra_en_texto": true
+    },
+    {
+      "frase": "La inflación sin alimentos y energía llegó a cuatro coma cincuenta por ciento, por transporte local y educación.",
+      "cifra": "4,50 %",
+      "etiqueta": "Inflación sin alimentos y energía",
+      "cifra_en_texto": true
+    },
+    {
+      "frase": "Sin transporte, la inflación subyacente se ubicó en uno coma ocho por ciento y sigue debajo de dos por ciento.",
+      "cifra": "1,8 %",
+      "etiqueta": "Inflación subyacente sin transporte",
+      "cifra_en_texto": true
+    },
+    {
+      "frase": "El BCRP proyecta cuatro coma dos por ciento para dos mil veintiséis y dos coma cero por ciento para dos mil veintisiete.",
+      "cifra": "4,2 %",
+      "etiqueta": "Proyección de inflación 2026",
+      "cifra_en_texto": true
+    },
+    {
+      "frase": "El riesgo sube por El Niño Costero extraordinario y posibles choques de oferta internos y externos.",
+      "cifra": "El Niño",
+      "etiqueta": "Riesgo climático en la proyección",
+      "cifra_en_texto": true
+    },
+    {
+      "frase": "Mira el tablero completo en mi perfil y comenta qué te preocupa más de estos precios.",
+      "cifra": "",
+      "etiqueta": "Mira el tablero: enlace en mi perfil",
+      "cifra_en_texto": true
+    }
+  ],
+  "hashtags": [
+    "#InflaciónPerú",
+    "#BCRP",
+    "#ReporteDeInflación",
+    "#DatosPerú",
+    "#EconomíaPeruana"
+  ],
+  "posts": {
+    "linkedin": "El Reporte de Inflación del BCRP de setiembre de 2026 muestra la inflación interanual en 4,44 % a agosto, impulsada por alimentos como pescado fresco, huevos y carne de pollo. La inflación sin alimentos y energía llegó a 4,50 %, por transporte local y educación; sin transporte, la subyacente se ubicó en 1,8 %.\n\nEl BCRP proyecta 4,2 % para 2026 y 2,0 % para 2027. El balance de riesgos se revisa al alza por El Niño Costero extraordinario y posibles choques de oferta.\n\nRevisa el tablero completo y comparte tu lectura de estos datos. La voz del video fue generada con IA a partir de la voz del autor.",
+    "x": "Inflación interanual: 4,44 % en agosto 2026 (BCRP). Sin alimentos y energía: 4,50 %. Sin transporte: 1,8 %. Proyección: 4,2 % para 2026 y 2,0 % para 2027. Mira el tablero. La voz del video fue generada con IA a partir de la voz del autor.",
+    "facebook": "El BCRP reportó una inflación interanual de 4,44 % en agosto de 2026, por alimentos como pescado fresco, huevos y carne de pollo. La inflación sin alimentos y energía llegó a 4,50 % y la subyacente sin transporte se mantuvo en 1,8 %.\n\nPara 2026 se proyecta 4,2 % y para 2027, 2,0 %. El riesgo sube por El Niño Costero extraordinario y choques de oferta.\n\nMira el tablero y comenta qué opinas de estas cifras. La voz del video fue generada con IA a partir de la voz del autor."
+  },
+  "cifras_dudosas_en_posts": []
+}
