@@ -33,6 +33,23 @@ def fuente_de(fila):
     return "Fotos propias" if fila["tipo"] == "foto" else "Apuntes manuscritos propios"
 
 
+NOMBRES = {"sintesis reporte marzo 2019": "Reporte de Inflación 2019", "regulacion conceptos": "Regulación económica",
+           "hoja calle": "Hoja suelta", "boletas": "Boleta", "caja c digos": "Etiqueta de envío"}
+
+
+def nombre_corto(ident, largo=28):
+    """Nombre legible de un documento a partir de su id; si es largo, se corta por la derecha."""
+    if m := re.match(r"imp_Memoria_BCRP_(\d{4})_p0*(\d+)$", ident):
+        nombre = f"Memoria BCRP {m[1]}, p. {m[2]}"
+    elif m := re.match(r"imp_Manuscrito_31_.*Gamarra_p0*(\d+)$", ident):
+        nombre = f"Carta a Gamarra 1832, p. {m[1]}"
+    else:
+        base = re.sub(r"^(fot_Foto|man_Manuscrito|imp)_", "", ident).replace("_", " ").lower()
+        base = re.sub(r"([a-z])(\d)", r"\1 \2", base)          # cuaderno1 -> cuaderno 1
+        nombre = NOMBRES.get(base, base.capitalize())
+    return nombre if len(nombre) <= largo else nombre[:largo - 1] + "…"
+
+
 def sin_tildes(texto):
     texto = unicodedata.normalize("NFKD", str(texto).lower())
     return "".join(c for c in texto if not unicodedata.combining(c))
@@ -84,15 +101,16 @@ def campos_llm(ident):
             st.json(json.loads(llm[ident]))
 
 
-st.set_page_config(page_title="Archivos económicos del Perú: ¿se pueden buscar?", layout="wide")
+TITULO = "De documentos escaneados y audio a texto buscable: evaluación sobre un corpus peruano"
+st.set_page_config(page_title=TITULO, layout="wide")
 corpus, lineas, metricas, comparativa, auditoria, llm = cargar()
 
 # ---------------------------------------------------------------- titulo y respuesta
 docs_eval = metricas[metricas["modalidad"] == "documento"]
 pct_cifras_mal = 1 - docs_eval["cifras_exactas"].sum() / docs_eval["cifras_total"].sum()
-st.title("Archivos económicos del Perú: ¿se pueden buscar?")
+st.title(TITULO)
 st.markdown(
-    f"##### En parte: el texto se recupera (CER {agregado(docs_eval):.3f}, "
+    f"##### ¿Se pueden buscar? En parte: el texto se recupera (CER {agregado(docs_eval):.3f}, "
     f"WER {agregado(metricas[metricas['modalidad'] == 'audio']):.3f}), pero el {pct_cifras_mal:.0%} de las "
     f"cifras sale mal y el LLM acierta {auditoria['correcto'].sum()} de {len(auditoria)}: "
     "los montos necesitan revisión humana.")
@@ -178,8 +196,7 @@ with tab_err:
 
     if len(m_doc):
         # el tipo va escrito en la etiqueta de cada barra: la informacion no depende solo del color
-        g = m_doc.assign(documento=m_doc["tipo"] + " · " + m_doc["id"].str.replace(r"^(imp|fot|man)_", "", regex=True)
-                         .str.replace("Manuscrito_31_PE_1352_Carta_escrita_a_Don_Agust_n_", "", regex=False).str[-24:],
+        g = m_doc.assign(documento=m_doc["tipo"] + " · " + m_doc["id"].map(nombre_corto),
                          cifras=m_doc["cifras_exactas"].astype(int).astype(str) + "/" + m_doc["cifras_total"].astype(int).astype(str))
         peor_doc = g.loc[g["valor"].idxmax()]
         fig = px.bar(g.sort_values("valor"), x="valor", y="documento", color="tipo", orientation="h",

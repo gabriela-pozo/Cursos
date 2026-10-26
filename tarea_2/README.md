@@ -1,6 +1,4 @@
-# Archivos económicos del Perú: ¿se pueden buscar?
-
-*De documentos escaneados y audio a texto buscable: evaluación sobre un corpus peruano*
+# De documentos escaneados y audio a texto buscable: evaluación sobre un corpus peruano
 
 **Tarea 2 · Ciencia de Datos con Python**
 Gabriela Pozo ([@gabriela-pozo](https://github.com/gabriela-pozo))
