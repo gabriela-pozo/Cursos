@@ -197,7 +197,14 @@ uv run --project <ruta>/Data-Science-Python jupyter lab
 ```
 
 El dashboard no ejecuta ningún modelo: solo lee los CSV ya generados, por lo que se
-puede levantar con muy pocas dependencias.
+puede levantar con muy pocas dependencias. Desde `tarea_2/`:
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+Con `uv`, sin instalar nada en el entorno:
 
 ```bash
 uv run --no-project --with-requirements requirements.txt streamlit run app.py
