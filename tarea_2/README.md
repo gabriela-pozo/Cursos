@@ -231,3 +231,8 @@ uv run --no-project --with-requirements requirements.txt streamlit run app.py
 
 Las imágenes y los audios originales están en `datos/raw/`, que no se versiona por su
 tamaño.
+
+## 9. Innovaciones
+Diarización avanzada. La entrevista de Espika FM se diarizó con embeddings de WeSpeaker y agrupamiento aglomerativo por coseno; datos/entrevistas/aud_espika_20201121_conversacion.csv atribuye cada segmento a su hablante, con el nombre del entrevistado seudonimizado.
+
+OCR histórico. Ocho de las páginas impresas son material de archivo: las Memorias del Banco Central de Reserva del Perú de 1922 y 1923, y el folleto Carta escrita a Don Agustín Gamarra (Cuzco, 1832). Son el caso que motiva la pregunta del trabajo: no contienen texto extraíble y están digitalizadas.
