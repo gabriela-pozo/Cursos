@@ -124,9 +124,14 @@ el más caro de todos.
 
 La extracción con Qwen2.5-0.5B acierta en **8 de 20** casos auditados a mano. Las dos
 invenciones de la muestra son el mismo error: el texto es una pregunta y el resumen la
-convierte en una afirmación que nadie dijo. No son casos aislados: en todo el corpus de
-clips, de las **24 preguntas** a las que el modelo les escribió un resumen, **20** quedaron
-como afirmación (cuenta automática, así que es una cota superior). Por ejemplo:
+convierte en una afirmación que nadie dijo. No son casos aislados. En el corpus de 400
+clips hay **87 preguntas**: en **63** el modelo dejó el resumen en `null` y, de las **24**
+que sí tuvieron resumen, **20** se redactaron como afirmación.
+
+Ese 20 es una **cota máxima**. La regla que lo detecta es automática: cuenta como
+afirmación todo resumen sin signo de interrogación y sin verbos como «pregunta», «consulta»
+o «pide». Por eso también entran algunos resúmenes neutros que no inventan nada, como «Se
+discute sobre cómo cambiar un grifo». Un ejemplo de los que sí inventan:
 
 > «¿Puedes verificar si hay alguna piscina olímpica cerca de la casa de Pedro?»
 > → «Pedro tiene una piscina en su casa».
