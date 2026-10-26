@@ -82,11 +82,42 @@ def agregado(m):
     return (m["valor"] * m["unidades_ref"]).sum() / m["unidades_ref"].sum() if len(m) else None
 
 
-def estilo(fig, alto=380):
-    """Mismo aspecto en todos los graficos: fondo blanco, margenes cortos, titulo a la izquierda."""
-    fig.update_layout(template="plotly_white", height=alto, margin=dict(l=10, r=10, t=60, b=10),
-                      title_x=0, title_font_size=15, legend_title_text="")
+ALTO = 400                                # misma altura para los graficos que van lado a lado
+
+
+def num(x, decimales=3):
+    """Numero con coma decimal, como en el README."""
+    return f"{x:.{decimales}f}".replace(".", ",")
+
+
+def estilo(fig, alto=ALTO):
+    """Mismo aspecto en todos los graficos: tipografia, ejes, margenes y coma decimal."""
+    fig.update_layout(template="plotly_white", height=alto, separators=", ",
+                      font=dict(size=12), title=dict(x=0, font=dict(size=15)),
+                      margin=dict(l=10, r=10, t=56, b=10), legend_title_text="")
+    fig.update_xaxes(automargin=True, title_font_size=12, tickfont_size=11)
+    fig.update_yaxes(automargin=True, title_font_size=12, tickfont_size=11)
     return fig
+
+
+def audio_de(ident):
+    """Muestra ligera publicable en datos/ejemplos/ (mp3 con el id del audio), si existe."""
+    ruta = EJEMPLOS / f"{ident}.mp3"
+    return ruta if ruta.is_file() else None
+
+
+def atribucion_audio(ident):
+    if ident.startswith("aud_pe"):
+        return "OpenSLR 73, corpus de español peruano de Google · CC BY-SA 4.0"
+    return ("Espika FM 90.7, *Al mundo le falta un tornillo*, 21/11/2020 · CC BY-SA 4.0 · "
+            "extracto de 40 s (0:30 a 1:10 del tramo)")
+
+
+def por_que_no_se_publica(ident):
+    if ident.endswith("_musica"):
+        return "Este tramo no se publica: incluye la canción «A La Molina», con derechos de terceros."
+    return ("Solo se publica una muestra de 4 audios en `datos/ejemplos/`; el resto queda en `datos/raw/`, "
+            "que no se versiona para que el repositorio no pese.")
 
 
 def imagen_de(fila):
@@ -110,8 +141,8 @@ docs_eval = metricas[metricas["modalidad"] == "documento"]
 pct_cifras_mal = 1 - docs_eval["cifras_exactas"].sum() / docs_eval["cifras_total"].sum()
 st.title(TITULO)
 st.markdown(
-    f"##### ¿Se pueden buscar? En parte: el texto se recupera (CER {agregado(docs_eval):.3f}, "
-    f"WER {agregado(metricas[metricas['modalidad'] == 'audio']):.3f}), pero el {pct_cifras_mal:.0%} de las "
+    f"##### ¿Se pueden buscar? En parte: el texto se recupera (CER {num(agregado(docs_eval))}, "
+    f"WER {num(agregado(metricas[metricas['modalidad'] == 'audio']))}), pero el {pct_cifras_mal:.0%} de las "
     f"cifras sale mal y el LLM acierta {auditoria['correcto'].sum()} de {len(auditoria)}: "
     "los montos necesitan revisión humana.")
 
@@ -141,21 +172,20 @@ m_aud = metricas[(metricas["modalidad"] == "audio") & metricas["id"].isin(ids)]
 aud_llm = auditoria[auditoria["id"].isin(ids)]
 cer, wer = agregado(m_doc), agregado(m_aud)
 
-st.space("small")
+st.space("medium")
 with st.container(border=True):
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Documentos", len(docs_v))
-    c2.metric("Minutos de audio", f"{aud_v['duracion_seg'].sum() / 60:.1f}",
-              help="Incluye la entrevista de Espika FM, cuyo conductor no es peruano.")
-    c3.metric("CER", f"{cer:.3f}" if cer is not None else "—",
-              help=f"Error por carácter de PP-OCRv6 (0 = perfecto), en {len(m_doc)} de los 10 documentos "
-                   "transcritos a mano que pasan el filtro.")
-    c4.metric("WER", f"{wer:.3f}" if wer is not None else "—",
-              help=f"Error por palabra de faster-whisper small, en {len(m_aud)} de los 10 clips transcritos a mano.")
+    c1.metric("Documentos", len(docs_v), help="Imágenes leídas con OCR que pasan el filtro.")
+    c2.metric("Minutos de audio", num(aud_v["duracion_seg"].sum() / 60, 1),
+              help="Clips de OpenSLR 73 y entrevista de Espika FM.")
+    c3.metric("CER", num(cer) if cer is not None else "—",
+              help=f"Error por carácter del OCR (0 = perfecto). {len(m_doc)} de 10 documentos transcritos a mano.")
+    c4.metric("WER", num(wer) if wer is not None else "—",
+              help=f"Error por palabra del ASR (0 = perfecto). {len(m_aud)} de 10 clips transcritos a mano.")
     c5.metric("Acuerdo LLM-humano", f"{aud_llm['correcto'].sum()}/{len(aud_llm)}" if len(aud_llm) else "—",
-              help="Extracciones correctas según la revisión humana, de las 20 auditadas que pasan el filtro.")
+              help="Extracciones del LLM correctas según la revisión a mano.")
 st.caption(f"{len(docs_v)} documentos y {len(aud_v)} audios de {len(corpus)} archivos con los filtros actuales.")
-st.space("small")
+st.space("medium")
 
 tab_bus, tab_err, tab_doc, tab_aud, tab_llm, tab_met = st.tabs(
     ["Buscar", "Error de OCR y ASR", "Documentos", "Audio", "Auditoría del LLM", "Metodología"])
@@ -187,10 +217,10 @@ with tab_err:
         peor = por_tipo.loc[por_tipo["pct_dudosas"].idxmax()]
         fig = px.bar(por_tipo.sort_values("pct_dudosas"), x="tipo", y="pct_dudosas", color="tipo",
                      color_discrete_map=COLORES, text_auto=".0f", hover_data=["lineas", "dudosas"],
-                     labels={"pct_dudosas": f"% de líneas con confianza < {UMBRAL}", "tipo": ""},
+                     labels={"pct_dudosas": f"% de líneas con confianza < {num(UMBRAL, 2)}", "tipo": ""},
                      title=f"Los {peor['tipo']}s son los que más dudan: {peor['pct_dudosas']:.0f}% de sus líneas")
         izq.plotly_chart(estilo(fig).update_layout(showlegend=False), width="stretch")
-        izq.caption("Confianza del propio modelo, no el error real.")
+        izq.caption("Es la confianza del modelo, no el error real.")
     else:
         izq.info("Ningún documento pasa el filtro.")
 
@@ -203,26 +233,27 @@ with tab_err:
                      color_discrete_map=COLORES, category_orders={"tipo": TIPOS}, text_auto=".2f",
                      hover_data={"cifras": True, "valor": ":.3f", "documento": False},
                      labels={"valor": "CER (0 = perfecto)", "documento": "", "cifras": "cifras exactas"},
-                     title=f"El error se concentra en pocas páginas: la peor tiene CER {peor_doc['valor']:.2f}")
-        der.plotly_chart(estilo(fig, 420), width="stretch")
-        der.caption("Documentos transcritos a mano. Las cifras exactas, al pasar el cursor.")
+                     title=f"El error se concentra en pocas páginas: la peor tiene CER {num(peor_doc['valor'], 2)}")
+        der.plotly_chart(estilo(fig), width="stretch")
+        der.caption("Cifras exactas de cada página, al pasar el cursor.")
     else:
         der.info("Ninguno de los 10 documentos transcritos a mano pasa el filtro.")
 
     if len(m_aud):
-        st.space("medium")
-        g = m_aud.assign(clip=m_aud["id"].str.replace("aud_", "", regex=False))
-        fig = px.bar(g.sort_values("valor"), x="clip", y="valor", text_auto=".2f",
-                     color_discrete_sequence=[COLORES["audio"]],
-                     labels={"valor": "WER (0 = perfecto)", "clip": ""},
+        st.space("large")
+        # cada clip de la muestra es de un hablante distinto: su codigo es una etiqueta corta y unica
+        g = m_aud.assign(hablante=m_aud["id"].str.extract(r"^aud_(pe[fm]_\d+)", expand=False).fillna(m_aud["id"]))
+        fig = px.bar(g.sort_values("valor"), x="hablante", y="valor", text_auto=".2f",
+                     color_discrete_sequence=[COLORES["audio"]], hover_data={"id": True},
+                     labels={"valor": "WER (0 = perfecto)", "hablante": "hablante (pef = mujer, pem = hombre)"},
                      title=f"El ASR acierta del todo en {(g['valor'] == 0).sum()} de {len(g)} clips; "
                            "en el resto falla en una o dos palabras")
         st.plotly_chart(estilo(fig, 340), width="stretch")
 
-    st.space("medium")
+    st.space("large")
     st.markdown("**Modelos alternativos**")
     st.dataframe(comparativa, width="stretch", hide_index=True)
-    st.caption("PaddleOCR-VL, en 4 documentos por su costo en CPU; Parakeet, en los 10 clips.")
+    st.caption("PaddleOCR-VL se midió en 4 documentos por su costo en CPU.")
 
 # ---------------------------------------------------------------- exploradores
 with tab_doc:
@@ -232,7 +263,7 @@ with tab_doc:
         ident = st.selectbox("Documento", docs_v["id"])
         d = docs_v.set_index("id").loc[ident]
         ev = metricas[metricas["id"] == ident]
-        datos_ev = (f" · CER {ev['valor'].iloc[0]:.3f} · cifras exactas "
+        datos_ev = (f" · CER {num(ev['valor'].iloc[0])} · cifras exactas "
                     f"{int(ev['cifras_exactas'].iloc[0])}/{int(ev['cifras_total'].iloc[0])}") if len(ev) else ""
         st.caption(f"{d['tipo']} · {d['fuente']} · {d['modelo']}{datos_ev}")
         st.space("small")
@@ -265,9 +296,19 @@ with tab_aud:
         ident = st.selectbox("Audio", aud_v["id"])
         a = aud_v.set_index("id").loc[ident]
         ev = metricas[metricas["id"] == ident]
-        st.caption(f"{a['fuente']} · {a['duracion_seg']:.1f} s · {a['n_hablantes']} hablante(s) · {a['modelo']}"
-                   + (f" · WER {ev['valor'].iloc[0]:.3f}" if len(ev) else ""))
+        st.caption(f"{a['fuente']} · {num(a['duracion_seg'], 1)} s · {a['n_hablantes']} hablante(s) · {a['modelo']}"
+                   + (f" · WER {num(ev['valor'].iloc[0])}" if len(ev) else ""))
         st.space("small")
+
+        sonido = audio_de(ident)
+        if sonido is not None:
+            reproductor, credito = st.columns([2, 3], gap="large", vertical_alignment="center")
+            reproductor.audio(str(sonido), format="audio/mpeg")
+            credito.caption(atribucion_audio(ident))
+        else:
+            st.info(por_que_no_se_publica(ident))
+        st.space("small")
+
         segmentos = DATOS / "entrevistas" / f"{ident}.csv"
         if segmentos.exists():
             st.markdown("**Segmentos por hablante**")
@@ -280,9 +321,6 @@ with tab_aud:
             st.markdown("**Transcripción manual**")
             st.write(a["texto_referencia"])
         campos_llm(ident)
-        st.space("small")
-        st.caption("Sin reproducción: los audios no se publican y el tramo musical de la entrevista "
-                   "tiene derechos de terceros.")
 
 with tab_llm:
     if aud_llm.empty:
@@ -296,10 +334,9 @@ with tab_llm:
         fig = px.bar(conteo, x="tipo_error", y="count", text_auto=True, color_discrete_sequence=[NEUTRO],
                      labels={"tipo_error": "", "count": "extracciones"},
                      title=f"El LLM acierta en {aud_llm['correcto'].sum()} de {len(aud_llm)}{detalle}")
-        st.plotly_chart(estilo(fig, 320), width="stretch")
-        st.caption("**Omisión:** dejó en `null` algo que el texto permitía llenar. "
-                   "**Invención:** afirmó algo que no está en el texto.")
-        st.space("small")
+        st.plotly_chart(estilo(fig, 340), width="stretch")
+        st.caption("Omisión: dejó en `null` algo que el texto traía. Invención: afirmó algo que no está en el texto.")
+        st.space("medium")
         st.dataframe(aud_llm, width="stretch", hide_index=True)
 
 with tab_met:
@@ -322,5 +359,6 @@ st.caption(
     "**Fuentes y licencias.** Memorias 1922 y 1923: Banco Central de Reserva del Perú, reproducción permitida "
     "citando la fuente · *Carta escrita a Don Agustín Gamarra* (1832): Repositorio PUCP, Instituto Riva-Agüero, "
     "CC0 1.0 · Audio: OpenSLR 73, corpus de español peruano de Google, CC BY-SA 4.0 · Entrevista: Espika FM 90.7, "
-    "*Al mundo le falta un tornillo*, 21/11/2020, CC BY-SA 4.0 (el tramo musical no se publica) · Fotos y "
+    "*Al mundo le falta un tornillo*, 21/11/2020, CC BY-SA 4.0 (se publica un extracto de 40 s; el tramo "
+    "musical, no) · Fotos y "
     "apuntes manuscritos: capturas propias de la autora, sin datos personales. Detalle en `datos/fuentes.csv`.")
