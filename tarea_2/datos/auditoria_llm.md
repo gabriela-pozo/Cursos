@@ -563,4 +563,4 @@ Modalidad: documento · modelo: Qwen/Qwen2.5-0.5B-Instruct (transformers, CPU, f
 }
 ```
 
-**Veredicto:** correcto — el resumen habla de "encaje", que sí aparece en el texto completo aunque no en el extracto de 800 caracteres; no inventa. Dejó `cifras` en null habiendo tres montos en libras peruanas (Lp.211,629, Lp.642,90l, Lp.42,280.3.37); además arrastró la errata del OCR hasta el resumen("peruinos" por "peruanos").
+**Veredicto:** correcto — el resumen habla de "encaje", que sí aparece en el texto completo aunque no en el extracto de 800 caracteres; no inventa. Dejó `cifras` en null habiendo tres montos en libras peruanas (Lp.211,629, Lp.642,90l, Lp.42,280.3.37); además introdujo una errata propia ("peruinos" por "peruanos") sobre un texto de entrada limpio.
