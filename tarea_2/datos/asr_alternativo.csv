@@ -1,0 +1,11 @@
+id,modelo_asr,texto_asr,duracion_seg,segundos_computo,rtf
+aud_pef_01523_00522726014,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",¿Cuál es el noticiero más importante?,4.78,1.128,0.236
+aud_pef_03397_00786843445,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",¿puedes verificar si hay alguna piscina olímpica cerca de la casa de Pedro?,6.31,1.519,0.2406
+aud_pef_04310_02004955505,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",A los carnívoros les encanta el tequila.,5.38,1.177,0.2189
+aud_pef_09697_01125907528,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",El tiempo total de viaje es de 10:35 minutos.,8.02,1.512,0.1885
+aud_pem_00610_01481040845,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",¿Qué hecho en específico te gustaría saber de la Primera Guerra Mundial?,7.08,1.98,0.2796
+aud_pem_01208_01665361242,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",He estado pensando que necesito salir a pasear más a menudo.,6.4,1.46,0.2281
+aud_pem_03349_00870034573,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",¿Dónde nació el director González Iñarrito?,6.06,1.366,0.2254
+aud_pem_07049_00952015254,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",Ayer no pude dormir y no sé qué puedo hacer para dormir mejor.,7.68,1.695,0.2207
+aud_pem_08421_00033745102,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)","Lo interesante de su educación es que ella no quería ser historiadora, quería ser cocinera.",7.51,1.641,0.2186
+aud_pem_09697_01885600279,"Parakeet TDT 0.6B v3 (transformers, CPU, float32)",Tengo que hacer una presentación para la oficina y queremos ligarlo a un evento cultural.,7.51,1.649,0.2196

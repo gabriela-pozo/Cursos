@@ -1,0 +1,3 @@
+modelo,millones_parametros
+PP-OCRv6 (con clasificador de orientacion),42.8
+PaddleOCR-VL,938.8

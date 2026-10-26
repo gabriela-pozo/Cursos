@@ -1,0 +1,5 @@
+modalidad,modelo,muestra,metrica,valor,cifras_exactas,costo
+documentos,PP-OCRv6 (linea base),4 docs (submuestra),CER agregado,0.296,55/60,20 s/pagina
+documentos,PaddleOCR-VL,4 docs (submuestra),CER agregado,0.162,58/60,483 s/pagina
+audio,faster-whisper small (linea base),10 clips,WER,0.045,,RTF 0.36
+audio,Parakeet TDT 0.6B v3,10 clips,WER,0.045,,RTF 0.23
