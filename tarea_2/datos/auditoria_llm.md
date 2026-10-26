@@ -30,7 +30,7 @@ Si vive en una zona donde el nivel de agua puede subir, considere levantar los m
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — todos los campos aparecen en el texto y los ausentes están en null.
 
 ---
 
@@ -58,7 +58,7 @@ Modalidad: audio · modelo: Qwen/Qwen2.5-0.5B-Instruct (transformers, CPU, float
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — invención: el texto es una pregunta y el modelo la convierte en una afirmación ("la ciudad ha establecido regulaciones"), que no está en el audio.
 
 ---
 
@@ -86,7 +86,8 @@ Te voy a compartir la canción por WhatsApp.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omisión: dejó tema y resumen en null, y también organizaciones, pese a que "WhatsApp" aparece en el texto.
+
 
 ---
 
@@ -114,7 +115,7 @@ Quiero comprar un perro, pero la verdad es que no tengo idea de las razas.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto - omitió tema y resumen, el primero puede ser compra de un perro y el segundo una persona quiere comprarlo, pero desconoce las razas.
 
 ---
 
@@ -142,7 +143,7 @@ Para hacer esa receta necesitas una cebolla y dos dientes de ajo.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omisión: dejó tema y resumen en null, y también cifras, pese a que el texto trae cantidades ("una cebolla", "dos dientes de ajo").
 
 ---
 
@@ -170,7 +171,7 @@ Modalidad: audio · modelo: Qwen/Qwen2.5-0.5B-Instruct (transformers, CPU, float
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omitió resumen, que sí se podía escribir a partir del texto.
 
 ---
 
@@ -198,7 +199,7 @@ Por las tardes escucha música en la plaza.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omitió resumen, tema y lugar; "la plaza" sí aparece en el texto.
 
 ---
 
@@ -226,7 +227,7 @@ Ayer estuve en un museo de arte moderno y vi una exposición buenísima.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — el resumen es fiel al texto y no inventa nada; omitió tema, que se podía poner.
 
 ---
 
@@ -254,7 +255,7 @@ Modalidad: audio · modelo: Qwen/Qwen2.5-0.5B-Instruct (transformers, CPU, float
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omisión: dejó resumen y tema en null pudiendo resumir la pregunta.
 
 ---
 
@@ -282,7 +283,7 @@ La yoga además de relajarte y equilibrar tu organismo también te permitirá to
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — tema y resumen salen del texto, sin inventar; el resumen es parcial (omite relajación y equilibrio).
 
 ---
 
@@ -310,7 +311,7 @@ Modalidad: audio · modelo: Qwen/Qwen2.5-0.5B-Instruct (transformers, CPU, float
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — invención: el texto es una pregunta, y el modelo la convirtió en una afirmación sobre proteínas y minerales que no está en el audio.
 
 ---
 
@@ -338,7 +339,7 @@ Nuria, ¿podrías proponerme una obra de teatro para hoy en la noche?
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omisión: todos los campos en null pudiendo resumir la petición; el tema podría ser "obra de teatro" y el texto trae además una referencia temporal ("hoy en la noche")
 
 ---
 
@@ -366,7 +367,7 @@ Mañana vaya abrigada, un gorro de lana y guantes es lo más recomendable.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omisión: dejó resumen y tema en null pudiendo resumir la petición.
 
 ---
 
@@ -394,7 +395,7 @@ Me ayudes a buscar una tienda donde pueda comprarle un regalo a mi abuela.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omisión: dejó resumen y tema en null pudiendo resumir la petición.
 
 ---
 
@@ -422,7 +423,7 @@ Estoy aburría de desayunarse real, quiero que me recomiendes un desayuno rápid
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — tema y resumen salen del texto, sin inventar; el resumen es parcial, repite el final de la frase.
 
 ---
 
@@ -450,7 +451,7 @@ Tienes que entrar al metro por la línea 9. Según Google, esta línea tiene 3 e
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — no inventa y el resumen es fiel; pero dejó `cifras` y `organizaciones` en null pese a que ambos datos aparecen en su propio resumen: los mencionó sin estructurarlos.
 
 ---
 
@@ -478,7 +479,7 @@ Me gustan demasiado las películas de ciencia ficción.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — tema exacto y no añade hechos nuevos; pero el resumen singulariza: el texto habla de un gusto por el género y el resumen suena a una película concreta.
 
 ---
 
@@ -506,7 +507,7 @@ Voy a la Ciudad de México por cuatro días.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** incorrecto — omisión: todos los campos en null pese a que el texto trae un lugar explícito ("Ciudad de México") y una cantidad ("cuatro días").
 
 ---
 
@@ -534,7 +535,7 @@ Quiero tener una mascota a quien le pueda decir mis sentimientos.
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — resumen fiel y completo, no un fragmento copiado; los campos sin dato están correctamente en null.
 
 ---
 
@@ -562,4 +563,4 @@ Modalidad: documento · modelo: Qwen/Qwen2.5-0.5B-Instruct (transformers, CPU, f
 }
 ```
 
-**Veredicto:**
+**Veredicto:** correcto — el resumen habla de "encaje", que sí aparece en el texto completo aunque no en el extracto de 800 caracteres; no inventa. Dejó `cifras` en null habiendo tres montos en libras peruanas (Lp.211,629, Lp.642,90l, Lp.42,280.3.37); además arrastró la errata del OCR hasta el resumen("peruinos" por "peruanos").

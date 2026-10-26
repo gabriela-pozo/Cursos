@@ -1,0 +1,21 @@
+id,modalidad,correcto,tipo_error,veredicto
+aud_pef_01208_01193903051,audio,True,,correcto — todos los campos aparecen en el texto y los ausentes están en null.
+aud_pef_01523_00025987806,audio,False,invencion,"incorrecto — invención: el texto es una pregunta y el modelo la convierte en una afirmación (""la ciudad ha establecido regulaciones""), que no está en el audio."
+aud_pef_02484_00239124837,audio,False,omision,"incorrecto — omisión: dejó tema y resumen en null, y también organizaciones, pese a que ""WhatsApp"" aparece en el texto."
+aud_pef_02484_00800951599,audio,False,omision,"incorrecto - omitió tema y resumen, el primero puede ser compra de un perro y el segundo una persona quiere comprarlo, pero desconoce las razas."
+aud_pef_03397_00105310998,audio,False,omision,"incorrecto — omisión: dejó tema y resumen en null, y también cifras, pese a que el texto trae cantidades (""una cebolla"", ""dos dientes de ajo"")."
+aud_pef_04310_01779939240,audio,False,omision,"incorrecto — omitió resumen, que sí se podía escribir a partir del texto."
+aud_pef_08784_01624964367,audio,False,omision,"incorrecto — omitió resumen, tema y lugar; ""la plaza"" sí aparece en el texto."
+aud_pef_09334_02028756242,audio,True,,"correcto — el resumen es fiel al texto y no inventa nada; omitió tema, que se podía poner."
+aud_pef_09697_00704431274,audio,False,omision,incorrecto — omisión: dejó resumen y tema en null pudiendo resumir la pregunta.
+aud_pem_00610_00202153686,audio,True,,"correcto — tema y resumen salen del texto, sin inventar; el resumen es parcial (omite relajación y equilibrio)."
+aud_pem_00610_00826490796,audio,False,invencion,"incorrecto — invención: el texto es una pregunta, y el modelo la convirtió en una afirmación sobre proteínas y minerales que no está en el audio."
+aud_pem_01208_00341280385,audio,False,omision,"incorrecto — omisión: todos los campos en null pudiendo resumir la petición; el tema podría ser ""obra de teatro"" y el texto trae además una referencia temporal (""hoy en la noche"")"
+aud_pem_01208_00999759644,audio,False,omision,incorrecto — omisión: dejó resumen y tema en null pudiendo resumir la petición.
+aud_pem_03349_00797280590,audio,False,omision,incorrecto — omisión: dejó resumen y tema en null pudiendo resumir la petición.
+aud_pem_07049_00541469161,audio,True,,"correcto — tema y resumen salen del texto, sin inventar; el resumen es parcial, repite el final de la frase."
+aud_pem_07505_00312036665,audio,True,,correcto — no inventa y el resumen es fiel; pero dejó `cifras` y `organizaciones` en null pese a que ambos datos aparecen en su propio resumen: los mencionó sin estructurarlos.
+aud_pem_07508_01835777824,audio,True,,correcto — tema exacto y no añade hechos nuevos; pero el resumen singulariza: el texto habla de un gusto por el género y el resumen suena a una película concreta.
+aud_pem_09334_01372052575,audio,False,omision,"incorrecto — omisión: todos los campos en null pese a que el texto trae un lugar explícito (""Ciudad de México"") y una cantidad (""cuatro días"")."
+aud_pem_09697_01192411833,audio,True,,"correcto — resumen fiel y completo, no un fragmento copiado; los campos sin dato están correctamente en null."
+imp_Memoria_BCRP_1923_p003,documento,True,,"correcto — el resumen habla de ""encaje"", que sí aparece en el texto completo aunque no en el extracto de 800 caracteres; no inventa. Dejó `cifras` en null habiendo tres montos en libras peruanas (Lp.211,629, Lp.642,90l, Lp.42,280.3.37); además arrastró la errata del OCR hasta el resumen(""peruinos"" por ""peruanos"")."
