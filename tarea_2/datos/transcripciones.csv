@@ -37,7 +37,7 @@ aud_pef_01208_01980282554,pef_01208_01980282554.wav,5.38,es,Es muy importante el
 aud_pef_01208_02073697234,pef_01208_02073697234.wav,7.77,es,"El actor es extraordinario, es de origen hindú y habla varios idiomas.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_01523_00025987806,pef_01523_00025987806.wav,6.66,es,¿Cuáles son los reglamentos de usar las bicicletas de la ciudad?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_01523_00247657828,pef_01523_00247657828.wav,5.55,es,El reciclaje es bueno para el medio ambiente.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pef_01523_00522726014,pef_01523_00522726014.wav,4.78,es,¿Cuál es el noticiero más importante?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pef_01523_00522726014,pef_01523_00522726014.wav,4.78,es,¿Cuál es el noticiero más importante?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,¿Cuál es el noticiero más importante?
 aud_pef_01523_00683558505,pef_01523_00683558505.wav,5.03,es,¿En qué calle está la casa?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_01523_00900640542,pef_01523_00900640542.wav,5.89,es,¿Qué beneficios tiene el comer frutas y verduras?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_01523_01472239235,pef_01523_01472239235.wav,7.51,es,¿Me puedes hacer un análisis de la película basándote en las recaudaciones que ha tenido?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -101,7 +101,7 @@ aud_pef_03349_02025712963,pef_03349_02025712963.wav,7.25,es,La película era tan
 aud_pef_03397_00029320125,pef_03397_00029320125.wav,4.18,es,¿Puedes verificarse de alguna cafetería cerca?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_03397_00105310998,pef_03397_00105310998.wav,5.55,es,Para hacer esa receta necesitas una cebolla y dos dientes de ajo.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_03397_00384320004,pef_03397_00384320004.wav,6.91,es,Me parece muy interesante el libro de Francisco sobre arte contemporáneo.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pef_03397_00786843445,pef_03397_00786843445.wav,6.31,es,¿Puedes verificar si hay alguna piscina olímpica cerca de la casa de Pedro?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pef_03397_00786843445,pef_03397_00786843445.wav,6.31,es,¿Puedes verificar si hay alguna piscina olímpica cerca de la casa de Pedro?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,¿Puedes verificar si hay una piscina olímpica cerca de la casa de Pedro?
 aud_pef_03397_00979698083,pef_03397_00979698083.wav,7.08,es,"Necesito configurarlo en la pantalla, pero estoy un poco perdido, ¿me puedes ayudar?","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_03397_01695197216,pef_03397_01695197216.wav,5.29,es,"Mañana va a llover todo el día, no olvides su impermeable.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_03397_02033763757,pef_03397_02033763757.wav,5.38,es,"La película es en inglés, pero está doblada el español de España.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -116,7 +116,7 @@ aud_pef_04310_01601379477,pef_04310_01601379477.wav,4.95,es,¿Cuánto tiempo hag
 aud_pef_04310_01732071763,pef_04310_01732071763.wav,5.03,es,"Estoy bien emocionada, me voy a Holanda.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_04310_01779939240,pef_04310_01779939240.wav,6.83,es,¿Cuáles fueron las consecuencias de este movimiento?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_04310_01796287329,pef_04310_01796287329.wav,3.93,es,Mañana va a nevar en la noche.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pef_04310_02004955505,pef_04310_02004955505.wav,5.38,es,a los carnívoros les encanta el tequila,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pef_04310_02004955505,pef_04310_02004955505.wav,5.38,es,a los carnívoros les encanta el tequila,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,A los carnívoros les encanta el tequila.
 aud_pef_04310_02130987430,pef_04310_02130987430.wav,7.51,es,Les recomiendo que vaya preparado con un buen impermeable y un termo con té caliente.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_04310_02143497039,pef_04310_02143497039.wav,7.94,es,"Hizo una película de guerra, luego otras sobre el siglo XVII y después otras sobre el espacio.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_05223_00215546534,pef_05223_00215546534.wav,5.38,es,Creo que tiene rota la tibia y el peronés.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -195,7 +195,7 @@ aud_pef_09697_00266685077,pef_09697_00266685077.wav,5.89,es,La aplicación te en
 aud_pef_09697_00532314389,pef_09697_00532314389.wav,4.01,es,¿En qué calle está la casa?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_09697_00704431274,pef_09697_00704431274.wav,5.03,es,¿Qué tipo de temas le gustaría escuchar?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_09697_01029682416,pef_09697_01029682416.wav,7.51,es,Es muy importante el apoyo nasal en la pronunciación.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pef_09697_01125907528,pef_09697_01125907528.wav,8.02,es,El tiempo total de viaje es de 10 horas 35 minutos.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pef_09697_01125907528,pef_09697_01125907528.wav,8.02,es,El tiempo total de viaje es de 10 horas 35 minutos.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,"El tiempo total de viaje es de diez horas, treinta y cinco minutos."
 aud_pef_09697_01257052265,pef_09697_01257052265.wav,5.97,es,la oscuridad del pozo era obscena por naturaleza.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_09697_01281373105,pef_09697_01281373105.wav,5.63,es,Quiero mi asiento en el pasillo.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pef_09697_01422959372,pef_09697_01422959372.wav,6.74,es,Estoy en varios grupos de redes sociales en donde intercambiamos ideas.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -218,7 +218,7 @@ aud_pem_00610_00597650903,pem_00610_00597650903.wav,6.4,es,¿Te gustaría comer 
 aud_pem_00610_00649467605,pem_00610_00649467605.wav,5.55,es,"Si quieres la compro y te la mando, llega pasado mañana.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_00610_00826490796,pem_00610_00826490796.wav,6.66,es,¿Conoce la información nutricional de la pisa vegetariana?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_00610_01157670820,pem_00610_01157670820.wav,4.27,es,Me acabo de comprar un rupecabezas.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pem_00610_01481040845,pem_00610_01481040845.wav,7.08,es,¿Qué hecho en específico te gustaría saber de la Primera Guerra Mundial?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pem_00610_01481040845,pem_00610_01481040845.wav,7.08,es,¿Qué hecho en específico te gustaría saber de la Primera Guerra Mundial?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,¿Qué hecho en específico te gustaría saber la primera guerra mundial?
 aud_pem_00610_01667879986,pem_00610_01667879986.wav,5.97,es,La película me llegó al corazón.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_00610_01877218365,pem_00610_01877218365.wav,4.35,es,La ciudad es bellísima y tan alegre.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_01208_00001812210,pem_01208_00001812210.wav,5.63,es,Un poco de humor nunca cae mal después de estos desastres.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -228,7 +228,7 @@ aud_pem_01208_00341280385,pem_01208_00341280385.wav,6.57,es,"Nuria, ¿podrías p
 aud_pem_01208_00912195288,pem_01208_00912195288.wav,4.69,es,¿Hay fútbol femenino en Estados Unidos?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_01208_00999759644,pem_01208_00999759644.wav,7.42,es,"Mañana vaya abrigada, un gorro de lana y guantes es lo más recomendable.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_01208_01576387658,pem_01208_01576387658.wav,4.86,es,El otro día comí un arroz con camarones.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pem_01208_01665361242,pem_01208_01665361242.wav,6.4,es,He estado pensando que necesito salir a pasear más a menudo.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pem_01208_01665361242,pem_01208_01665361242.wav,6.4,es,He estado pensando que necesito salir a pasear más a menudo.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,He estado pensando que necesito salir a pasear más a menudo.
 aud_pem_01208_01763913630,pem_01208_01763913630.wav,5.72,es,El otro día comí una sope champiñones muy picante.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_01208_01942454647,pem_01208_01942454647.wav,7.34,es,Ya no quiero usar tanto mi coche. Quiero usar más la bicicleta.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_01208_01944426315,pem_01208_01944426315.wav,5.63,es,"Yo no sé andar en bici, ahí te dan cursos.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -293,7 +293,7 @@ aud_pem_03349_00558309901,pem_03349_00558309901.wav,8.28,es,Las teclas para la m
 aud_pem_03349_00594104275,pem_03349_00594104275.wav,6.74,es,Últimamente he visto muchas bicicletas en la calle.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_03349_00797280590,pem_03349_00797280590.wav,6.14,es,Me ayudes a buscar una tienda donde pueda comprarle un regalo a mi abuela.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_03349_00803200685,pem_03349_00803200685.wav,5.72,es,Necesitamos encontrar una laptop roja para esta tarde.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pem_03349_00870034573,pem_03349_00870034573.wav,6.06,es,¿Dónde nació el director González Iñarrito?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pem_03349_00870034573,pem_03349_00870034573.wav,6.06,es,¿Dónde nació el director González Iñarrito?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,¿Dónde nació el director Gonzales Iñarritu?
 aud_pem_03349_01136540980,pem_03349_01136540980.wav,5.12,es,Hay muchas tiendas de ropa en el centro.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_03349_01454949281,pem_03349_01454949281.wav,6.49,es,Tienes que comer mejor y tomar vitaminas.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_03349_01682490756,pem_03349_01682490756.wav,4.95,es,¿Cuánto cueste ese traje de baño español?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -347,7 +347,7 @@ aud_pem_07049_00208098622,pem_07049_00208098622.wav,5.55,es,El viaje en avión e
 aud_pem_07049_00409342232,pem_07049_00409342232.wav,7.17,es,"Quiero salir de viaje con mis padres, pero no sé a dónde ir.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_07049_00541469161,pem_07049_00541469161.wav,8.96,es,"Estoy aburría de desayunarse real, quiero que me recomiendes un desayuno rápido y saludable.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_07049_00744289228,pem_07049_00744289228.wav,6.06,es,¿Quieres que te mande las noticias de los diferentes medios?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pem_07049_00952015254,pem_07049_00952015254.wav,7.68,es,ayer no pude dormir y no sé qué puedo hacer para dormir mejor,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pem_07049_00952015254,pem_07049_00952015254.wav,7.68,es,ayer no pude dormir y no sé qué puedo hacer para dormir mejor,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,Ayer no pude dormir y no sé qué puedo hacer para dormir mejor.
 aud_pem_07049_01135642675,pem_07049_01135642675.wav,7.68,es,"Muy bien, te enviaré esas canciones enseguido.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_07505_00145585437,pem_07505_00145585437.wav,5.89,es,Los corazones de pollo son una delicia.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_07505_00183794883,pem_07505_00183794883.wav,9.47,es,Es una gran ventaja tener a una amiga mayor.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -369,7 +369,7 @@ aud_pem_07508_01796320827,pem_07508_01796320827.wav,14.17,es,¿Qué me recomenda
 aud_pem_07508_01810502901,pem_07508_01810502901.wav,9.39,es,¿Es verdad que usaron perros de verdad en la película?,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_07508_01835777824,pem_07508_01835777824.wav,9.13,es,Me gustan demasiado las películas de ciencia ficción.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_07508_01836937109,pem_07508_01836937109.wav,9.64,es,"Quiero que por favor averigues qué películas tienen para hoy, a qué hora y cuál es la que más recomiendan.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pem_08421_00033745102,pem_08421_00033745102.wav,7.51,es,"Lo interesante de su educación es que ya no quería ser historiadora, quería ser cocinera.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pem_08421_00033745102,pem_08421_00033745102.wav,7.51,es,"Lo interesante de su educación es que ya no quería ser historiadora, quería ser cocinera.","faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,"Lo interesante de su educación es que ella no quería ser historiadora, quería ser cocinera."
 aud_pem_08421_00083262918,pem_08421_00083262918.wav,5.38,es,Ahora puedes encontrar pambaguet en todas partes.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_08421_00276869657,pem_08421_00276869657.wav,5.72,es,Esa palabra no tiene un origen conocido.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_08421_00468732418,pem_08421_00468732418.wav,5.63,es,El pijama de rayas es azul.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
@@ -400,4 +400,4 @@ aud_pem_09697_00899130046,pem_09697_00899130046.wav,6.57,es,habría de investiga
 aud_pem_09697_01153185376,pem_09697_01153185376.wav,4.44,es,El pijama de rayas es azul.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_09697_01192411833,pem_09697_01192411833.wav,5.72,es,Quiero tener una mascota a quien le pueda decir mis sentimientos.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
 aud_pem_09697_01660418360,pem_09697_01660418360.wav,4.18,es,mañana va a estar nublado por la mañana,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
-aud_pem_09697_01885600279,pem_09697_01885600279.wav,7.51,es,Tengo que hacer una presentación para la oficina y queremos ligarlo a un evento cultural.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,
+aud_pem_09697_01885600279,pem_09697_01885600279.wav,7.51,es,Tengo que hacer una presentación para la oficina y queremos ligarlo a un evento cultural.,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",1,Tengo que hacer una presentación para la oficina y queremos ligarlo a un evento cultural.

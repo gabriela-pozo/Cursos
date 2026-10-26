@@ -1,0 +1,21 @@
+id,modalidad,tipo,modelo,metrica,valor,cifras_exactas,cifras_total
+imp_Manuscrito_31_PE_1352_Carta_escrita_a_Don_Agust_n_Gamarra_p023,documento,impreso,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.0397,0,0
+imp_Manuscrito_31_PE_1352_Carta_escrita_a_Don_Agust_n_Gamarra_p003,documento,impreso,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.9038,0,2
+imp_Memoria_BCRP_1922_p002,documento,impreso,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.0218,9,11
+imp_Memoria_BCRP_1923_p003,documento,impreso,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.009,18,20
+fot_Foto_regulacion_conceptos,documento,foto,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.0408,1,1
+fot_Foto_sintesis_reporte_marzo_2019,documento,foto,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.4595,25,25
+fot_Foto_boletas,documento,foto,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.1142,9,11
+man_Manuscrito_cuaderno1,documento,manuscrito,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.1008,1,1
+man_Manuscrito_cuaderno3,documento,manuscrito,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.1152,3,4
+man_Manuscrito_hoja_calle,documento,manuscrito,"PP-OCRv6 (PaddleOCR, engine=transformers)",CER,0.2405,0,0
+aud_pef_01523_00522726014,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0,,
+aud_pef_03397_00786843445,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0769,,
+aud_pef_04310_02004955505,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0,,
+aud_pef_09697_01125907528,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0,,
+aud_pem_00610_01481040845,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0909,,
+aud_pem_01208_01665361242,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0,,
+aud_pem_03349_00870034573,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.3333,,
+aud_pem_07049_00952015254,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0,,
+aud_pem_08421_00033745102,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0667,,
+aud_pem_09697_01885600279,audio,audio,"faster-whisper small (CTranslate2 int8, CPU, VAD Silero)",WER,0.0,,
