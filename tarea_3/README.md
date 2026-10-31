@@ -1,11 +1,11 @@
 # Cohortes escolares del Perú 2025
 
-**Tarea 3, Python Intermedio** (issue 197 de d2cml-ai/Data-Science-Python). Proyecto individual de **[Tu nombre y apellido]**.
+**Tarea 3, Python Intermedio** (issue 197 de d2cml-ai/Data-Science-Python). Proyecto individual de **Gabriela Pozo**.
 
 > **Tema:** estructura por edades del Censo 2025 (INEI) y oferta escolar del Censo Educativo 2025 (Minedu), por distrito.
 > **Pregunta de investigación (opción B):** ¿qué distritos enfrentarán más presión o más brecha en el sistema escolar en los próximos 6 años, y a cuáles habría que atender primero?
 
-- **Dashboard público:** `https://TU-USUARIO.github.io/TU-REPO/tarea_3/web/` *(completar al publicar; ver «¿Cómo publicar con GitHub Pages?»)*
+- **Dashboard público:** <https://gabriela-pozo.github.io/Cursos/tarea_3/web/>
 - **Publicación de LinkedIn:** *(completar)*
 - **Reel:** `reel/reel.mp4` (ver `reel/README.md`)
 
@@ -126,7 +126,7 @@ GitHub Pages solo publica desde la raíz del repositorio (`/ (root)`) o desde un
 1. Sube la rama a GitHub y únela a `main`.
 2. En el repositorio: **Settings → Pages → Build and deployment → Source: Deploy from a branch**.
 3. Elige **Branch: `main`** y carpeta **`/ (root)`**, y guarda.
-4. Después de uno o dos minutos, el dashboard queda en `https://TU-USUARIO.github.io/Cursos/tarea_3/web/`.
+4. Después de uno o dos minutos, el dashboard queda en `https://gabriela-pozo.github.io/Cursos/tarea_3/web/`.
 
 Otra opción, si prefieres que la URL apunte solo al dashboard: copia el contenido de `tarea_3/web/` a una carpeta `docs/` en la raíz del repositorio y elige `/docs` en el paso 3. También se puede publicar `tarea_3/web` con un flujo de GitHub Actions ("Static HTML").
 
