@@ -1,8 +1,12 @@
-.venv/
-.venv-llm/
-salidas*/
-fuentes/
+data/raw/*
+!data/raw/README.md
+reel/audio/*.wav
+reel/musica.mp3
+__pycache__/
+*.pyc
 
-mi_voz.*
-
-mi_voz.*
+# datos crudos fuera de data/raw (el padrón tiene datos personales: nunca se sube)
+*.dbf
+*.zip
+inei_tabulados/
+node_modules/

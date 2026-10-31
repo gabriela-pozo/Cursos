@@ -1,98 +1,141 @@
-# Entrega · Sesión 15 · Del texto a tu voz: reels con modelos abiertos
+# Cohortes escolares del Perú 2025
 
-**Nombre:** Gabriela  
-**Texto que usaste:** Síntesis del Reporte de Inflación, BCRP, setiembre de 2026 (5 páginas), de mi carrera  
-**Link de tu repo:** https://github.com/gabriela-pozo/Cursos/tree/main/tarea_3  
-**Fecha:** 24 de octubre de 2026
+**Tarea 3, Python Intermedio** (issue 197 de d2cml-ai/Data-Science-Python). Proyecto individual de **[Tu nombre y apellido]**.
 
-## 1. Archivos de la entrega: del texto a tu voz
+> **Tema:** estructura por edades del Censo 2025 (INEI) y oferta escolar del Censo Educativo 2025 (Minedu), por distrito.
+> **Pregunta de investigación (opción B):** ¿qué distritos enfrentarán más presión o más brecha en el sistema escolar en los próximos 6 años, y a cuáles habría que atender primero?
 
-| Archivo | Qué es |
+- **Dashboard público:** `https://TU-USUARIO.github.io/TU-REPO/tarea_3/web/` *(completar al publicar; ver «¿Cómo publicar con GitHub Pages?»)*
+- **Publicación de LinkedIn:** *(completar)*
+- **Reel:** `reel/reel.mp4` (ver `reel/README.md`)
+
+![Cabecera y panorama del dashboard](docs/img/dashboard_1_resumen.png)
+![Mapa con filtros y detalle del distrito](docs/img/dashboard_2_mapa.png)
+![Pesos, ranking y barras por departamento](docs/img/dashboard_3_graficos.png)
+
+## Respuesta corta
+
+En el Perú hay **80.7 niños de 3 a 5 años por cada 100 de 9 a 11**: en los próximos seis años llegarán a la escuela menos niños de los que hoy terminan primaria. Pero el país no es uniforme. Un índice de prioridad que combina **demanda**, **brecha de cobertura** y **brecha de condiciones** identifica **151 distritos de prioridad alta** (índice ≥ 75 de 100) entre los 1,798 evaluados. Ahí viven 151,020 niños de 3 a 5 años (11.0 % del país). Por ellos habría que empezar, en especial por los **36 distritos con triple brecha**.
+
+Todas las cifras de esta página y del dashboard salen de [`docs/hallazgos.md`](docs/hallazgos.md) y de `web/data/findings.js`, que escribe `scripts/05b_findings.py`.
+
+## Hallazgos
+
+1. **44 % de la prioridad alta está en tres departamentos.** 66 de los 151 distritos de prioridad alta están en Loreto (25), Huánuco (21) y San Martín (20). Loreto pone 9 de los 15 primeros del ranking.
+2. **Donde la demanda crece, la cobertura es menor.** En los 194 distritos con más niños de 3 a 5 que de 9 a 11 años, la mediana de asistencia es 77 % a los 3–5 años y 38 % a los 17–24 años; en los 1,586 donde la demanda se achica, 80 % y 47 %.
+3. **Triple brecha.** 36 distritos están en el 25 % más exigido del país en las tres dimensiones a la vez. Ahí viven 49,812 niños de 3 a 5 años.
+4. **En la prioridad alta hay más alumnos por docente y menos internet.** La mediana es 14.4 alumnos por docente en los distritos de prioridad alta y 10.3 en el resto. Usa internet el 26 % de los niños de 5 a 14 años en los primeros, contra 37 % en el resto.
+5. **La otra presión: aulas que se vacían.** 351 distritos se achican con certeza estadística y ahí vive el 63 % de los niños de 6 a 11 años del país (48 % de ellos en Lima y Callao). No son prioridad por brecha, pero sí necesitan planificar menos matrícula.
+
+**Top 5 de prioridad:** Nieva y El Cenepa (Amazonas), Manseriche (Loreto), Tahuania (Ucayali) y Andoas (Loreto). Los nombres se escriben como vienen en la fuente (sin tilde). El Top 15 completo está en `docs/hallazgos.md` y en el dashboard.
+
+## ¿Qué tiene el dashboard?
+
+Es una sola página (`web/index.html`) en JavaScript puro, sin librerías ni CDN. Funciona abriendo el archivo con doble clic (`file://`) y en GitHub Pages. Tiene modo claro y oscuro, íconos propios y está diseñada primero para celular (390 px). Tiene modo claro y oscuro, y está diseñada primero para celular (390 px).
+
+| Sección | Contenido |
 |---|---|
-| `reel.mp4` | Reel vertical de 53,7 s narrado con mi voz clonada, con subtítulos y el aviso «Voz generada con IA» |
-| `posts.md` | Tres posts (LinkedIn, X y Facebook) revisados |
-| `guion_qwen.json` | Guion generado por Qwen, sin corregir |
-| `guion_deepseek.json` | Guion generado por DeepSeek, sin corregir |
-| `guion_deepseek_corregido.json` | Guion de DeepSeek con mis correcciones (es el que se narró) |
-| `portada.png`, `reel.srt` | Portada y subtítulos del reel |
+| Cabecera | Título, pregunta, contexto y navegación fija con botón de tema |
+| 1. Panorama | Cifra principal (151 distritos de prioridad alta), 4 KPIs, la respuesta en 20 segundos, qué es el IRC y los 5 hallazgos |
+| 2. Mapa | Filtros comunes (departamento, niños que entran frente a los que salen, motivo de la prioridad, zona rural o urbana, tamaño del distrito, datos disponibles y solo prioridad alta), con el total de niños de 3 a 5 años de la selección. Mapa coroplético de canvas con zoom, arrastre, acercamiento al departamento elegido y selector de variable (prioridad, las tres dimensiones, IRC y los indicadores de base: asistencia, alumnos por docente, internet y ruralidad). Panel de detalle con las tres dimensiones. Lista de 69 distritos sin mapa |
+| 3. Prioridades | Sliders de pesos que recalculan el índice en vivo, matriz de calor del Top 15, qué tipo de respuesta sugiere cada motivo, prioridad alta por departamento, dispersión IRC vs. ruralidad, comparador de dos distritos y tabla ordenable y buscable con descarga CSV |
+| 4. Método y límites | Pasos, límites, fuentes, aviso de que no es una proyección oficial y créditos |
 
-Nivel que busco: **Excelente** (reel y posts revisados, correcciones explicadas y comparación Qwen vs DeepSeek).
+Cada gráfico tiene un tooltip y una vista "Ver como tabla". El foco por teclado muestra lo mismo que el hover: en el mapa y la dispersión se recorren los distritos con las flechas, y las barras se recorren con Tab.
 
-El reel no se publica para no dejar mi voz pública; lo presento en clase.
+## ¿Cómo se calcula?
 
-## 2. ¿Cómo lo hice?
+Solo conteos, razones, percentiles y diferencias; no hay econometría.
 
-1. Generé el prompt con `guion.py` a partir del PDF y lo pegué en chat.qwen.ai y en chat.deepseek.com, con el mismo prompt y el mismo texto.
-2. Revisé los dos guiones escena por escena contra el informe.
-3. Elegí el de DeepSeek, lo corregí a mano y lo narré.
-4. Voz: Qwen3-TTS 0,6B (clonada con una grabación mía de 22 s). Subtítulos y control de calidad: Whisper large-v3-turbo. Video: Pillow y ffmpeg.
-5. Todo corrió en una laptop con Windows, sin GPU.
+1. **Demanda:** IRC del distrito = niños de 3 a 5 años ÷ niños de 9 a 11 años (Censo 2025). Un IRC mayor que 1 indica que la demanda crece.
+2. **Brecha de cobertura:** proporción que no asiste a una institución educativa a los 3–5 y a los 17–24 años.
+3. **Brecha de condiciones:** alumnos por docente (Censo Educativo 2025) y proporción de niños de 5 a 14 años que no usa internet.
+4. **Percentiles:** cada indicador se convierte en percentil (0 a 100, donde 100 es lo más exigido) entre los distritos con 500 habitantes o más. Cada dimensión se redondea a un decimal.
+5. **Índice:** promedio ponderado de las dimensiones disponibles (al menos 2). Por defecto los tres pesos valen 1 (`config.json`). El dashboard usa la misma fórmula (`web/indice.js`) y la prueba `RankingDashboard` comprueba que, con pesos iguales, reproduce `prioridad_distrito.csv` posición por posición.
+6. **Prioridad alta:** índice ≥ 75 (`config.json → prioridad.prioridad_alta_min`).
 
-## 3. Resultado técnico
+La tipología de cohortes (contracción, estable o incierto, expansión, muestra pequeña) usa un intervalo de Wilson al 95 % sobre el IRC: 351 distritos en contracción, 750 estables o inciertos, 21 en expansión y 771 con muestra pequeña.
 
-- Narración de **53,7 s** (dentro de los 30 a 60 s pedidos) y **139 palabras** subtituladas.
-- Control de Whisper, palabras mal entendidas por escena: 0,04 · 0,00 · 0,06 · 0,05 · 0,09 · 0,04 · 0,00. Ninguna superó el 25 %, así que no se regeneró ninguna escena.
-- Tiempo total del reel con modelos ya descargados: unos 7,7 minutos en CPU.
+**Validaciones:** los alumnos de colegios públicos del padrón suman 6,731,402, igual que la cifra oficial del Minedu. La suma de edades simples difiere en 0.016 % de la población censada.
 
-## 4. Mis correcciones al guion de DeepSeek
+## Fuentes
 
-| Dónde | Qué decía el modelo | Qué dice el informe | Corrección |
-|---|---|---|---|
-| Escena 2 | El alza se explica por alimentos; la cifra mostrada era +4,37 % con etiqueta «Alimentos y energía» | 4,37 % es la inflación del grupo alimentos y energía juntos (cuadro de la p. 5); el texto atribuye el alza sobre todo a alimentos como pescado fresco, huevos y pollo | Etiqueta explícita («Inflación de alimentos y energía, ago. 2026»), frase con «sobre todo» y sin repetir la fecha |
-| Escena 6 | El riesgo sube por El Niño Costero extraordinario | El balance de riesgos se revisa al alza sobre todo por el mayor riesgo de choques de oferta internos; el escenario base **supone** un Niño Costero extraordinario (p. 5) | Frase que separa el motivo (choques de oferta internos) del supuesto (El Niño) |
-| Escena 7 | «Mira el tablero completo en mi perfil» (el prompt de `guion.py` pide ese tipo de cierre) | No existe ningún tablero | Cierre con el reporte completo en la web del BCRP |
-| Posts | Mencionaban el tablero en los tres; en LinkedIn y Facebook la frase de El Niño tenía el mismo problema que la escena 6 | Igual que arriba | Se quitó el tablero y se corrigió la frase de El Niño; se mantuvo el aviso de IA |
+| Fuente | Uso |
+|---|---|
+| [INEI, Censos Nacionales 2025, tabulados de población](https://censos2025.inei.gob.pe/resultados/descarga-de-datos/cuadros-estadisticos/tabulados/tabulados-poblacion) | Edad simple, asistencia escolar, omisión censal y uso de internet por distrito |
+| [Minedu, ESCALE, Censo Educativo 2025](https://escale.minedu.gob.pe) | Padrón de instituciones educativas (alumnos y docentes). Solo se publican agregados por distrito |
+| [juaneladio/peru-geojson](https://github.com/juaneladio/peru-geojson) (MPL-2.0) | Polígonos distritales simplificados |
 
-## 5. Comparación Qwen vs DeepSeek (mismo prompt, mismo informe)
+## ¿Qué límites tiene?
 
-Clasifiqué los problemas en cinco tipos:
+- **Nombres.** Los nombres de distritos se muestran como vienen en la fuente; algunos no llevan tilde.
+- **Residencia, no colegio.** El censo cuenta a los niños donde viven; un niño puede estudiar en otro distrito.
+- **Polígonos de ~2015.** 69 distritos no tienen polígono: no aparecen en el mapa, pero sí en el ranking, los gráficos y la tabla.
+- **Omisión censal.** En 117 distritos la omisión estimada supera el 8 % (9 de ellos son de prioridad alta).
+- **No es una proyección.** El IRC compara dos cohortes del mismo año; no incluye migración, mortalidad ni repitencia.
+- **Sin índice.** 95 distritos quedan fuera del índice por tener menos de 500 habitantes o menos de 2 dimensiones con datos.
+- Es un **análisis de apoyo**, no una proyección oficial. No recomienda abrir ni cerrar colegios.
 
-- **A. Persona o dato inventado** (el modelo habla como autor del informe).
-- **B. Proyección o supuesto presentado como hecho.**
-- **C. Etiqueta o cifra mal asociada.**
-- **D. Imprecisión menor** (falta el período o el «interanual»).
-- **E. Referencia inexistente** (el tablero).
+## Diseño
 
-| | Qwen | DeepSeek |
-|---|---|---|
-| Escenas totales | 6 | 7 |
-| **Escenas con errores de fondo** (A, B o C) | **4 de 6** | **2 de 7** |
-| A. Persona o dato inventado | 3 escenas (1, 3 y 4) y 2 posts | 0 |
-| B. Proyección como hecho | 1 escena (3) y 3 posts | 1 escena (6) y 2 posts |
-| C. Etiqueta o cifra mal asociada | 1 escena (2) | 1 escena (2) |
-| D. Imprecisión menor | 2 escenas (4 y 5) | 0 |
-| E. Referencia inexistente (tablero), **inducida por el prompt**: no se cuenta como error del modelo | 1 escena (6) y 3 posts | 1 escena (7) y 3 posts |
-| Cifras correctas contra el informe | 5 de 5 | 6 de 6 |
+- Magnitudes: una sola gama azul en 5 clases. En modo claro va de `#86b6ef` a `#0d366b`; en modo oscuro, de `#184f95` a `#b7d3f6` (el valor alto es el más claro).
+- IRC (crece o se achica): par divergente rojo/azul con gris neutro en el centro (0.9–1.1).
+- Colores categóricos: solo dos, azul y naranja (prioridad alta y comparador). No se usan colores de estado para series.
+- Paletas validadas con el validador de la skill *dataviz* (`validate_palette.js`), en modo claro y oscuro: categórica (`--pairs all`), rampa ordinal y polos del divergente. El primer intento falló en dos puntos y se corrigió: el paso más claro de la rampa (`#cde2fb`, contraste 1.29:1) y el polo azul del divergente en oscuro (`#5598e7`, fuera de la banda de luminosidad).
 
-**Ejemplos.** Qwen escribió «mi proyección de crecimiento» y «mis exportaciones se benefician», como si la autora fuera el BCRP y el país fueran suyos, y presentó El Niño como un hecho que ya bajó el crecimiento, cuando el informe lo trata como un supuesto de la proyección. DeepSeek se mantuvo más cerca del texto, pero mezcló una cifra de alimentos y energía con una frase solo de alimentos y atribuyó el alza del riesgo a El Niño en lugar de a los choques de oferta.
+## Estructura del repositorio
 
-**Conclusión.** En esta prueba, **DeepSeek inventó menos que Qwen**: 2 de 7 escenas con errores de fondo frente a 4 de 6, y ninguna persona inventada. Ambos repitieron el «tablero en mi perfil», pero **no es un error de los modelos**: el prompt de `guion.py` les pide que la última escena invite a «ver el tablero» y trae como ejemplo «Mira el tablero: enlace en mi perfil» (líneas 28 y 38). Por eso no lo conté contra ninguno. Es **una sola corrida con un solo informe**, así que no sirve para afirmar que un modelo sea mejor en general.
+```
+tarea_3/
+├── README.md
+├── config.json                 parámetros (edades, umbrales, pesos, prioridad alta)
+├── run_all.sh                  corre toda la tubería (o solo la parte web: bash run_all.sh web)
+├── scripts/
+│   ├── 01, 01b, 02, 03, 04     lectura de INEI y Minedu, cruce de ubigeos, indicadores
+│   ├── 04b_prioridad.py        índice de prioridad -> prioridad_distrito.csv
+│   ├── 05_build_web.py         une indicadores + prioridad -> web/data/distritos.js, geometria.js
+│   ├── 05b_findings.py         KPIs, Top 15, hallazgos y conteos -> web/data/findings.js, docs/hallazgos.md
+│   └── 06, 07                  imágenes y video del reel
+├── data/processed/             tablas por distrito (CSV)
+├── web/                        dashboard: index.html, styles.css, app.js, indice.js, data/
+├── docs/                       hallazgos.md (generado), diccionario de datos, LinkedIn, issue, img/
+├── reel/
+└── tests/                      test_consistencia.py y verificar_dashboard.js (Playwright)
+```
 
-## 6. Lo que la verificación automática no detectó
+## ¿Cómo reproducir los resultados?
 
-`guion.py` marcó **«ok» en las 6 escenas de Qwen y en las 7 de DeepSeek**, porque todas las cifras sí aparecen en el informe. Pero había frases falsas, inventadas o mal atribuidas, incluida una escena sin cifra que mencionaba un tablero inexistente. La verificación automática valida números, no afirmaciones. La revisión humana contra la fuente es la que detectó los errores, y fue necesaria antes de narrar.
+```bash
+pip install -r requirements.txt
+# Con los datos crudos en data/raw/ (ver data/raw/README.md):
+bash run_all.sh
+# Solo índice, datos web, hallazgos y pruebas, a partir de data/processed/:
+bash run_all.sh web
+# Pruebas
+python -m unittest discover tests
+# Verificación visual (opcional, requiere Chrome y: npm install playwright-core)
+node tests/verificar_dashboard.js docs/img/verificacion final
+```
 
-## 7. Problemas técnicos en Windows
+Si `data/raw/peru_distrital_simple.geojson` no está, `05_build_web.py` reutiliza los polígonos que ya tiene `web/data/geometria.js`.
 
-- **`UnicodeDecodeError` al leer `guion.json`:** `guion.py` lo escribió en la codificación ANSI de Windows y no en UTF-8. Lo resolví activando `PYTHONUTF8=1` en la terminal y guardando el guion corregido en UTF-8.
-- **Rutas de Mac en los comandos del README:** usé `.venv\Scripts\python` en lugar de `.venv/bin/python` y no usé `--device mps`.
-- **Avisos de `flash-attn`, `SoX` y symlinks de Hugging Face:** no bloquearon la ejecución.
-- **Primera corrida lenta:** descargó unos 4 GB de modelos; la voz en CPU no muestra progreso mientras genera.
+## ¿Cómo publicar con GitHub Pages?
 
-## 8. Limitaciones que observé en el reel y mejoras propuestas
+GitHub Pages solo publica desde la raíz del repositorio (`/ (root)`) o desde una carpeta `/docs` en la raíz. **No** permite elegir `/web` ni `tarea_3/web` directamente. Como este repositorio (`Cursos`) tiene varias tareas, la opción más simple es:
 
-Después de ver y escuchar el reel completo, noté tres problemas que ni la verificación de cifras ni el control de Whisper señalaron:
+1. Sube la rama a GitHub y únela a `main`.
+2. En el repositorio: **Settings → Pages → Build and deployment → Source: Deploy from a branch**.
+3. Elige **Branch: `main`** y carpeta **`/ (root)`**, y guarda.
+4. Después de uno o dos minutos, el dashboard queda en `https://TU-USUARIO.github.io/Cursos/tarea_3/web/`.
 
-1. **La sigla «BCRP» no se entiende bien en la narración.** La voz clonada no la pronuncia con claridad. Las escenas que la contienen (la 1 y la 5) tuvieron un error de Whisper de 0,04 y 0,09, así que el control automático no las marcó como problema. **Mejora:** decir «el Banco Central» en las frases habladas (más fácil de pronunciar y de entender) y dejar «BCRP» solo en el texto escrito, como en los posts.
-2. **En la escena de El Niño, el texto y la imagen no ayudan a entender el mensaje.** La pantalla muestra «El Niño» en letras gigantes, como si fuera una cifra, con la etiqueta «Supuesto de la proyección». La cifra «El Niño» la propuso DeepSeek; la etiqueta la escribí yo al corregir el guion, sin probar cómo se vería en pantalla. Juntas parecen un título sin explicación. La frase es larga y técnica («balance de riesgos», «choques de oferta», «escenario base»). Quien no conoce el informe no entiende qué significa ni por qué importa. **Mejora:** una frase más corta que diga el efecto («el BCRP supone un Fenómeno El Niño extraordinario; si se intensifica o dura más, la inflación podría ser mayor») y una etiqueta que lo explique.
+Otra opción, si prefieres que la URL apunte solo al dashboard: copia el contenido de `tarea_3/web/` a una carpeta `docs/` en la raíz del repositorio y elige `/docs` en el paso 3. También se puede publicar `tarea_3/web` con un flujo de GitHub Actions ("Static HTML").
 
-3. **Los cambios de escena no coinciden del todo con la narración.** En las transiciones, la tarjeta de la escena siguiente aparece cuando la voz todavía no terminó la frase anterior, y los subtítulos mezclan el final de una escena con el inicio de la otra (por ejemplo, la franja mostró «mil veintisiete El balance» sobre la tarjeta de El Niño). Causa probable, por confirmar en `reel.py`: las tarjetas y los subtítulos se sincronizan con tiempos distintos en el límite entre escenas. **Mejora posible:** que cada tarjeta dure hasta la última palabra de su escena, o dejar una pausa corta entre escenas.
+No hace falta compilar nada: los datos se cargan con `<script src="data/*.js">`.
 
-**Aprendizaje:** las verificaciones automáticas (cifras con ¡ y error de palabras de Whisper) no miden si el mensaje se entiende ni si se oye claro. Hay que ver y escuchar el reel final, además de leer el guion.
+## ¿Cómo usar estos resultados?
 
-## 9. Reglas
+Sirven para decidir **dónde mirar primero**, no para decidir qué hacer en cada distrito. El dashboard muestra, para cada distrito, su **motivo de prioridad** (más niños por atender, menos asistencia escolar, pocos docentes e internet) cuando esa dimensión llega a 75 puntos o más, y si su prioridad **se mantiene al cambiar los pesos**: 107 de los 151 distritos siguen en prioridad alta si se duplica el peso de cualquiera de las tres dimensiones. Conviene contrastarlos con datos de las UGEL, con los flujos de estudiantes entre distritos y con los proyectos en curso. No son una proyección oficial ni sirven para abrir o cerrar colegios.
 
-- La voz clonada es **la mía**.
-- El video y los tres posts declaran que la voz fue generada con IA.
-- El guion completo fue leído contra el informe antes de narrarlo.
-- Mi grabación de voz no se sube al repositorio.
+## Declaración de uso de IA
+
+Este proyecto se desarrolló con asistencia de **Claude (Anthropic)**: exploración de datos, código, diseño del tablero, verificación con Playwright y redacción. Las decisiones de tema, pregunta y enfoque, y la revisión de los resultados, son de la autora. La **voz del reel es sintética**, generada con IA a partir de una grabación propia de la autora. Los datos son públicos (INEI y Minedu). No hay claves ni datos personales en el repositorio: el padrón (`Padron.dbf`) no se publica porque contiene nombres de directores y teléfonos; solo se suben agregados por distrito.

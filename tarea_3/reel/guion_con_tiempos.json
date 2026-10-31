@@ -1,0 +1,68 @@
+{
+  "titulo": "Cohortes escolares del Perú 2025: ¿qué distritos atender primero?",
+  "formato": {
+    "ancho": 1080,
+    "alto": 1920,
+    "fps": 30
+  },
+  "voz": "Voz generada con IA a partir de una grabación propia de la autora (15-25 s). Cada escena tiene su archivo en reel/audio/escena_N.wav",
+  "fuente_datos": "INEI Censos Nacionales 2025; Minedu Censo Educativo 2025 (ESCALE)",
+  "escenas": [
+    {
+      "id": 1,
+      "rol": "gancho",
+      "narracion": "En el Perú hay ochenta y un niños de tres a cinco años por cada cien de nueve a once. ¿Qué distritos sentirán más presión en los próximos seis años?",
+      "visual": "Número 80.7 y dos barras: niños de 3 a 5 contra niños de 9 a 11 años",
+      "t0": 0.0,
+      "dur": 12.14,
+      "con_audio": false
+    },
+    {
+      "id": 2,
+      "rol": "metodo",
+      "narracion": "Usé el Censo 2025 del INEI y el Censo Educativo del Minedu. Para cada distrito combiné tres cosas: cuántos niños vienen por entrar, cuántos faltan en la escuela y qué condiciones tienen los colegios.",
+      "visual": "Tres tarjetas: demanda, cobertura y condiciones, con el umbral de 75 puntos",
+      "t0": 12.14,
+      "dur": 13.68,
+      "con_audio": false
+    },
+    {
+      "id": 3,
+      "rol": "hallazgo_1",
+      "narracion": "Resultado: ciento cincuenta y un distritos, de mil setecientos noventa y ocho, son de prioridad alta. Ahí viven ciento cincuenta y un mil niños de tres a cinco años.",
+      "visual": "Mapa del índice con los distritos de prioridad alta resaltados",
+      "t0": 25.82,
+      "dur": 11.75,
+      "con_audio": false
+    },
+    {
+      "id": 4,
+      "rol": "hallazgo_2",
+      "narracion": "Los primeros son Nieva y El Cenepa, en Amazonas; Manseriche, en Loreto; Tahuania, en Ucayali; y Andoas, en Loreto.",
+      "visual": "Barras con el índice de los cinco primeros distritos",
+      "t0": 37.57,
+      "dur": 7.91,
+      "con_audio": false
+    },
+    {
+      "id": 5,
+      "rol": "hallazgo_3",
+      "narracion": "El cuarenta y cuatro por ciento está en Loreto, Huánuco y San Martín. Y en treinta y seis distritos se juntan las tres brechas a la vez. Por ahí habría que empezar.",
+      "visual": "Barras de prioridad alta por departamento y cifra de triple brecha",
+      "t0": 45.48,
+      "dur": 12.91,
+      "con_audio": false
+    },
+    {
+      "id": 6,
+      "rol": "cierre",
+      "narracion": "Explora tu distrito en el dashboard. Datos del INEI y el Minedu. Esta voz fue generada con inteligencia artificial a partir de mi propia voz.",
+      "visual": "Llamado a la acción con enlace al dashboard, créditos y aviso de voz de IA",
+      "t0": 58.38,
+      "dur": 10.22,
+      "con_audio": false
+    }
+  ],
+  "musica": "Pista con licencia que el usuario elija (por ejemplo YouTube Audio Library o Pixabay). Se mezcla a -22 dB bajo la voz. Anotar la licencia en reel/CREDITOS.md",
+  "duracion_total_s": 68.6
+}

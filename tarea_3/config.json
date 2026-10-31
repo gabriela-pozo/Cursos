@@ -1,0 +1,45 @@
+{
+  "version": "0.1.0",
+  "censo_anio": 2025,
+  "irc_central": {
+    "entrantes": [
+      3,
+      5
+    ],
+    "salientes": [
+      9,
+      11
+    ]
+  },
+  "irc_tope": {
+    "entrantes": [
+      0,
+      5
+    ],
+    "salientes": [
+      6,
+      11
+    ]
+  },
+  "omision_edades_0_2": 1.0,
+  "tipologia": {
+    "contraccion_irc_max": 0.9,
+    "expansion_irc_min": 1.0,
+    "min_ninos_salientes": 150,
+    "nivel_confianza_z": 1.96
+  },
+  "colegio_pequeno_max_alumnos": 20,
+  "prioridad": {
+    "pesos": {
+      "demanda": 1,
+      "cobertura": 1,
+      "condiciones": 1
+    },
+    "demanda_direccion": "crece",
+    "poblacion_minima": 500,
+    "min_dimensiones": 2,
+    "omision_alta": 0.08,
+    "prioridad_alta_min": 75,
+    "horizonte_anios": 6
+  }
+}
