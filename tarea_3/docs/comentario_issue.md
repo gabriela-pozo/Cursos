@@ -1,4 +1,4 @@
-### Tarea 3 – [Nombre y apellido]
+### Tarea 3 – Gabriela Pozo
 
 **Tema:** Cohortes escolares del Perú 2025: estructura por edades del Censo 2025 (INEI) y oferta escolar del Censo Educativo 2025 (Minedu), por distrito.
 
@@ -6,8 +6,8 @@
 
 **Respuesta corta:** 151 de los 1,798 distritos evaluados son de prioridad alta (índice de demanda, cobertura y condiciones ≥ 75 de 100); el 44 % está en Loreto, Huánuco y San Martín. 36 distritos tienen triple brecha. Cifras en `docs/hallazgos.md`.
 
-**Repositorio de GitHub:** [PEGAR ENLACE a la carpeta tarea_3]
+**Repositorio de GitHub:** https://github.com/gabriela-pozo/Cursos/tree/dashboard-b/tarea_3
 
-**Dashboard público:** [PEGAR ENLACE]
+**Dashboard público:** https://gabriela-pozo.github.io/Cursos/tarea_3/web/
 
 **Publicación de LinkedIn:** [PEGAR ENLACE]

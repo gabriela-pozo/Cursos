@@ -18,8 +18,8 @@ Construí un índice por distrito con tres dimensiones (demanda, cobertura y con
 
 El dashboard tiene mapa, filtros y pesos que puedes mover para ver cómo cambia el ranking. Incluye metodología y límites: es un análisis de apoyo, no una proyección oficial.
 
-🔗 Dashboard: [PEGAR ENLACE]
-💻 Repositorio: [PEGAR ENLACE]
+🔗 Dashboard: https://gabriela-pozo.github.io/Cursos/tarea_3/web/
+💻 Repositorio: https://github.com/gabriela-pozo/Cursos/tree/dashboard-b/tarea_3
 
 La voz del video es sintética, generada con IA a partir de mi propia voz. Análisis y código desarrollados con asistencia de Claude.
 
