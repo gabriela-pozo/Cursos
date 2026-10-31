@@ -10,3 +10,7 @@ __pycache__/
 *.zip
 inei_tabulados/
 node_modules/
+
+# muestra de voz personal: se queda en tu computador
+mi_voz.*
+reel/referencia_voz.wav
