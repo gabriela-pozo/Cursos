@@ -1,11 +1,11 @@
 # Cohortes escolares del Perú 2025
 
-**Tarea 3, Python Intermedio** (issue 197 de d2cml-ai/Data-Science-Python). Proyecto individual de **Gabriela Pozo**.
+**Tarea 3, Python Intermedio** (issue 197 de d2cml-ai/Data-Science-Python). Proyecto individual de **[Tu nombre y apellido]**.
 
 > **Tema:** estructura por edades del Censo 2025 (INEI) y oferta escolar del Censo Educativo 2025 (Minedu), por distrito.
 > **Pregunta de investigación (opción B):** ¿qué distritos enfrentarán más presión o más brecha en el sistema escolar en los próximos 6 años, y a cuáles habría que atender primero?
 
-- **Dashboard público:** <https://gabriela-pozo.github.io/Cursos/tarea_3/web/>
+- **Dashboard público:** `https://TU-USUARIO.github.io/TU-REPO/tarea_3/web/` *(completar al publicar; ver «¿Cómo publicar con GitHub Pages?»)*
 - **Publicación de LinkedIn:** *(completar)*
 - **Reel:** `reel/reel.mp4` (ver `reel/README.md`)
 
@@ -27,6 +27,9 @@ Todas las cifras de esta página y del dashboard salen de [`docs/hallazgos.md`](
 4. **En la prioridad alta hay más alumnos por docente y menos internet.** La mediana es 14.4 alumnos por docente en los distritos de prioridad alta y 10.3 en el resto. Usa internet el 26 % de los niños de 5 a 14 años en los primeros, contra 37 % en el resto.
 5. **La otra presión: aulas que se vacían.** 351 distritos se achican con certeza estadística y ahí vive el 63 % de los niños de 6 a 11 años del país (48 % de ellos en Lima y Callao). No son prioridad por brecha, pero sí necesitan planificar menos matrícula.
 
+6. **En 66 distritos de prioridad alta hay mucha población de lengua indígena.** En 66 de los 151 distritos de prioridad alta (44 %), al menos 1 de cada 4 personas de 3 y más años aprendió a hablar en una lengua indígena; en el resto de distritos evaluados es el 47 %. La lengua no explica por sí sola la prioridad, pero en esos distritos la respuesta debería considerar un enfoque intercultural bilingüe.
+7. **Los colegios no siempre están donde viven los niños.** En 242 distritos, al menos 1 de cada 4 niños de 5 a 14 años que estudia lo hace en otro distrito (en el país, 11 %). Sus alumnos por docente describen solo los colegios del propio distrito. En la prioridad alta la mediana es 2 %: casi todos estudian en su distrito.
+
 **Top 5 de prioridad:** Nieva y El Cenepa (Amazonas), Manseriche (Loreto), Tahuania (Ucayali) y Andoas (Loreto). Los nombres se escriben como vienen en la fuente (sin tilde). El Top 15 completo está en `docs/hallazgos.md` y en el dashboard.
 
 ## ¿Qué tiene el dashboard?
@@ -36,9 +39,9 @@ Es una sola página (`web/index.html`) en JavaScript puro, sin librerías ni CDN
 | Sección | Contenido |
 |---|---|
 | Cabecera | Título, pregunta, contexto y navegación fija con botón de tema |
-| 1. Panorama | Cifra principal (151 distritos de prioridad alta), 4 KPIs, la respuesta en 20 segundos, qué es el IRC y los 5 hallazgos |
-| 2. Mapa | Filtros comunes (departamento, niños que entran frente a los que salen, motivo de la prioridad, zona rural o urbana, tamaño del distrito, datos disponibles y solo prioridad alta), con el total de niños de 3 a 5 años de la selección. Mapa coroplético de canvas con zoom, arrastre, acercamiento al departamento elegido y selector de variable (prioridad, las tres dimensiones, IRC y los indicadores de base: asistencia, alumnos por docente, internet y ruralidad). Panel de detalle con las tres dimensiones. Lista de 69 distritos sin mapa |
-| 3. Prioridades | Sliders de pesos que recalculan el índice en vivo, matriz de calor del Top 15, qué tipo de respuesta sugiere cada motivo, prioridad alta por departamento, dispersión IRC vs. ruralidad, comparador de dos distritos y tabla ordenable y buscable con descarga CSV |
+| 1. Panorama | Cifra principal (151 distritos de prioridad alta), 4 KPIs, la respuesta en 20 segundos, qué es el IRC y los 7 hallazgos |
+| 2. Mapa | Filtros comunes organizados por decisión: atajos (ampliar vacantes, llevar más niños a la escuela, reforzar docentes e internet, educación intercultural bilingüe y triple brecha, con el número de distritos de cada uno) y filtros por dónde (departamento, UGEL, zona), qué situación (motivo, niños que entran frente a los que salen, lengua materna) y qué distritos incluir (tamaño, datos disponibles, solo prioridad alta). Los filtros activos se muestran como etiquetas que se quitan una por una, con el total de niños de 3 a 5 años de la selección. Mapa coroplético de canvas con zoom, arrastre, acercamiento al departamento elegido y selector de variable (prioridad, las tres dimensiones, IRC y los indicadores de base: asistencia, alumnos por docente, internet y ruralidad). Panel de detalle con las tres dimensiones. Lista de 69 distritos sin mapa |
+| 3. Prioridades | Sliders de pesos que recalculan el índice en vivo, matriz de calor del ranking (15, 30 o 50 distritos, con su UGEL), qué tipo de respuesta sugiere cada motivo, prioridad alta por departamento, dispersión IRC vs. ruralidad, comparador de dos distritos y tabla ordenable y buscable con descarga CSV |
 | 4. Método y límites | Pasos, límites, fuentes, aviso de que no es una proyección oficial y créditos |
 
 Cada gráfico tiene un tooltip y una vista "Ver como tabla". El foco por teclado muestra lo mismo que el hover: en el mapa y la dispersión se recorren los distritos con las flechas, y las barras se recorren con Tab.
@@ -62,8 +65,8 @@ La tipología de cohortes (contracción, estable o incierto, expansión, muestra
 
 | Fuente | Uso |
 |---|---|
-| [INEI, Censos Nacionales 2025, tabulados de población](https://censos2025.inei.gob.pe/resultados/descarga-de-datos/cuadros-estadisticos/tabulados/tabulados-poblacion) | Edad simple, asistencia escolar, omisión censal y uso de internet por distrito |
-| [Minedu, ESCALE, Censo Educativo 2025](https://escale.minedu.gob.pe) | Padrón de instituciones educativas (alumnos y docentes). Solo se publican agregados por distrito |
+| [INEI, Censos Nacionales 2025, tabulados de población](https://censos2025.inei.gob.pe/resultados/descarga-de-datos/cuadros-estadisticos/tabulados/tabulados-poblacion) | Edad simple, asistencia escolar, ubicación del colegio (mismo distrito u otro), lengua materna, omisión censal y uso de internet por distrito |
+| [Minedu, ESCALE, Censo Educativo 2025](https://escale.minedu.gob.pe) | Padrón de instituciones educativas (alumnos, docentes y UGEL). Solo se publican agregados por distrito |
 | [juaneladio/peru-geojson](https://github.com/juaneladio/peru-geojson) (MPL-2.0) | Polígonos distritales simplificados |
 
 ## ¿Qué límites tiene?
@@ -91,7 +94,7 @@ tarea_3/
 ├── config.json                 parámetros (edades, umbrales, pesos, prioridad alta)
 ├── run_all.sh                  corre toda la tubería (o solo la parte web: bash run_all.sh web)
 ├── scripts/
-│   ├── 01, 01b, 02, 03, 04     lectura de INEI y Minedu, cruce de ubigeos, indicadores
+│   ├── 01, 01b, 01c, 02, 02b, 03, 04   lectura de INEI y Minedu (incluye lengua materna, colegio en otro distrito y UGEL), cruce de ubigeos, indicadores
 │   ├── 04b_prioridad.py        índice de prioridad -> prioridad_distrito.csv
 │   ├── 05_build_web.py         une indicadores + prioridad -> web/data/distritos.js, geometria.js
 │   ├── 05b_findings.py         KPIs, Top 15, hallazgos y conteos -> web/data/findings.js, docs/hallazgos.md
@@ -126,7 +129,7 @@ GitHub Pages solo publica desde la raíz del repositorio (`/ (root)`) o desde un
 1. Sube la rama a GitHub y únela a `main`.
 2. En el repositorio: **Settings → Pages → Build and deployment → Source: Deploy from a branch**.
 3. Elige **Branch: `main`** y carpeta **`/ (root)`**, y guarda.
-4. Después de uno o dos minutos, el dashboard queda en `https://gabriela-pozo.github.io/Cursos/tarea_3/web/`.
+4. Después de uno o dos minutos, el dashboard queda en `https://TU-USUARIO.github.io/Cursos/tarea_3/web/`.
 
 Otra opción, si prefieres que la URL apunte solo al dashboard: copia el contenido de `tarea_3/web/` a una carpeta `docs/` en la raíz del repositorio y elige `/docs` en el paso 3. También se puede publicar `tarea_3/web` con un flujo de GitHub Actions ("Static HTML").
 

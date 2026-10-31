@@ -41,15 +41,16 @@
       <p class="eyebrow">Censo 2025 (INEI) × Censo Educativo 2025 (Minedu) · por distrito</p>
       <h1>Cohortes escolares del Perú 2025</h1>
       <p class="question">¿Qué distritos enfrentarán más presión o más brecha en el sistema escolar en los próximos <span data-f="kpis.horizonte_anios">…</span> años, y a cuáles habría que atender primero?</p>
-      <p class="context">Comparamos, en <span data-f="kpis.distritos_total" data-fmt="n0">…</span> distritos, a los niños que están por entrar a la escuela (<span data-f="kpis.edades_entrantes">…</span> años) con los que están por terminar primaria (<span data-f="kpis.edades_salientes">…</span> años). Luego lo cruzamos con la asistencia escolar y con las condiciones de los colegios para ordenar a los distritos por prioridad.</p>
-      <p class="hero-cta"><a class="btn primary" href="#mapa">Ver el mapa</a> <a class="btn" href="#prioridades">Ver el ranking</a></p>
+      <p class="context">Este tablero ordena <b><span data-f="kpis.distritos_evaluados" data-fmt="n0">…</span> distritos</b> (de <span data-f="kpis.distritos_total" data-fmt="n0">…</span>; los que tienen <span data-f="kpis.poblacion_minima" data-fmt="n0">…</span> habitantes o más y datos suficientes) según qué tan exigida es su situación escolar. Para cada uno cruza tres señales: cuántos niños están por entrar a la escuela (<span data-f="kpis.edades_entrantes">…</span>&nbsp;años) frente a los que están por terminar primaria (<span data-f="kpis.edades_salientes">…</span> años), cuántos asisten a clases y con qué condiciones cuentan sus colegios. El resultado es un <b>índice de prioridad de 0 a 100</b>.</p>
+      <p class="source">Fuentes: Censos Nacionales 2025 (INEI) y Censo Educativo 2025 (Minedu). Estadística descriptiva: no establece causas.</p>
+      <p class="hero-cta"><a class="btn primary" href="#mapa">Ver el mapa</a> <a class="btn" href="#prioridades">Ver el ranking</a> <a class="btn ghost" href="#metodo">Cómo se calcula</a></p>
     </div>
     <aside class="answer" aria-labelledby="h-ans">
       <h2 id="h-ans" class="answer-t">La respuesta en 20 segundos</h2>
       <ol class="answer-l">
-        <li><span class="n">1</span><p data-f="frases.0">…</p></li>
-        <li><span class="n">2</span><p data-f="frases.1">…</p></li>
-        <li><span class="n">3</span><p data-f="hallazgos.2.texto">…</p></li>
+        <li><span class="n">1</span><p><b>El país.</b> Por cada 100 niños de <span data-f="kpis.edades_salientes">…</span> años hay <span data-f="kpis.ninos_3_5_por_100_9_11" data-fmt="n1">…</span> de <span data-f="kpis.edades_entrantes">…</span>. En los próximos <span data-f="kpis.horizonte_anios">…</span> años llegarán a la escuela menos niños de los que hoy terminan primaria.</p></li>
+        <li><span class="n">2</span><p><b>Dónde se concentra la presión.</b> <span data-f="kpis.prioridad_alta" data-fmt="n0">…</span> de <span data-f="kpis.distritos_evaluados" data-fmt="n0">…</span> distritos (<span data-f="detalle.pct_alta_evaluados" data-fmt="pct1">…</span>) son de <b>prioridad alta</b>, con índice de <span data-f="kpis.prioridad_alta_min">…</span> o más: más niños por entrar, menos asistencia escolar y colegios con menos recursos. El <span data-f="detalle.top3_pct" data-fmt="pct0">…</span> está en <span data-f="detalle.dep_alta.0.dpto">…</span>, <span data-f="detalle.dep_alta.1.dpto">…</span> y <span data-f="detalle.dep_alta.2.dpto">…</span>.</p></li>
+        <li><span class="n">3</span><p><b>Por dónde empezar.</b> Por los <span data-f="detalle.triple_brecha">…</span> distritos con <b>triple brecha</b>: tienen <span data-f="kpis.prioridad_alta_min">…</span> puntos o más en demanda, cobertura y condiciones a la vez. Ahí viven <span data-f="detalle.ninos_3_5_triple" data-fmt="n0">…</span> niños de <span data-f="kpis.edades_entrantes">…</span> años.</p></li>
       </ol>
     </aside>
   </div>
@@ -100,40 +101,61 @@
   <p class="kicker">02 · Mapa</p>
   <h2 id="h-map">¿Dónde se concentra la presión?</h2>
   <p class="lead">Cuanto más intenso el color, más exigente la situación del distrito. Haz clic en cualquiera para ver por qué.</p>
-  <form id="filtros" class="filters card" aria-label="Filtros del mapa y del ranking" onsubmit="return false">
-    <div class="f-head"><b>Filtros</b> <span class="note">Se combinan: un distrito debe cumplirlos todos. Se aplican al mapa y a toda la sección Prioridades.</span></div>
-    <label>Departamento<select id="fDep"></select></label>
-    <label>Niños que entran frente a los que salen<select id="fDir" title="Compara a los niños de 3 a 5 años con los de 9 a 11 años del distrito (IRC)">
-      <option value="">Todos los distritos</option>
-      <option value="crece">Entran más de los que salen (IRC mayor que 1)</option>
-      <option value="achica">Entran menos de los que salen (IRC menor que 1)</option>
-    </select></label>
-    <label>Motivo de la prioridad<select id="fMot" title="Una dimensión cuenta como motivo cuando su percentil es de 75 o más">
-      <option value="">Cualquiera</option>
-      <option value="demanda">Más niños por atender (demanda)</option>
-      <option value="cobertura">Menos asistencia a la escuela (cobertura)</option>
-      <option value="condiciones">Pocos docentes e internet (condiciones)</option>
-      <option value="todos">Los tres motivos a la vez</option>
-    </select></label>
-    <label>Zona<select id="fZona" title="Según la proporción de población rural del distrito">
-      <option value="">Rural y urbana</option>
-      <option value="rural">Más rural (50 % o más de población rural)</option>
-      <option value="urbana">Más urbana (menos de 50 % rural)</option>
-    </select></label>
-    <label>Lengua materna de la población<select id="fLen" title="Proporción de personas de 3 y más años que aprendieron a hablar en una lengua indígena (Censo 2025)">
-      <option value="">Cualquiera</option>
-      <option value="25">25 % o más con lengua indígena</option>
-      <option value="50">50 % o más con lengua indígena</option>
-    </select></label>
-    <label>UGEL<select id="fUgel" title="Unidad de Gestión Educativa Local a la que pertenece la mayoría de los alumnos del distrito"></select></label>
-    <label>Tamaño del distrito<select id="fPop"></select></label>
-    <label>Datos disponibles<select id="fDim">
-      <option value="2">Al menos 2 de las 3 dimensiones</option>
-      <option value="3">Solo con las 3 dimensiones</option>
-    </select></label>
-    <label class="check"><input id="fAlta" type="checkbox"> <span>Solo prioridad alta (índice de <span data-f="kpis.prioridad_alta_min">…</span> o más)</span></label>
-    <button id="fReset" class="btn" type="button">Quitar filtros</button>
-    <p id="fCount" class="f-count" aria-live="polite"></p>
+  <form id="filtros" class="filters card" aria-label="Filtros del mapa y de Prioridades" onsubmit="return false">
+    <div class="f-head">
+      <h3>¿Qué quieres revisar?</h3>
+      <p class="note">Elige un atajo según la decisión que debas tomar o afina con los filtros. Se combinan y se aplican al mapa y a toda la sección Prioridades.</p>
+    </div>
+    <div class="f-atajos" role="group" aria-label="Atajos según la decisión">
+      <button type="button" class="atajo" data-atajo="" aria-pressed="true"><b>Todos los distritos</b><small>Sin atajo</small><span class="cn"></span></button>
+      <button type="button" class="atajo" data-atajo="demanda" aria-pressed="false"><b>Ampliar vacantes y secciones</b><small>Más niños por atender</small><span class="cn"></span></button>
+      <button type="button" class="atajo" data-atajo="cobertura" aria-pressed="false"><b>Llevar más niños a la escuela</b><small>Menos asistencia escolar</small><span class="cn"></span></button>
+      <button type="button" class="atajo" data-atajo="condiciones" aria-pressed="false"><b>Reforzar docentes e internet</b><small>Más alumnos por docente, menos internet</small><span class="cn"></span></button>
+      <button type="button" class="atajo" data-atajo="eib" aria-pressed="false"><b>Educación intercultural bilingüe</b><small>25 % o más con lengua indígena</small><span class="cn"></span></button>
+      <button type="button" class="atajo" data-atajo="triple" aria-pressed="false"><b>Triple brecha</b><small>Los tres motivos a la vez</small><span class="cn"></span></button>
+    </div>
+    <p class="f-nota">Cada atajo muestra los distritos de <b>prioridad alta</b> con ese motivo. El número es cuántos hay con los demás filtros.</p>
+    <fieldset class="f-grp"><legend>Dónde</legend>
+      <label>Departamento<select id="fDep"></select></label>
+      <label>UGEL<select id="fUgel" title="Unidad de Gestión Educativa Local a la que pertenece la mayoría de los alumnos del distrito"></select></label>
+      <label>Zona<select id="fZona" title="Según la proporción de población rural del distrito">
+        <option value="">Rural y urbana</option>
+        <option value="rural">Más rural (50 % o más de población rural)</option>
+        <option value="urbana">Más urbana (menos de 50 % rural)</option>
+      </select></label>
+    </fieldset>
+    <fieldset class="f-grp"><legend>Qué situación</legend>
+      <label>Motivo de la prioridad<select id="fMot" title="Una dimensión cuenta como motivo cuando su percentil es de 75 o más">
+        <option value="">Cualquiera</option>
+        <option value="demanda">Más niños por atender (demanda)</option>
+        <option value="cobertura">Menos asistencia a la escuela (cobertura)</option>
+        <option value="condiciones">Pocos docentes e internet (condiciones)</option>
+        <option value="todos">Los tres motivos a la vez</option>
+      </select></label>
+      <label>Niños que entran frente a los que salen<select id="fDir" title="Compara a los niños de 3 a 5 años con los de 9 a 11 años del distrito (IRC)">
+        <option value="">Todos los distritos</option>
+        <option value="crece">Entran más de los que salen (IRC mayor que 1)</option>
+        <option value="achica">Entran menos de los que salen (IRC menor que 1)</option>
+      </select></label>
+      <label>Lengua materna de la población<select id="fLen" title="Proporción de personas de 3 y más años que aprendieron a hablar en una lengua indígena (Censo 2025)">
+        <option value="">Cualquiera</option>
+        <option value="25">25 % o más con lengua indígena</option>
+        <option value="50">50 % o más con lengua indígena</option>
+      </select></label>
+    </fieldset>
+    <fieldset class="f-grp"><legend>Qué distritos incluir</legend>
+      <label>Tamaño del distrito<select id="fPop"></select></label>
+      <label>Datos disponibles<select id="fDim">
+        <option value="2">Al menos 2 de las 3 dimensiones</option>
+        <option value="3">Solo con las 3 dimensiones</option>
+      </select></label>
+      <label class="check"><input id="fAlta" type="checkbox"> <span>Solo prioridad alta (índice de <span data-f="kpis.prioridad_alta_min">…</span> o más)</span></label>
+    </fieldset>
+    <div class="f-foot">
+      <div id="fChips" class="fchips" aria-label="Filtros activos"></div>
+      <p id="fCount" class="f-count" aria-live="polite"></p>
+      <button id="fReset" class="btn" type="button">Quitar todos los filtros</button>
+    </div>
   </form>
 
   <div class="map-grid">
@@ -182,7 +204,7 @@
   <p class="kicker">03 · Prioridades</p>
   <h2 id="h-pri">¿A quién atender primero?</h2>
   <p class="lead">El orden depende de lo que consideres más importante. Cambia los pesos y mira qué distritos se mantienen arriba.</p>
-  <p class="active-f">Filtros activos: <span id="fSummary"></span> · <a href="#filtros">cambiar</a></p>
+  <p class="active-f">Filtros activos: <span id="fSummary"></span> · <a href="#filtros">cambiar filtros</a></p>
 
   <div class="card weights">
     <h3>Pesos del índice</h3>
@@ -199,8 +221,9 @@
 
   <div class="charts2">
     <div class="card">
-      <h3>Los 15 distritos de mayor prioridad</h3>
-      <p class="sub">El <b>índice de prioridad</b> (de 0 a 100) es el promedio de las tres dimensiones de la derecha. En todas, 100 es la situación más exigida del país, y un 90 significa que el distrito está más exigido que el 90 % de los distritos. Los pesos son los actuales. El color se ajusta al rango de estos 15: cuanto más intenso, más exigente.</p>
+      <div class="card-head"><h3 id="topH">Los 15 distritos de mayor prioridad</h3>
+        <label class="inline">Mostrar<select id="topN"><option value="15">15</option><option value="30">30</option><option value="50">50</option></select></label></div>
+      <p class="sub">Percentil de 0 a 100: 100 es lo más exigido del país, y un 90 significa más exigido que el 90 % de los distritos. El índice es el promedio de las tres dimensiones, con los pesos actuales. El color se ajusta al rango de lo que se muestra.</p>
       <div class="mx-grp" aria-hidden="true"><span></span><span class="g1">Resultado</span><span class="g2">Las tres dimensiones que lo forman</span></div>
       <div class="mx-head" aria-hidden="true"><span>Puesto y distrito</span><span><b>Índice</b><i>Índ.</i></span><span><b>Demanda</b><i>Dem.</i></span><span><b>Cobertura</b><i>Cob.</i></span><span><b>Condiciones</b><i>Cond.</i></span></div>
       <div id="cTop" class="hbars"></div>
@@ -216,7 +239,7 @@
 
   <div class="card">
     <h3>¿Qué tipo de respuesta sugiere cada motivo?</h3>
-    <p class="note">Son ejemplos de líneas de acción para conversar con las UGEL y los gobiernos locales, no recomendaciones del análisis. Los conteos son de distritos de prioridad alta con los filtros y pesos actuales.</p>
+    <p class="note">Son ejemplos de líneas de acción para conversar con las UGEL y los gobiernos locales, no recomendaciones del análisis. Los conteos son de distritos de prioridad alta con los filtros y pesos actuales. Para verlos en el mapa y el ranking, usa los atajos de arriba.</p>
     <div id="perfiles" class="perf-grid"></div>
   </div>
 
@@ -260,7 +283,8 @@
   </div>
 
   <div class="card">
-    <h3>Todos los distritos</h3>
+    <h3>Lista de distritos según los filtros</h3>
+    <p class="sub">Es la lista de trabajo: ordénala, búscala y descárgala en CSV con la UGEL, los motivos y los niños de 3 a 5 años.</p>
     <div class="tbl-tools">
       <label class="inline grow">Buscar<input id="q" type="search" placeholder="Distrito o provincia" autocomplete="off"></label>
       <button id="csv" class="btn" type="button">Descargar CSV</button>
@@ -312,10 +336,8 @@
   <h3>¿Cómo usar estos resultados?</h3>
   <ul class="usos">
     <li><b>Para decidir dónde mirar primero:</b> sirven para elegir distritos donde verificar, visitar o pedir información más fina.</li>
-    <li><b>Con información local:</b> contrástalos con datos de las UGEL, los flujos de estudiantes entre distritos y los proyectos en curso.</li>
+    <li><b>Con información local:</b> contrástalos con la UGEL y el gobierno local, que conocen la oferta real, los flujos de estudiantes y los proyectos en curso.</li>
     <li><b>Con sensibilidad:</b> mueve los pesos. Los distritos que siguen arriba con cualquier esquema son los más firmes.</li>
-    <li><b>Con cautela:</b> la omisión censal alta y la muestra pequeña indican cifras menos firmes.</li>
-    <li><b>Sin sobreinterpretar:</b> no es una proyección oficial ni sirve para decidir abrir o cerrar colegios.</li>
   </ul>
   <h3>Fuentes</h3>
   <ul class="src">

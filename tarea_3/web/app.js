@@ -18,7 +18,7 @@ const TIPO = { contraccion: 'Contracción', estable_o_incierto: 'Estable o incie
 const get = (p) => p.split('.').reduce((o, k) => (o == null ? o : o[k]), FND);
 const FMTS = { n0: (v) => fmt(v), n1: (v) => fmt(v, 1), pct0: (v) => pct(v), pct1: (v) => pct(v, 1) };
 document.querySelectorAll('[data-f]').forEach((el) => { const v = get(el.dataset.f); el.textContent = el.dataset.fmt ? FMTS[el.dataset.fmt](v) : v; });
-$('hallazgos').innerHTML = FND.hallazgos.map((h) => '<li><b>' + esc(h.titulo) + '</b> <span>' + esc(h.texto) + '</span></li>').join('');
+$('hallazgos').innerHTML = FND.hallazgos.filter((h, i) => i !== 0 && i !== 2).map((h) => '<li><b>' + esc(h.titulo) + '</b> <span>' + esc(h.texto) + '</span></li>').join('');
 { const k = FND.kpis, share = k.prioridad_alta / k.distritos_evaluados; $('meterFill').style.width = (share * 100).toFixed(1) + '%'; $('meterPct').textContent = pct(share, 1); }
 // resalta en el menú la sección que se está leyendo
 { const links = [...document.querySelectorAll('.topnav li a')], secs = links.map((a) => document.querySelector(a.getAttribute('href')));
@@ -36,7 +36,7 @@ D.forEach((d, i) => {
 const byId = new Map(D.map((d) => [d.id, d]));
 const ELIG = D.filter((d) => d.ok);
 const PESOS0 = Object.assign({}, FND.pesos);
-const S = { w: Object.assign({}, PESOS0), dep: '', dir: '', mot: '', zona: '', alta: false, len: '', ugel: '', pmin: FND.kpis.poblacion_minima, ndim: 2, v: 'indice', sel: null, hover: null,
+const S = { w: Object.assign({}, PESOS0), dep: '', dir: '', mot: '', zona: '', alta: false, len: '', ugel: '', pmin: FND.kpis.poblacion_minima, ndim: 2, topN: 15, v: 'indice', sel: null, hover: null,
   A: null, B: null, sort: { k: 'rank', asc: true }, q: '', shown: 50 };
 const IC = (n) => '<svg class="ic" aria-hidden="true"><use href="#i-' + n + '"/></svg>';
 const MOT = [['demanda', 'Más niños por atender', 'demanda'], ['cobertura', 'Menos asistencia escolar', 'cobertura'], ['condiciones', 'Pocos docentes e internet', 'condiciones']];
@@ -55,18 +55,18 @@ function compute() {
   if (sw > 0) for (const r of IX.ranking(ELIG, S.w)) { r.d.ix = r.ix; r.d.rk = r.rank; r.d.alta = r.ix >= ALTA; }
   L = ELIG.filter((d) => d.ix != null && pass(d)).sort((a, b) => a.rk - b.rk);
 }
-function pass(d) {
-  if (S.dep && d.d !== S.dep) return false;
-  if (S.dir === 'crece' && !(d.irc > 1)) return false;
-  if (S.dir === 'achica' && !(d.irc != null && d.irc < 1)) return false;
-  if (!(d.pop >= S.pmin)) return false;
-  if (S.ndim === 3 && d.n_dim !== 3) return false;
-  if (S.mot === 'todos' ? !MOT.every(([k]) => d[k] != null && d[k] >= ALTA) : (S.mot && !(d[S.mot] != null && d[S.mot] >= ALTA))) return false;
-  if (S.zona === 'rural' && !(d.rur >= 0.5)) return false;
-  if (S.zona === 'urbana' && !(d.rur < 0.5)) return false;
-  if (S.alta && !d.alta) return false;
-  if (S.len && !(d.lengua != null && d.lengua >= +S.len / 100)) return false;
-  if (S.ugel && d.uc !== S.ugel) return false;
+function pass(d, o = S) {
+  if (o.dep && d.d !== o.dep) return false;
+  if (o.dir === 'crece' && !(d.irc > 1)) return false;
+  if (o.dir === 'achica' && !(d.irc != null && d.irc < 1)) return false;
+  if (!(d.pop >= o.pmin)) return false;
+  if (o.ndim === 3 && d.n_dim !== 3) return false;
+  if (o.mot === 'todos' ? !MOT.every(([k]) => d[k] != null && d[k] >= ALTA) : (o.mot && !(d[o.mot] != null && d[o.mot] >= ALTA))) return false;
+  if (o.zona === 'rural' && !(d.rur >= 0.5)) return false;
+  if (o.zona === 'urbana' && !(d.rur < 0.5)) return false;
+  if (o.alta && !d.alta) return false;
+  if (o.len && !(d.lengua != null && d.lengua >= +o.len / 100)) return false;
+  if (o.ugel && d.uc !== o.ugel) return false;
   return true;
 }
 
@@ -312,7 +312,7 @@ function inkOn(hex) {
 }
 // matriz de calor: cada fila es un distrito y cada celda una dimensión (más oscuro = más exigente)
 function top15() {
-  const T = L.slice(0, 15), el = $('cTop');
+  const T = L.slice(0, S.topN), el = $('cTop'); $('topH').textContent = 'Los ' + S.topN + ' distritos de mayor prioridad';
   if (!T.length) { el.innerHTML = '<p class="empty">Ningún distrito cumple los filtros.</p>'; tvRender('top'); return; }
   // el color se reparte entre el mínimo y el máximo de lo que se muestra (si no, los 15 saldrían del mismo tono)
   const vals = T.flatMap((d) => [d.ix, d.demanda, d.cobertura, d.condiciones]).filter((v) => v != null), lo = Math.min(...vals), hi = Math.max(...vals);
@@ -320,7 +320,7 @@ function top15() {
   const cell = (v) => { const bg = v == null ? '' : cssv(SEQ[kk(v)]); return '<span class="mx-c" style="' + (bg ? 'background:' + bg + ';color:' + inkOn(bg) : '') + '">' + fmt(v, 0) + '</span>'; };
   el.innerHTML = T.map((d, i) => '<div class="hb-row mx-row' + (S.sel && d.id === S.sel.id ? ' on' : '') + '" tabindex="0" role="button" data-i="' + i + '" data-id="' + d.id + '" aria-label="' +
     esc(d.rk + '. ' + d.N + ', ' + d.DD + ': índice ' + fmt(d.ix, 1) + '; demanda ' + fmt(d.demanda) + ', cobertura ' + fmt(d.cobertura) + ', condiciones ' + fmt(d.condiciones)) + '">' +
-    '<span class="hb-lab"><b>' + fmt(d.rk) + '</b><span class="mn">' + esc(d.N) + '<small>' + esc(d.DD) + '</small></span></span>' + cell(d.ix) + cell(d.demanda) + cell(d.cobertura) + cell(d.condiciones) + '</div>').join('');
+    '<span class="hb-lab"><b>' + fmt(d.rk) + '</b><span class="mn" title="' + esc(d.N + ', ' + d.DD + (d.uc ? ' · ' + UG.get(d.uc).n : '')) + '">' + esc(d.N) + '<small>' + esc(d.DD) + (d.uc ? ' · ' + esc(UG.get(d.uc).n.replace(/^UGEL /, '')) : '') + '</small></span></span>' + cell(d.ix) + cell(d.demanda) + cell(d.cobertura) + cell(d.condiciones) + '</div>').join('');
   el.querySelectorAll('.hb-row').forEach((row) => {
     const d = T[+row.dataset.i];
     row.onclick = () => select(d, true);
@@ -452,7 +452,7 @@ $('cmpSwap').onclick = () => { [S.A, S.B] = [S.B, S.A]; compare(); };
 for (const k of ['A', 'B']) $('cmpSel' + k).onclick = () => { if (S.sel && BYID.has(S.sel.id)) { S[k] = BYID.get(S.sel.id); compare(); } else $('cmpSum').textContent = 'Primero elige un distrito en el mapa, el ranking o la tabla (debe tener índice).'; };
 
 // ---------- tabla ----------
-const COLS = [['rank', '#', (d) => d.rk, (d) => fmt(d.rk)], ['N', 'Distrito', (d) => d.N, (d) => esc(d.N)], ['DD', 'Departamento', (d) => d.DD, (d) => esc(d.DD)],
+const COLS = [['rank', '#', (d) => d.rk, (d) => fmt(d.rk)], ['N', 'Distrito', (d) => d.N, (d) => esc(d.N)], ['DD', 'Departamento', (d) => d.DD, (d) => esc(d.DD)], ['ug', 'UGEL', (d) => d.uc ? UG.get(d.uc).n : '', (d) => esc(d.uc ? UG.get(d.uc).n : '–')],
   ['ix', 'Índice', (d) => d.ix, (d) => fmt(d.ix, 1)], ['demanda', 'Demanda', (d) => d.demanda, (d) => fmt(d.demanda, 1)], ['cobertura', 'Cobertura', (d) => d.cobertura, (d) => fmt(d.cobertura, 1)],
   ['condiciones', 'Condiciones', (d) => d.condiciones, (d) => fmt(d.condiciones, 1)], ['irc', 'IRC', (d) => d.irc, (d) => fmt(d.irc, 2)], ['pop', 'Población', (d) => d.pop, (d) => fmt(d.pop)], ['k35', 'Niños 3–5', (d) => d.k35, (d) => fmt(d.k35)],
   ['tipologia', 'Tipología', (d) => TIPO[d.tipologia] || '', (d) => esc(TIPO[d.tipologia] || '–')], ['omision', 'Omisión', (d) => d.omision, (d) => pct(d.omision, 1)], ['mapa', 'Mapa', (d) => d.feat ? 1 : 0, (d) => d.feat ? 'sí' : 'sin mapa']];
@@ -499,7 +499,7 @@ const simple = (head, rows) => { const num = head.map((h, j) => rows.length > 0 
 const TV = {
   map: () => { const m = VARS[S.v]; const rows = D.filter((d) => inFilter(d)).sort((a, b) => (m.f(b) ?? -1) - (m.f(a) ?? -1));
     return simple(['Distrito', 'Departamento', esc(m.lab), 'Mapa'], rows.map((d) => [esc(d.N), esc(d.DD), m.fmt(m.f(d)), d.feat ? 'sí' : 'sin mapa'])); },
-  top: () => simple(['#', 'Distrito', 'Departamento', 'Índice', 'Demanda', 'Cobertura', 'Condiciones'], L.slice(0, 15).map((d) => [fmt(d.rk), esc(d.N), esc(d.DD), fmt(d.ix, 1), fmt(d.demanda, 1), fmt(d.cobertura, 1), fmt(d.condiciones, 1)])),
+  top: () => simple(['#', 'Distrito', 'Departamento', 'Índice', 'Demanda', 'Cobertura', 'Condiciones'], L.slice(0, S.topN).map((d) => [fmt(d.rk), esc(d.N), esc(d.DD), fmt(d.ix, 1), fmt(d.demanda, 1), fmt(d.cobertura, 1), fmt(d.condiciones, 1)])),
   ugel: () => simple(['UGEL', 'Departamento', 'Distritos de prioridad alta', 'Distritos con índice', 'Niños de 3 a 5 años en ellos'], (ugels.rows || []).map((r) => [esc(r.nom), esc(r.dep), fmt(r.v), fmt(r.all), fmt(r.k)])),
   dep: () => simple(['Departamento', 'Distritos de prioridad alta'], (deps.rows || []).map(([dep, n]) => [esc(tc(dep)), fmt(n)])),
   sc: () => simple(['Distrito', 'Departamento', 'Población rural', 'IRC', 'Prioridad alta'], (SC ? SC.order : []).map((d) => [esc(d.N), esc(d.DD), pct(d.rur), fmt(d.irc, 2), d.alta ? 'sí' : 'no']))
@@ -523,35 +523,55 @@ function fitDep() {  // el mapa se acerca al departamento elegido
   fit((S.dep || S.ugel) ? [Math.min(...bs.map((b) => b[0])), Math.min(...bs.map((b) => b[1])), Math.max(...bs.map((b) => b[2])), Math.max(...bs.map((b) => b[3]))] : wb, 12); drawMap();
 }
 function setFilter(k, v) {
-  if (k === 'dep') { S.dep = v; $('fDep').value = v; }
+  if (k === 'dep') { S.dep = v; $('fDep').value = v; fillUgel(); }
   refresh(); if (k === 'dep') fitDep();
 }
 $('fDep').onchange = (e) => setFilter('dep', e.target.value);
 $('fDir').onchange = (e) => { S.dir = e.target.value; refresh(); };
 $('fPop').onchange = (e) => { S.pmin = +e.target.value; refresh(); };
-const UG = new Map(); for (const d of D) if (d.uc && !UG.has(d.uc)) UG.set(d.uc, { n: tc(d.ug).replace(/^Ugel/, 'UGEL'), dep: d.DD });
-$('fUgel').innerHTML = '<option value="">Todas las UGEL</option>' + [...UG.entries()].sort((a, b) => a[1].dep.localeCompare(b[1].dep, 'es') || a[1].n.localeCompare(b[1].n, 'es'))
-  .map(([c, u]) => '<option value="' + c + '">' + esc(u.n) + ' (' + esc(u.dep) + ')</option>').join('');
+const UG = new Map(); for (const d of D) if (d.uc) { if (!UG.has(d.uc)) UG.set(d.uc, { n: tc(d.ug).replace(/^Ugel/, 'UGEL'), dep: d.DD, deps: new Set() }); UG.get(d.uc).deps.add(d.d); }
+function fillUgel() {  // las UGEL se limitan al departamento elegido
+  const rows = [...UG.entries()].filter(([, u]) => !S.dep || u.deps.has(S.dep)).sort((a, b) => a[1].dep.localeCompare(b[1].dep, 'es') || a[1].n.localeCompare(b[1].n, 'es'));
+  if (S.ugel && !rows.some(([c]) => c === S.ugel)) S.ugel = '';
+  $('fUgel').innerHTML = '<option value="">' + (S.dep ? 'Todas las UGEL de ' + esc(tc(S.dep)) : 'Todas las UGEL') + '</option>' + rows.map(([c, u]) => '<option value="' + c + '">' + esc(u.n) + (S.dep ? '' : ' (' + esc(u.dep) + ')') + '</option>').join('');
+  $('fUgel').value = S.ugel;
+}
+function syncControls() {
+  $('fDep').value = S.dep; $('fDir').value = S.dir; $('fMot').value = S.mot; $('fZona').value = S.zona; $('fLen').value = S.len;
+  $('fPop').value = String(S.pmin); $('fDim').value = String(S.ndim); $('fAlta').checked = S.alta; fillUgel();
+}
+const ATAJOS = { '': { mot: '', len: '', alta: false }, demanda: { mot: 'demanda', len: '', alta: true }, cobertura: { mot: 'cobertura', len: '', alta: true },
+  condiciones: { mot: 'condiciones', len: '', alta: true }, eib: { mot: '', len: '25', alta: true }, triple: { mot: 'todos', len: '', alta: true } };
+const atajoActual = () => Object.keys(ATAJOS).find((k) => { const a = ATAJOS[k]; return S.mot === a.mot && S.len === a.len && (k === '' ? !S.alta : S.alta); });
+$('filtros').querySelector('.f-atajos').addEventListener('click', (e) => { const b = e.target.closest('.atajo'); if (!b) return; Object.assign(S, ATAJOS[b.dataset.atajo]); syncControls(); refresh(); });
 $('fLen').onchange = (e) => { S.len = e.target.value; refresh(); };
 $('fUgel').onchange = (e) => { S.ugel = e.target.value; refresh(); fitDep(); };
 $('fMot').onchange = (e) => { S.mot = e.target.value; refresh(); };
 $('fZona').onchange = (e) => { S.zona = e.target.value; refresh(); };
 $('fAlta').onchange = (e) => { S.alta = e.target.checked; refresh(); };
 $('fDim').onchange = (e) => { S.ndim = +e.target.value; refresh(); };
-$('fReset').onclick = () => { S.dep = ''; S.dir = ''; S.mot = ''; S.zona = ''; S.alta = false; S.len = ''; S.ugel = ''; S.pmin = P0; S.ndim = 2; $('fDep').value = ''; $('fDir').value = ''; $('fMot').value = ''; $('fZona').value = ''; $('fLen').value = ''; $('fUgel').value = ''; $('fAlta').checked = false; $('fPop').value = String(P0); $('fDim').value = '2'; refresh(); fitDep(); };
+$('fReset').onclick = () => { Object.assign(S, { dep: '', dir: '', mot: '', zona: '', alta: false, len: '', ugel: '', pmin: P0, ndim: 2 }); syncControls(); refresh(); fitDep(); };
+const FCLEAR = { dep: { dep: '', ugel: '' }, ugel: { ugel: '' }, zona: { zona: '' }, mot: { mot: '' }, dir: { dir: '' }, len: { len: '' }, alta: { alta: false }, pmin: { pmin: P0 }, ndim: { ndim: 2 } };
+$('fChips').addEventListener('click', (e) => { const b = e.target.closest('button[data-clear]'); if (!b) return; Object.assign(S, FCLEAR[b.dataset.clear]); syncControls(); refresh(); fitDep(); });
 function filterSummary() {
-  const parts = [S.dep ? tc(S.dep) : 'todo el país'];
-  if (S.dir) parts.push(S.dir === 'crece' ? 'entran más niños de los que salen' : 'entran menos niños de los que salen');
-  if (S.mot) parts.push(S.mot === 'todos' ? 'los tres motivos' : 'motivo: ' + MOT.find((m) => m[0] === S.mot)[1].toLowerCase());
-  if (S.zona) parts.push(S.zona === 'rural' ? 'más rural' : 'más urbana');
-  if (S.len) parts.push(S.len + ' % o más con lengua indígena');
-  if (S.ugel) parts.push(UG.get(S.ugel).n);
-  if (S.alta) parts.push('solo prioridad alta');
-  parts.push(fmt(S.pmin) + '+ habitantes');
-  if (S.ndim === 3) parts.push('solo con 3 dimensiones');
+  const act = [];  // [clave, texto]
+  if (S.dep) act.push(['dep', tc(S.dep)]);
+  if (S.ugel) act.push(['ugel', UG.get(S.ugel).n]);
+  if (S.zona) act.push(['zona', S.zona === 'rural' ? 'Más rural' : 'Más urbana']);
+  if (S.mot) act.push(['mot', S.mot === 'todos' ? 'Los tres motivos' : 'Motivo: ' + MOT.find((m) => m[0] === S.mot)[1].toLowerCase()]);
+  if (S.dir) act.push(['dir', S.dir === 'crece' ? 'Entran más niños de los que salen' : 'Entran menos niños de los que salen']);
+  if (S.len) act.push(['len', S.len + ' % o más con lengua indígena']);
+  if (S.alta) act.push(['alta', 'Solo prioridad alta']);
+  if (S.pmin !== P0) act.push(['pmin', fmt(S.pmin) + ' o más habitantes']);
+  if (S.ndim === 3) act.push(['ndim', 'Solo con las 3 dimensiones']);
+  $('fChips').innerHTML = act.length ? act.map(([k, t]) => '<span class="fchip">' + esc(t) + '<button type="button" data-clear="' + k + '" aria-label="Quitar filtro: ' + esc(t) + '">×</button></span>').join('') : '<span class="note">Sin filtros: todo el país.</span>';
   const k35 = L.reduce((a, d) => a + d.k35, 0), alta = L.filter((d) => d.alta);
-  $('fSummary').textContent = parts.join(' · ') + ' (' + fmt(L.length) + ' distritos)';
+  $('fSummary').textContent = (act.length ? act.map((a) => a[1].toLowerCase()).join(' · ') : 'todo el país') + ' (' + fmt(L.length) + ' distritos)';
   $('fCount').textContent = fmt(L.length) + ' de ' + fmt(ELIG.length) + ' distritos con índice cumplen los filtros; ' + fmt(alta.length) + ' son de prioridad alta. Ahí viven ' + fmt(k35) + ' niños de ' + FND.kpis.edades_entrantes + ' años (' + pct(k35 / FND.kpis.ninos_3_5_total, 1) + ' del país).';
+  // atajos: resalta el activo y cuenta distritos de prioridad alta con los demás filtros
+  const cur = atajoActual();
+  $('filtros').querySelectorAll('.atajo').forEach((b) => { const k = b.dataset.atajo, o = Object.assign({}, S, ATAJOS[k], { alta: true });
+    b.setAttribute('aria-pressed', String(k === cur)); b.querySelector('.cn').textContent = k === '' ? '' : fmt(ELIG.filter((d) => d.ix != null && pass(d, o)).length); });
 }
 const WK = [['demanda', 'wDem', 'oDem'], ['cobertura', 'wCob', 'oCob'], ['condiciones', 'wCon', 'oCon']];
 function showWeights() {
@@ -580,17 +600,15 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', repaint);
 const RESP = { demanda: 'Ampliar vacantes y secciones de inicial y primaria, y prever aulas y docentes.',
   cobertura: 'Buscar activamente a los niños fuera de la escuela y apoyar su asistencia (transporte, permanencia).',
   condiciones: 'Cubrir plazas docentes (con enfoque intercultural donde corresponda) y mejorar la conectividad.' };
+$('topN').onchange = (e) => { S.topN = +e.target.value; top15(); };
 function perfiles() {
   const alta = L.filter((d) => d.alta);
   $('perfiles').innerHTML = MOT.map(([k, lab, ic]) => { const g = alta.filter((d) => d[k] >= ALTA);
     return '<div class="perf">' + '<div class="perf-t">' + IC(ic) + lab + '</div><div class="perf-n">' + fmt(g.length) + ' <small>distritos de prioridad alta</small></div><p>' + RESP[k] +
-      '</p><button type="button" class="btn" data-mot="' + k + '">Ver en el mapa</button></div>'; }).join('') +
-    '<div class="perf"><div class="perf-t">' + IC('demanda') + 'Lengua indígena</div><div class="perf-n">' + fmt(alta.filter((d) => d.lengua != null && d.lengua >= 0.25).length) + ' <small>distritos de prioridad alta con 25 % o más</small></div><p>Considerar un enfoque intercultural bilingüe: docentes que hablen la lengua y materiales en ella.</p><button type="button" class="btn" data-len="25">Ver en el mapa</button></div>' +
+      '</p></div>'; }).join('') +
+    '<div class="perf"><div class="perf-t">' + IC('demanda') + 'Lengua indígena</div><div class="perf-n">' + fmt(alta.filter((d) => d.lengua != null && d.lengua >= 0.25).length) + ' <small>distritos de prioridad alta con 25 % o más</small></div><p>Considerar un enfoque intercultural bilingüe: docentes que hablen la lengua y materiales en ella.</p></div>' +
     '<div class="perf">' + '<div class="perf-t">' + IC('baja') + 'Aulas que se vacían</div><div class="perf-n">' + fmt(FND.tipologia.contraccion) + ' <small>distritos en contracción</small></div><p>Reorganizar secciones y docentes con menos matrícula. No equivale a cerrar colegios.</p></div>';
 }
-$('perfiles').addEventListener('click', (e) => { const b = e.target.closest('button[data-mot], button[data-len]'); if (!b) return;
-  if (b.dataset.len) { S.mot = ''; S.len = b.dataset.len; $('fMot').value = ''; $('fLen').value = S.len; } else { S.mot = b.dataset.mot; S.len = ''; $('fMot').value = S.mot; $('fLen').value = ''; }
-  S.alta = true; $('fAlta').checked = true; refresh(); fitDep(); $('mapa').scrollIntoView(); });
 $('robust').textContent = 'Con pesos iguales hay ' + fmt(ROBN) + ' distritos de prioridad alta; ' + fmt(ROB.size) + ' (' + pct(ROB.size / ROBN) + ') siguen siéndolo si se duplica el peso de cualquiera de las tres dimensiones.';
 
 // ---------- ciclo de actualización ----------
@@ -602,7 +620,7 @@ let rt, lastW = innerWidth;
 addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { resizeMap(); if (innerWidth !== lastW) { lastW = innerWidth; scatter(); } }, 150); });
 addEventListener('scroll', () => { if (tipEl && document.activeElement === tipEl) tipAt(tipEl, tipElHTML); else hideTip(); }, { passive: true });
 
-makePattern(); themeLabel(); showWeights(); legend(); resizeMap(); compute();
+syncControls(); makePattern(); themeLabel(); showWeights(); legend(); resizeMap(); compute();
 S.A = L[0] || null;
 S.B = ELIG.slice().sort((a, b) => b.pop - a.pop)[0] || null;
 S.sel = L[0] || null;
