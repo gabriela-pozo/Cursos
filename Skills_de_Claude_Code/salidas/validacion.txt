@@ -1,0 +1,12 @@
+ENAHO 2024 - validación
+Hogares en la sumaria: 33,691
+Filas del módulo 02: 117,721
+Residentes habituales: 108,664
+Filas tras la unión m:1: 108,664 (sin pérdidas ni duplicados)
+Departamentos: 25
+Pobreza monetaria (personas, facpob07): 27.53 %
+Pobreza monetaria (sumaria, factor07 x mieperho): 27.58 %
+Pobreza oficial INEI: 27.6 % -> diferencia 0.07 pp: OK
+Pobreza extrema: 5.50 %
+Urbano: 24.74 % | Rural: 39.44 %
+Lima Metropolitana (dominio 8): 28.03 %
