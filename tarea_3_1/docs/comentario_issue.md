@@ -6,7 +6,7 @@
 
 **Respuesta corta:** 151 de los 1,798 distritos evaluados son de prioridad alta (índice de demanda, cobertura y condiciones ≥ 75 de 100); el 44 % está en Loreto, Huánuco y San Martín. 36 distritos tienen triple brecha. Cifras en `docs/hallazgos.md`.
 
-**Repositorio de GitHub:** https://github.com/gabriela-pozo/Cursos/tree/dashboard-b/tarea_3_1
+**Repositorio de GitHub:** https://github.com/gabriela-pozo/Cursos/tree/main/tarea_3_1
 
 **Dashboard público:** https://gabriela-pozo.github.io/Cursos/tarea_3_1/web/
 
