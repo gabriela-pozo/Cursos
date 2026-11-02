@@ -1,0 +1,19 @@
+data/raw/*
+!data/raw/README.md
+reel/audio/*.wav
+reel/musica.mp3
+__pycache__/
+*.pyc
+
+# datos crudos fuera de data/raw (el padrón tiene datos personales: nunca se sube)
+*.dbf
+*.zip
+inei_tabulados/
+node_modules/
+
+# muestra de voz personal: se queda en tu computador
+mi_voz.*
+reel/referencia_voz.wav
+
+# entornos virtuales
+.venv/

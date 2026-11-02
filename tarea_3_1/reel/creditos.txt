@@ -1,0 +1,37 @@
+CRÉDITOS DE IMÁGENES Y TIPOGRAFÍA DEL REEL
+Todas las fotos vienen de Wikimedia Commons y no muestran personas identificables. En el video se recortan a 9:16,
+se desenfocan y se oscurecen para leer el texto encima. En la escena 6 del video se indica:
+«Fotos: Wikimedia Commons · créditos en el repositorio».
+
+reel/imagenes/escena_1.jpg
+  «I.E.I. 542 Los Sauces - 20260710 130223» (fachada de una institución de educación inicial) — El Surquillano
+  Licencia: CC0 1.0, dominio público (https://creativecommons.org/publicdomain/zero/1.0/)
+  https://commons.wikimedia.org/wiki/File:I.E.I._542_Los_Sauces_-_20260710_130223.jpg
+
+reel/imagenes/escena_2.jpg
+  «BlankChalkboard» (pizarra vacía) — Raysonho @ Open Grid Scheduler / Grid Engine
+  Licencia: CC0 1.0, dominio público (https://creativecommons.org/publicdomain/zero/1.0/)
+  https://commons.wikimedia.org/wiki/File:BlankChalkboard.JPG
+
+reel/imagenes/escena_3.jpg
+  «Valle del río Marañón 01128» — Waterloo1883
+  Licencia: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0)
+  https://commons.wikimedia.org/wiki/File:Valle_del_r%C3%ADo_Mara%C3%B1%C3%B3n_01128.jpg
+
+reel/imagenes/escena_4.jpg
+  «Santa Maria de Nieva P1010595mod» (capital del distrito de Nieva, Amazonas) — JYB Devot
+  Licencia: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+  https://commons.wikimedia.org/wiki/File:Santa_Maria_de_Nieva_P1010595mod.jpg
+
+reel/imagenes/escena_5.jpg
+  «Yurimaguas-Rio Huallaga» (Loreto) — Maurice Chédel
+  Licencia: CC BY 3.0 (https://creativecommons.org/licenses/by/3.0)
+  https://commons.wikimedia.org/wiki/File:Yurimaguas-Rio_Huallaga.JPG
+
+reel/imagenes/escena_6.jpg
+  «Urubamba - Valle Sagrado 3» (Cusco) — Charles Gadbois
+  Licencia: CC BY 3.0 (https://creativecommons.org/licenses/by/3.0)
+  https://commons.wikimedia.org/wiki/File:Urubamba_-_Valle_Sagrado_3.JPG
+
+Tipografía: Inter (Rasmus Andersson), SIL Open Font License 1.1 — reel/fuentes/Inter.ttf y reel/fuentes/OFL.txt
+Mapa: polígonos distritales de juaneladio/peru-geojson (MPL-2.0). Gráficos e íconos: propios, dibujados con Python (Pillow).
