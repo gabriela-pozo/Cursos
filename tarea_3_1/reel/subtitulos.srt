@@ -1,0 +1,111 @@
+1
+00:00:00,020 --> 00:00:01,660
+En el Perú hay ochenta y un niños
+
+2
+00:00:01,660 --> 00:00:03,080
+de tres a cinco años
+
+3
+00:00:03,080 --> 00:00:04,880
+por cada cien de nueve a once.
+
+4
+00:00:04,880 --> 00:00:06,700
+¿Qué distritos sentirán más presión
+
+5
+00:00:06,700 --> 00:00:08,470
+en los próximos seis años?
+
+6
+00:00:09,000 --> 00:00:11,980
+Usé el Censo 2025 del INEI
+
+7
+00:00:11,980 --> 00:00:14,000
+y el Censo Educativo del Minedu.
+
+8
+00:00:14,000 --> 00:00:16,480
+Para cada distrito combiné tres cosas:
+
+9
+00:00:16,480 --> 00:00:18,340
+cuántos niños vienen por entrar,
+
+10
+00:00:18,340 --> 00:00:19,680
+cuántos faltan en la escuela
+
+11
+00:00:19,680 --> 00:00:21,890
+y qué condiciones tienen los colegios.
+
+12
+00:00:22,180 --> 00:00:25,140
+Resultado: ciento cincuenta y un distritos,
+
+13
+00:00:25,140 --> 00:00:27,320
+de mil setecientos noventa y ocho,
+
+14
+00:00:27,320 --> 00:00:28,640
+son de prioridad alta.
+
+15
+00:00:28,640 --> 00:00:30,520
+Ahí viven ciento cincuenta y un mil niños
+
+16
+00:00:30,520 --> 00:00:32,050
+de tres a cinco años.
+
+17
+00:00:32,600 --> 00:00:34,920
+Los primeros son Nieva y El Cenepa,
+
+18
+00:00:34,920 --> 00:00:37,440
+en Amazonas; Manseriche, en Loreto;
+
+19
+00:00:37,440 --> 00:00:40,490
+Tahuania, en Ucayali; y Andoas, en Loreto.
+
+20
+00:00:40,860 --> 00:00:42,040
+El cuarenta y cuatro por ciento
+
+21
+00:00:42,040 --> 00:00:44,460
+está en Loreto, Huánuco y San Martín.
+
+22
+00:00:44,460 --> 00:00:45,960
+Y en treinta y seis distritos
+
+23
+00:00:45,960 --> 00:00:48,240
+se juntan las tres brechas a la vez.
+
+24
+00:00:48,240 --> 00:00:49,850
+Por ahí habría que empezar.
+
+25
+00:00:50,290 --> 00:00:52,330
+Explora tu distrito en el dashboard.
+
+26
+00:00:52,330 --> 00:00:54,810
+Datos del INEI y el Minedu.
+
+27
+00:00:54,810 --> 00:00:57,350
+Esta voz fue generada con inteligencia artificial
+
+28
+00:00:57,350 --> 00:00:59,220
+a partir de mi propia voz.
