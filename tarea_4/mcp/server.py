@@ -10,6 +10,7 @@ import calendar
 import json
 import random
 import re
+import textwrap
 import threading
 import time
 import unicodedata
@@ -18,19 +19,25 @@ from functools import cache
 from pathlib import Path
 
 import httpx
+import matplotlib
 import pandas as pd
 from fastmcp import FastMCP
-from fastmcp.exceptions import ToolError
+from fastmcp.exceptions import ResourceError, ToolError
+
+matplotlib.use("Agg")   # sin ventanas: solo guarda archivos PNG
+import matplotlib.dates as mdates  # noqa: E402
+from matplotlib.figure import Figure  # noqa: E402
 
 AQUI = Path(__file__).parent
 CATALOGO = AQUI / "datos" / "catalogo_bcrp.csv"
+FIGURAS = AQUI.parent / "figuras"   # tarea_4/figuras/
 URL_CATALOGO = "https://estadisticas.bcrp.gob.pe/estadisticas/series/metadata"
 API = "https://estadisticas.bcrp.gob.pe/estadisticas/series/api"
 SOLO_LECTURA = {"readOnlyHint": True, "openWorldHint": True}
 
 mcp = FastMCP("bcrp", instructions=(
     "Series oficiales del Banco Central de Reserva del Perú (BCRP). Primero busca el código con buscar_series; "
-    "luego usa resumen para variaciones, promedios y extremos, y serie para los datos. No calcules a mano: "
+    "luego usa resumen para variaciones, promedios y extremos, serie para los datos y graficar_serie para un gráfico. No calcules a mano: "
     "cita siempre el código de la serie y el periodo."))
 
 
@@ -246,26 +253,157 @@ def resumen(codigo: str, desde: str, hasta: str) -> dict:
     """
     s = _datos(codigo, desde, hasta)
     datos = s["datos"]
+    # 1) Todas las cuentas se hacen con los valores originales, sin redondear nada
     primero, ultimo = datos[0], datos[-1]
     maximo = max(datos, key=lambda x: x["valor"])   # si hay empate, el más antiguo
     minimo = min(datos, key=lambda x: x["valor"])
+    cambio = ultimo["valor"] - primero["valor"]
+    variacion = (ultimo["valor"] / primero["valor"] - 1) * 100 if primero["valor"] else None
+    promedio = sum(x["valor"] for x in datos) / len(datos)
+    # 2) Se redondea solo al devolver (los valores observados se entregan tal como los publica el BCRP)
     return {"codigo": codigo, "nombre": s["nombre"], "frecuencia": s["frecuencia"], "observaciones": len(datos),
             "primero": primero, "ultimo": ultimo,
-            "cambio": round(ultimo["valor"] - primero["valor"], 4),
-            "variacion_pct": round((ultimo["valor"] / primero["valor"] - 1) * 100, 4) if primero["valor"] else None,
-            "promedio": round(sum(x["valor"] for x in datos) / len(datos), 4),
+            "cambio": round(cambio, 4),
+            "variacion_pct": None if variacion is None else round(variacion, 4),
+            "promedio": round(promedio, 4),
             "maximo": maximo, "minimo": minimo, "fuente": s["fuente"]}
 
 
-# TODO 3 · Una herramienta suya, bien descrita. Ideas:
-#   - comparar_paises con la API del Banco Mundial, que tampoco pide clave:
-#     https://api.worldbank.org/v2/country/PER;CHL;COL/indicator/NY.GDP.MKTP.KD.ZG?format=json&date=2015:2025
-#   - correlacion(codigo_a, codigo_b, desde, hasta)
-#   - grafico(codigo, desde, hasta) que guarde un PNG en salidas/ y devuelva la ruta
+# ---------------------------------------------------------------------------------------------------------------
+# Herramienta propia: graficar_serie. Reutiliza _datos (el mismo núcleo de serie), así que hereda su validación
+# del código, su caché y sus errores honestos; aquí solo se dibuja y se guarda el PNG.
+# ---------------------------------------------------------------------------------------------------------------
+def _unidad(codigo):
+    """La unidad de la serie, si el catálogo la trae entre paréntesis: «(S/ por US$)», «(var% mensual)»...
 
-# TODO 4 · Un recurso, por ejemplo la plantilla bcrp://serie/{codigo} con la ficha de la serie.
+    No se inventa: si el nombre y el grupo no traen paréntesis, devuelve None.
+    """
+    f = catalogo().query("codigo == @codigo").iloc[0]
+    for texto in (f.nombre, f.grupo):
+        entre_parentesis = re.findall(r"\(([^()]+)\)", texto)
+        if entre_parentesis:
+            return entre_parentesis[-1].strip()
+    return None
 
-# TODO 5 · Un prompt, por ejemplo informe(tema) que pida citar el código y el periodo de cada cifra.
+
+def _fecha_periodo(periodo, frecuencia):
+    """Pasa un periodo del proyecto («2025-01», «2025-T1», «2026-10-01», «2025») a una fecha para el eje X."""
+    if frecuencia == "Diaria":
+        return date.fromisoformat(periodo)
+    if frecuencia == "Anual":
+        return date(int(periodo), 1, 1)
+    if frecuencia == "Trimestral":
+        a, q = periodo.split("-T")
+        return date(int(a), 3 * (int(q) - 1) + 1, 1)
+    a, m = periodo.split("-")
+    return date(int(a), int(m), 1)
+
+
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True,
+                       "openWorldHint": True})
+def graficar_serie(codigo: str, desde: str, hasta: str) -> dict:
+    """Dibuja una serie oficial del BCRP, guarda el gráfico como PNG en figuras/ y devuelve la ruta del archivo.
+
+    Úsela cuando pidan un gráfico, la evolución o la tendencia de un indicador (inflación, tipo de cambio,
+    reservas...). Para solo cifras use resumen o serie. Primero obtenga el código con buscar_series. Mismas fechas
+    que serie. Ejemplo: codigo="PN01273PM", desde="2021-01", hasta="2026-09".
+    El gráfico lleva un título que dice qué pasó (de qué valor a qué valor), el nombre y el código de la serie, el
+    periodo, la unidad (si el catálogo la indica) y la fuente (BCRP). Devuelve {ruta, ruta_relativa, codigo, nombre,
+    periodo, observaciones, unidad, fuente}. Para mostrar el gráfico, cite la ruta.
+    """
+    s = _datos(codigo, desde, hasta)   # lanza ToolError si el código no existe o no hay datos
+    datos, frecuencia = s["datos"], s["frecuencia"]
+    unidad = _unidad(codigo)
+    etiqueta_unidad = unidad or "unidad no indicada en el catálogo del BCRP"
+    x = [_fecha_periodo(d["periodo"], frecuencia) for d in datos]
+    y = [d["valor"] for d in datos]
+    primero, ultimo = datos[0], datos[-1]
+    maximo = max(datos, key=lambda d: d["valor"])
+    minimo = min(datos, key=lambda d: d["valor"])
+    verbo = "subió" if ultimo["valor"] > primero["valor"] else "bajó" if ultimo["valor"] < primero["valor"] else "no cambió"
+    titulo = (f"{s['nombre']}: {verbo} de {primero['valor']:,.2f} en {primero['periodo']} "
+              f"a {ultimo['valor']:,.2f} en {ultimo['periodo']}")
+    subtitulo = (f"Serie {codigo} · {frecuencia.lower()} · {primero['periodo']} a {ultimo['periodo']} · "
+                 f"{len(datos)} observaciones · Unidad: {etiqueta_unidad}")
+
+    fig = Figure(figsize=(10, 5.8))
+    ax = fig.subplots()
+    fig.subplots_adjust(top=0.80, bottom=0.15, left=0.09, right=0.96)
+    ax.plot(x, y, color="#1f5f8b", linewidth=2, marker="o" if len(datos) <= 40 else None, markersize=4)
+    if min(y) < 0 < max(y):
+        ax.axhline(0, color="#888888", linewidth=0.8)
+    rango = (max(y) - min(y)) or abs(y[0]) or 1.0
+    ax.set_ylim(min(y) - 0.16 * rango, max(y) + 0.18 * rango)   # margen para que quepan las etiquetas
+    etiquetas = {}   # un punto puede ser a la vez el máximo y el último: se rotula una sola vez
+    for punto, texto in ((maximo, "máx."), (minimo, "mín."), (ultimo, "último")):
+        etiquetas.setdefault(punto["periodo"], (punto, []))[1].append(texto)
+    for periodo, (punto, textos) in etiquetas.items():
+        debajo = "mín." in textos and "máx." not in textos
+        ax.annotate(f"{' y '.join(textos)} {punto['valor']:,.2f}\n({periodo})",
+                    (_fecha_periodo(periodo, frecuencia), punto["valor"]), textcoords="offset points",
+                    xytext=(0, -24 if debajo else 8), ha="center", fontsize=8, color="#333333")
+    ax.set_ylabel(etiqueta_unidad)
+    ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+    ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ax.xaxis.get_major_locator()))
+    ax.grid(axis="y", color="#dddddd", linewidth=0.7)
+    for lado in ("top", "right"):
+        ax.spines[lado].set_visible(False)
+    fig.text(0.09, 0.95, textwrap.fill(titulo, 78), fontsize=12.5, fontweight="bold", va="top")
+    fig.text(0.09, 0.855, subtitulo, fontsize=9, color="#444444", va="top")
+    fig.text(0.09, 0.03, f"Fuente: BCRP, Estadísticas de series (código {codigo}). Elaboración propia con datos oficiales.",
+             fontsize=8, color="#555555")
+
+    ruta = FIGURAS / f"bcrp_{codigo}_{primero['periodo']}_{ultimo['periodo']}.png"
+    try:
+        FIGURAS.mkdir(exist_ok=True)
+        fig.savefig(ruta, dpi=200)
+    except OSError as e:
+        raise ToolError(f"No se pudo guardar el gráfico en {ruta}: {e}") from None
+    return {"ruta": str(ruta), "ruta_relativa": f"figuras/{ruta.name}", "codigo": codigo, "nombre": s["nombre"],
+            "periodo": f"{primero['periodo']} a {ultimo['periodo']}", "observaciones": len(datos),
+            "unidad": unidad, "fuente": s["fuente"]}
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Recurso: la ficha de una serie, leída del catálogo local (no llama a la API de datos).
+# ---------------------------------------------------------------------------------------------------------------
+@mcp.resource("bcrp://serie/{codigo}", mime_type="application/json",
+              annotations={"readOnlyHint": True, "idempotentHint": True})
+def ficha_serie(codigo: str) -> dict:
+    """Ficha descriptiva de una serie del BCRP: nombre, categoría, frecuencia, unidad, desde cuándo hay datos,
+    cuándo se actualizó por última vez y la fuente. Ejemplo: bcrp://serie/PN01273PM."""
+    try:
+        ficha = _ficha(codigo)
+    except ToolError as e:
+        raise ResourceError(str(e)) from None
+    return {**ficha, "unidad": _unidad(codigo) or "no indicada en el catálogo del BCRP",
+            "fuente": "Banco Central de Reserva del Perú (BCRP), Estadísticas de series: "
+                      "https://estadisticas.bcrp.gob.pe/estadisticas/series/"}
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Prompt: una receta reutilizable para que Claude arme un informe con las herramientas, sin inventar cifras.
+# ---------------------------------------------------------------------------------------------------------------
+@mcp.prompt
+def informe(tema: str) -> str:
+    """Guía a Claude para elaborar un informe breve sobre un indicador del BCRP, citando código, periodo y fuente."""
+    return f"""Elabora un informe breve sobre «{tema}» usando solo las herramientas del servidor bcrp.
+
+Sigue estos pasos, en orden:
+1. Busca la serie con buscar_series("{tema}"). Si no hay resultados, prueba con menos palabras o con sinónimos. Si
+   hay varias series candidatas, elige la más adecuada y di por qué (frecuencia, vigencia, unidad).
+2. Confirma qué mide con el recurso bcrp://serie/<código>: nombre, frecuencia, unidad y desde cuándo hay datos.
+3. Decide un periodo razonable (por ejemplo, los últimos 12 meses o 5 años) y pide los números con resumen(código,
+   desde, hasta). Si necesitas los valores uno por uno, usa serie. No calcules nada a mano: toda variación, promedio,
+   máximo o mínimo debe venir de las herramientas.
+4. Si ayuda a entender la evolución, genera el gráfico con graficar_serie y cita la ruta del archivo.
+5. Presenta el resultado: 3 a 5 hallazgos, cada uno con su cifra, el código de la serie, el periodo exacto y la fuente
+   (BCRP, con la URL que devolvió la herramienta). Una tabla con esas columnas funciona bien.
+6. Cierra con las limitaciones: qué periodo cubre, si la serie ya viene en porcentaje, y que describir una evolución no
+   prueba una causa.
+
+Reglas: no uses cifras que no hayan salido de una herramienta. Si una herramienta falla o no devuelve datos, di
+exactamente qué falló y no rellenes con estimaciones."""
 
 
 if __name__ == "__main__":
