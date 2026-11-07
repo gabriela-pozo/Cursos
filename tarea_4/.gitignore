@@ -1,0 +1,16 @@
+# Datos descargados (microdatos ENAHO, GeoJSON, catálogo BCRP): se vuelven a bajar con datos/descargar.py
+datos/*
+!datos/descargar.py
+
+# Entornos virtuales y cachés
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Claves y secretos
+.env
+*.key

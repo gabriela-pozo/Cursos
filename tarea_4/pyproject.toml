@@ -1,0 +1,13 @@
+[project]
+name = "tarea-4-agente-socioeconomico"
+version = "0.1.0"
+description = "Agente de investigación socioeconómica: MCP del BCRP (FastMCP) + Skills de Claude Code para la ENAHO 2024"
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=4,<5",
+    "pandas",
+    "pyarrow",
+    "geopandas",
+    "matplotlib",
+    "pytest",
+]
