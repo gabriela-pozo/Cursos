@@ -14,3 +14,7 @@ __pycache__/
 # Claves y secretos
 .env
 *.key
+
+# Catálogo y caché del servidor MCP (se regeneran solos)
+mcp/datos/
+mcp/cache/
