@@ -69,3 +69,35 @@ def test_un_recurso():
 
 def test_un_prompt():
     assert len(asyncio.run(_con_cliente(lambda c: c.list_prompts()))) >= 1
+
+
+# =====================================================================================================================
+# PRUEBAS PROPIAS (no son de la sesión 04). Evalúan graficar_serie, la herramienta propia de este proyecto.
+# Escriben en una carpeta temporal (tmp_path), nunca en figuras/.
+# =====================================================================================================================
+import server  # noqa: E402
+
+FIRMA_PNG = b"\x89PNG\r\n\x1a\n"
+
+
+def test_propia_graficar_serie_genera_un_png_valido(tmp_path, monkeypatch):
+    from pathlib import Path
+    monkeypatch.setattr(server, "FIGURAS", tmp_path / "figuras")   # el gráfico se guarda en la carpeta temporal
+    r = llamar("graficar_serie", codigo="PN01271PM", desde="2025-01", hasta="2025-12")
+    ruta = Path(r["ruta"])
+    assert ruta.parent == tmp_path / "figuras" and ruta.suffix == ".png"
+    assert ruta.exists() and ruta.stat().st_size > 0
+    assert ruta.read_bytes()[:8] == FIRMA_PNG                       # los 8 primeros bytes de todo PNG
+    assert r["codigo"] == "PN01271PM"                                # devuelve los datos con que se hizo
+    assert r["periodo"] == "2025-01 a 2025-12" and r["observaciones"] == 12
+    assert r["fuente"].startswith("https://estadisticas.bcrp.gob.pe")
+
+
+def test_propia_graficar_serie_error_claro_y_sin_archivo(tmp_path, monkeypatch):
+    monkeypatch.setattr(server, "FIGURAS", tmp_path / "figuras")
+    casos = [({"codigo": "XX999", "desde": "2025-01", "hasta": "2025-02"}, "XX999"),           # código que no existe
+             ({"codigo": "PN01271PM", "desde": "2025/01", "hasta": "2025-02"}, "no válida")]   # fecha mal escrita
+    for args, mensaje in casos:
+        with pytest.raises(ToolError, match=mensaje):
+            llamar("graficar_serie", **args)
+    assert not (tmp_path / "figuras").exists() and list(tmp_path.rglob("*")) == []   # no se creó ningún archivo

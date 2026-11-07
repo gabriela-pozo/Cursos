@@ -6,6 +6,8 @@ Baja de ENAHO 2024 los módulos 34 (sumaria) y 02 (miembros) en formato STATA, y
 departamental del repositorio del curso. Los zip se descomprimen en datos/966-Modulo34/ y
 datos/966-Modulo02/. Si un archivo ya existe y es válido, no se vuelve a bajar.
 Solo usa la biblioteca estándar. Si una descarga falla, el script termina con error: no inventa datos.
+Si el INEI bloquea la descarga automática, bájelos a mano desde los enlaces de ZIPS/GEOJSON (más abajo) y
+descomprima cada zip en datos/966-ModuloXX/.
 """
 import shutil
 import sys
@@ -29,8 +31,8 @@ def bajar(url: str, destino: Path) -> None:
     """Descarga url a destino (por un archivo temporal, para no dejar archivos a medias)."""
     print(f"Bajando {url}")
     tmp = destino.with_suffix(destino.suffix + ".part")
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (tarea_4 descargar.py)"})
-    with urllib.request.urlopen(req, timeout=300) as r, open(tmp, "wb") as f:
+    # User-Agent por defecto de Python: no se disfraza la descarga. Si el INEI la bloquea, ver README (descarga manual).
+    with urllib.request.urlopen(url, timeout=300) as r, open(tmp, "wb") as f:
         shutil.copyfileobj(r, f)
     tmp.replace(destino)
     print(f"  -> {destino.name}: {destino.stat().st_size / 1e6:.1f} MB")
