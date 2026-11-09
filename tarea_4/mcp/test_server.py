@@ -101,3 +101,15 @@ def test_propia_graficar_serie_error_claro_y_sin_archivo(tmp_path, monkeypatch):
         with pytest.raises(ToolError, match=mensaje):
             llamar("graficar_serie", **args)
     assert not (tmp_path / "figuras").exists() and list(tmp_path.rglob("*")) == []   # no se creó ningún archivo
+
+
+# --- Pruebas de robustez PROPIAS (se agregaron a las 10 anteriores, que no se modificaron) ---------------------
+def test_propia_periodo_sin_datos_da_error_claro():
+    # Un período futuro no tiene datos: debe fallar con un mensaje claro, sin inventar valores ni devolver una lista vacía.
+    with pytest.raises(ToolError, match="2030"):
+        llamar("serie", codigo="PN01271PM", desde="2030-01", hasta="2030-12")
+
+
+def test_propia_busqueda_sin_resultados_no_falla():
+    # Un término que no existe en el catálogo devuelve una lista vacía, sin excepción.
+    assert llamar("buscar_series", texto="zzzxqwv inexistente") == []
