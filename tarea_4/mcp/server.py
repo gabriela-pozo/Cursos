@@ -299,6 +299,18 @@ def _fecha_periodo(periodo, frecuencia):
     return date(int(a), int(m), 1)
 
 
+def _titulo_serie(nombre: str, datos: list[dict]) -> str:
+    """Título que dice qué pasó: de qué valor a qué valor y, además, el máximo y el mínimo con su período.
+    Todo sale de los datos; así un pico intermedio no queda escondido por los extremos."""
+    primero, ultimo = datos[0], datos[-1]
+    maximo = max(datos, key=lambda d: d["valor"])
+    minimo = min(datos, key=lambda d: d["valor"])
+    verbo = "subió" if ultimo["valor"] > primero["valor"] else "bajó" if ultimo["valor"] < primero["valor"] else "no cambió"
+    return (f"{nombre}: {verbo} de {primero['valor']:,.2f} en {primero['periodo']} a {ultimo['valor']:,.2f} en "
+            f"{ultimo['periodo']} (máx. {maximo['valor']:,.2f} en {maximo['periodo']}; "
+            f"mín. {minimo['valor']:,.2f} en {minimo['periodo']})")
+
+
 @mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True,
                        "openWorldHint": True})
 def graficar_serie(codigo: str, desde: str, hasta: str) -> dict:
@@ -307,7 +319,7 @@ def graficar_serie(codigo: str, desde: str, hasta: str) -> dict:
     Úsela cuando pidan un gráfico, la evolución o la tendencia de un indicador (inflación, tipo de cambio,
     reservas...). Para solo cifras use resumen o serie. Primero obtenga el código con buscar_series. Mismas fechas
     que serie. Ejemplo: codigo="PN01273PM", desde="2021-01", hasta="2026-09".
-    El gráfico lleva un título que dice qué pasó (de qué valor a qué valor), el nombre y el código de la serie, el
+    El gráfico lleva un título que dice qué pasó (de qué valor a qué valor, con el máximo y el mínimo y su período), el nombre y el código de la serie, el
     periodo, la unidad (si el catálogo la indica) y la fuente (BCRP). Devuelve {ruta, ruta_relativa, codigo, nombre,
     periodo, observaciones, unidad, fuente}. Para mostrar el gráfico, cite la ruta.
     """
@@ -320,15 +332,15 @@ def graficar_serie(codigo: str, desde: str, hasta: str) -> dict:
     primero, ultimo = datos[0], datos[-1]
     maximo = max(datos, key=lambda d: d["valor"])
     minimo = min(datos, key=lambda d: d["valor"])
-    verbo = "subió" if ultimo["valor"] > primero["valor"] else "bajó" if ultimo["valor"] < primero["valor"] else "no cambió"
-    titulo = (f"{s['nombre']}: {verbo} de {primero['valor']:,.2f} en {primero['periodo']} "
-              f"a {ultimo['valor']:,.2f} en {ultimo['periodo']}")
+    titulo = _titulo_serie(s["nombre"], datos)
     subtitulo = (f"Serie {codigo} · {frecuencia.lower()} · {primero['periodo']} a {ultimo['periodo']} · "
                  f"{len(datos)} observaciones · Unidad: {etiqueta_unidad}")
 
+    lineas_titulo = textwrap.wrap(titulo, 78)
+    extra = 0.045 * max(0, len(lineas_titulo) - 2)   # si el título ocupa más de 2 líneas, se baja el resto
     fig = Figure(figsize=(10, 5.8))
     ax = fig.subplots()
-    fig.subplots_adjust(top=0.80, bottom=0.15, left=0.09, right=0.96)
+    fig.subplots_adjust(top=0.80 - extra, bottom=0.15, left=0.09, right=0.96)
     ax.plot(x, y, color="#1f5f8b", linewidth=2, marker="o" if len(datos) <= 40 else None, markersize=4)
     if min(y) < 0 < max(y):
         ax.axhline(0, color="#888888", linewidth=0.8)
@@ -349,7 +361,7 @@ def graficar_serie(codigo: str, desde: str, hasta: str) -> dict:
     for lado in ("top", "right"):
         ax.spines[lado].set_visible(False)
     fig.text(0.09, 0.95, textwrap.fill(titulo, 78), fontsize=12.5, fontweight="bold", va="top")
-    fig.text(0.09, 0.855, subtitulo, fontsize=9, color="#444444", va="top")
+    fig.text(0.09, 0.855 - extra, subtitulo, fontsize=9, color="#444444", va="top")
     fig.text(0.09, 0.03, f"Fuente: BCRP, Estadísticas de series (código {codigo}). Elaboración propia con datos oficiales.",
              fontsize=8, color="#555555")
 
