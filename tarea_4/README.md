@@ -205,3 +205,14 @@ Resultado: gráfico de la serie del BCRP, gráficos de pobreza por área y por d
 Verificación manual: la estudiante comprobó 6 afirmaciones del informe por su cuenta contra el BCRP (serie `PN01273PM`) y la presentación del jefe del INEI. Está en [`informes/verificacion.md`](informes/verificacion.md).
 
 Los registros se sanean con `informes/sanear_registro.py` antes de guardarse (oculta rutas personales y posibles credenciales).
+
+## 13. Innovaciones
+
+- **Verificación automática de cifras.** `informes/generar_trazabilidad.py` arma `informes/trazabilidad.md` con las cifras que salen de las respuestas de las herramientas (`ejecucion.jsonl`) y de los archivos de la ENAHO. Además hace una verificación independiente: consulta la API del BCRP sin pasar por el MCP y recalcula la pobreza desde los microdatos. `informes/verificar_informe.py` falla si el informe contiene un número que no está en la trazabilidad; hoy comprueba 211 números. Se probó en negativo con una copia del informe a la que se le inyectaron tres cifras (31.77, -0.55 y 39.4): el verificador falló con código 1 y señaló las tres (registrado en `evidencias_ia/skills/04_skills_2a_2b.md`).
+- **Detección de inconsistencias entre herramientas.** `mapeando-enaho` compara los 25 departamentos con la referencia de la sesión 16 (tolerancia de 0.05 pp por el redondeo de la referencia). Si alguno se desvía, el script termina con error y no guarda el mapa.
+- **Pruebas de robustez.** `mcp/test_server.py` tiene 12 pruebas: las 10 requeridas (8 originales y 2 sobre `graficar_serie`) y 2 propias, una para un período sin datos (2030), que da un error claro, y otra para una búsqueda sin resultados, que devuelve una lista vacía.
+- **Doble método de estimación, rotulado.** La pobreza se calcula con el método oficial del INEI (hogares, `factor07 × mieperho`) y, de forma informativa, por personas (`facpob07`). `indicadores.csv` rotula el método de cada fila, y la diferencia de universo se explica en `limpiando-enaho/reference.md` y en la sección 10.
+- **Robustez ante fallos del BCRP.** El servidor usa caché en memoria y en disco, pausa entre pedidos, hasta 6 reintentos con espera creciente y errores explícitos; nunca rellena ni inventa datos.
+- **Análisis al desactivar herramientas.** El experimento A/B de la Parte 4 compara 10 preguntas sin herramientas (modo A) y con MCP y Skills (modo B); los resultados están en la sección 9 y en `evaluacion/comparacion.md`.
+
+No se implementó ningún dashboard de resultados.
