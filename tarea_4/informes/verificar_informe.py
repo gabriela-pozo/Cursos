@@ -31,6 +31,7 @@ def sin_ruido(texto: str) -> str:
     texto = re.sub(r"`[^`\n]*`", " ", texto)                              # código en línea
     texto = re.sub(r"\]\([^)]*\)", "]", texto)                            # destinos de enlaces e imágenes
     texto = re.sub(r"https?://\S+", " ", texto)                           # URLs sueltas
+    texto = re.sub(r"\b\d{1,2}-(?:ene|feb|mar|abr|may|jun|jul|ago|set|sep|oct|nov|dic)[a-z]*-\d{4}\b", " ", texto, flags=re.I)   # fechas «8-nov-2026»
     texto = re.sub(r"(?m)^\s*(?:#+\s*)?\d+[.)]\s+", "", texto)            # numeración de listas y de secciones
     texto = re.sub(r"\b(?:Hallazgo|Figura|Tabla|Paso)\s+\d+", " ", texto)  # rótulos
     return texto

@@ -7,8 +7,8 @@
   d2cml-ai/Data-Science-Python): un agente que combina un servidor MCP del      
   BCRP (FastMCP) con 3 Skills de Claude Code para la ENAHO 2024.                
   Uso Windows. El proyecto vive en                                              
-  C:\Users\Asus\Documents\GitHub\Cursos\tarea_4 y el repo del curso está        
-  clonado en C:\Users\Asus\Documents\GitHub\Data-Science-Python.                
+  C:\Users\<usuario>\Documents\GitHub\Cursos\tarea_4 y el repo del curso está        
+  clonado en C:\Users\<usuario>\Documents\GitHub\Data-Science-Python.                
                                                                                 
   Reglas para toda la sesión:                                                   
   - Soy estudiante: antes de codificar dime el plan, y al terminar explícame    

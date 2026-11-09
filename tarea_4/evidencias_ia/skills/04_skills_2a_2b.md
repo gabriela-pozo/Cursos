@@ -7,8 +7,8 @@
   d2cml-ai/Data-Science-Python): un agente que combina un servidor MCP del      
   BCRP (FastMCP) con 3 Skills de Claude Code para la ENAHO 2024.                
   Uso Windows. El proyecto vive en                                              
-  C:\Users\Asus\Documents\GitHub\Cursos\tarea_4 y el repo del curso está        
-  clonado en C:\Users\Asus\Documents\GitHub\Data-Science-Python.                
+  C:\Users\<usuario>\Documents\GitHub\Cursos\tarea_4 y el repo del curso está        
+  clonado en C:\Users\<usuario>\Documents\GitHub\Data-Science-Python.                
                                                                                 
   Reglas para toda la sesión:                                                   
   - Soy estudiante: antes de codificar dime el plan, y al terminar explícame    
@@ -170,7 +170,7 @@
 ※ recap: Estás armando la Tarea 4: un agente que combina el MCP del BCRP con tres Skills de ENAHO 2024. La Fase 0 (estructura, descarga de datos y commit 2a809e2) está lista, y lo siguiente es que me des tu OK para presentarte el plan de la Fase 1. (disable recaps in /config)
 
 ❯ /export 0 fase_evidencias_ia/mcp/                                             
-  ⎿  Conversation exported to: C:\Users\Asus\Documents\GitHub\Cursos\tarea_4\0
+  ⎿  Conversation exported to: C:\Users\<usuario>\Documents\GitHub\Cursos\tarea_4\0
      fase_evidencias_ia\mcp.txt
 
 ❯ OK a la Fase 0. Ahora FASE 1a (sin escribir código del proyecto):             
@@ -661,7 +661,7 @@
 
 ❯ /export 01_fase1a_y_1b.md                                                     
   ⎿  Conversation exported to:
-     C:\Users\Asus\Documents\GitHub\Cursos\tarea_4\01_fase1a_y_1b.md
+     C:\Users\<usuario>\Documents\GitHub\Cursos\tarea_4\01_fase1a_y_1b.md
 
 ❯ OK a la 1b. Ajustes antes de seguir:                                          
   - El servidor debe usar siempre el User-Agent por defecto, sin disfrazarlo.   
