@@ -1,0 +1,11 @@
+id,tipo,pregunta,respuesta_esperada,tolerancia,fuente_de_la_esperada
+1,BCRP,Inflación mensual de Lima en marzo de 2025,0.81 %,±0.01,Pruebas de la sesión 04
+2,BCRP,Tipo de cambio interbancario el 15-oct-2026 (S/ por US$),3.428,±0.005,Pruebas de la sesión 04
+3,BCRP,Inflación a 12 meses de Lima en enero de 2020,1.89 %,±0.01,Verificación manual en BCRP (PN01273PM)
+4,BCRP,Mes de menor inflación a 12 meses en Lima entre 2020 y 2024 y su valor,"junio 2020, 1.60 %",±0.01,Verificación manual en BCRP (PN01273PM)
+5,ENAHO,Pobreza monetaria nacional en 2024,27.6 %,±0.1,Issue #201
+6,ENAHO,Pobreza monetaria rural en 2024,39.3 %,±0.1,Presentación del jefe del INEI
+7,ENAHO,Residentes habituales en la ENAHO 2024,"108,664",exacto,Issue #201
+8,ENAHO,Departamento con menor pobreza monetaria en 2024 y su tasa,"Ica, 6.0 %",±0.1,Presentación del jefe del INEI
+9,Combinada,Brecha de pobreza rural menos urbana en 2024 y menor inflación a 12 meses de Lima entre 2020 y 2024,"14.5 pp y 1.60 %",±0.1 y ±0.01,Presentación del jefe del INEI y BCRP
+10,Combinada,Departamento con mayor pobreza monetaria en 2024 con su tasa e inflación a 12 meses de Lima en enero de 2020,Cajamarca 45.0 % y 1.89 %,±0.1 y ±0.01,Presentación del jefe del INEI y BCRP
