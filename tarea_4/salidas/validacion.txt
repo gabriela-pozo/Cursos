@@ -1,0 +1,49 @@
+VALIDACIÓN ENAHO 2024 · skill limpiando-enaho
+========================================================================
+Módulo 34 (sumaria): datos/966-Modulo34/966-Modulo34/sumaria-2024.dta
+Módulo 02 (miembros): datos/966-Modulo02/966-Modulo02/enaho01-2024-200.dta
+
+[APROBADA] Llaves leídas como texto con ceros iniciales (largo único por llave)
+    obtenido: conglome: [6], vivienda: [3], hogar: [2], codperso: [2]   |   esperado: un solo largo por llave
+[APROBADA] Sumaria: una fila por hogar (sin llaves duplicadas)
+    obtenido: 33,691 hogares   |   esperado: 33,691 hogares y sin duplicados
+[APROBADA] Sumaria: número de hogares
+    obtenido: 33,691   |   esperado: 33,691
+[APROBADA] Miembros: una fila por persona (sin llaves duplicadas)
+    obtenido: 117,721 filas   |   esperado: sin duplicados
+[APROBADA] Residentes habituales
+    obtenido: 108,664 de 117,721 filas   |   esperado: 108,664
+[APROBADA] Unión m:1: no se pierden ni se duplican personas
+    obtenido: 108,664 residentes -> 108,664 filas; 0 sin hogar   |   esperado: mismas filas que antes de unir y 0 sin hogar
+[APROBADA] Unión m:1: ninguna persona repetida tras unir
+    obtenido: 0 repetidas   |   esperado: 0
+[APROBADA] Persona y hogar coinciden en ubigeo y estrato
+    obtenido: 0 ubigeo y 0 estrato distintos   |   esperado: 0 y 0
+[APROBADA] 25 códigos territoriales (ubigeo[:2]), de 01 a 25
+    obtenido: 25 códigos; faltan [], sobran []   |   esperado: 25 códigos, de 01 a 25 (Lima 15 y Callao 07 separados)
+[APROBADA] Factores de expansión (facpob07, factor07) presentes y positivos en todas las filas
+    obtenido: facpob07 nulos: 0   |   esperado: 0 nulos y todos > 0
+[APROBADA] Variable pobreza solo toma los valores 1, 2 y 3 (extremo, no extremo, no pobre)
+    obtenido: valores: [1, 2, 3]   |   esperado: {1, 2, 3}
+[APROBADA] Sexo reconocido en todas las filas (p207 = 1 o 2)
+    obtenido: 0 sin sexo   |   esperado: 0
+[APROBADA] Pobreza monetaria nacional · método oficial (hogares, factor07 x mieperho)
+    obtenido: 27.58 %   |   esperado: 27.6 % ± 0.1 pp
+[APROBADA] Pobreza monetaria urbana (estrato <= 5) · método oficial (hogares, factor07 x mieperho)
+    obtenido: 24.81 %   |   esperado: 24.8 % ± 0.1 pp
+[APROBADA] Pobreza monetaria rural (estrato > 5) · método oficial (hogares, factor07 x mieperho)
+    obtenido: 39.30 %   |   esperado: 39.3 % ± 0.1 pp
+[INFO] Informativo: pobreza nacional · personas residentes con facpob07
+    obtenido: 27.53 %  (diferencia con la referencia: -0.07 pp)   |   esperado: 27.6 %
+[INFO] Informativo: pobreza urbana · personas residentes con facpob07
+    obtenido: 24.74 %  (diferencia con la referencia: -0.06 pp)   |   esperado: 24.8 %
+[INFO] Informativo: pobreza rural · personas residentes con facpob07
+    obtenido: 39.44 %  (diferencia con la referencia: +0.14 pp)   |   esperado: 39.3 %
+[INFO] Informativo: pobreza nacional SIN ponderar (no se usa; muestra por qué hay que ponderar)
+    obtenido: 25.61 %
+[APROBADA] Las dos sumarias dan lo mismo en hogares y variables de pobreza (justifica la elección de sumaria-2024)
+    obtenido: 33,691 hogares en la 12g; hogares en una sola: 0; variables distintas: ninguna   |   esperado: mismos hogares y mismas variables
+
+========================================================================
+RESUMEN: 16 APROBADAS, 0 FALLIDAS
+RESULTADO: TODAS LAS VERIFICACIONES ESENCIALES APROBADAS; se guardaron la base y los indicadores.

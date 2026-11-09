@@ -18,3 +18,6 @@ __pycache__/
 # Catálogo y caché del servidor MCP (se regeneran solos)
 mcp/datos/
 mcp/cache/
+
+# Microdatos derivados de la ENAHO (se regeneran con la skill limpiando-enaho)
+salidas/*.parquet
