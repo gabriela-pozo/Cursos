@@ -4,7 +4,8 @@
 
 Lee salidas/indicadores.csv, que genera la skill limpiando-enaho a partir de los microdatos con estimaciones
 PONDERADAS. Aquí no se calcula ninguna cifra a mano ni se hace ningún promedio simple: solo se dibuja lo que ya salió
-del procesamiento, y los títulos arman sus cifras desde esos mismos datos.
+del procesamiento, y los títulos arman sus cifras desde esos mismos datos. Los nombres de departamento vienen de la
+columna nombre_categoria de indicadores.csv (diccionario oficial de ubigeo de limpiando-enaho), no de memoria.
 
   - Área y departamento: método oficial del INEI (hogares, factor07 x mieperho), el de validacion.txt.
   - Sexo: cálculo por personas (facpob07), porque el sexo es un atributo de la persona. Se rotula en el gráfico y
@@ -14,10 +15,8 @@ Si falta la base procesada (salidas/personas_2024.parquet), si faltan los indica
 verificación esencial fallida, termina con un error que dice qué hacer. Guarda los PNG en figuras/.
 """
 import argparse
-import json
 import sys
 import textwrap
-import unicodedata
 from pathlib import Path
 
 import matplotlib
@@ -30,24 +29,16 @@ OFICIAL = "hogares_factor07_x_mieperho"
 PERSONAS = "personas_facpob07"
 FUENTE = "Fuente: INEI, ENAHO 2024 (módulos 34 y 02). Elaboración propia."
 AZUL, GRIS = "#1f5f8b", "#666666"
-ACENTOS = {"Ancash": "Áncash", "Apurimac": "Apurímac", "Huanuco": "Huánuco", "Junin": "Junín",
-           "San Martin": "San Martín"}   # el GeoJSON trae los nombres en mayúscula y sin tildes
+DEPARTAMENTOS = [f"{i:02d}" for i in range(1, 26)]
 
 
 class Falla(Exception):
     """Error explícito que detiene el proceso."""
 
 
-def nombre_departamento(nombdep: str) -> str:
-    """«SAN MARTIN» -> «San Martín», «MADRE DE DIOS» -> «Madre de Dios»."""
-    t = " ".join(w.lower() if w in ("DE", "DEL", "LA") and i else w.capitalize()
-                 for i, w in enumerate(nombdep.split()))
-    return ACENTOS.get(t, t)
-
-
 # ------------------------------------------------------------------------------------------------ insumos
-def cargar(raiz: Path):
-    """Comprueba la base procesada y devuelve (indicadores, nombres de departamento por código)."""
+def cargar(raiz: Path) -> pd.DataFrame:
+    """Comprueba la base procesada y devuelve los indicadores (con nombre_categoria, del diccionario oficial)."""
     salidas = raiz / "salidas"
     if not (salidas / "personas_2024.parquet").exists():
         raise Falla("Falta salidas/personas_2024.parquet. Ejecute primero la skill limpiando-enaho "
@@ -60,13 +51,10 @@ def cargar(raiz: Path):
         raise Falla("salidas/validacion.txt registra una verificación fallida: no se grafica con datos no validados. "
                     "Revise limpiando-enaho.")
     ind = pd.read_csv(salidas / "indicadores.csv", dtype={"categoria": str})
-    geojson = raiz / "datos" / "peru_departamental_simple.geojson"
-    if not geojson.exists():
-        raise Falla("Falta datos/peru_departamental_simple.geojson (nombres de departamento). "
-                    "Ejecute: uv run datos/descargar.py")
-    props = [f["properties"] for f in json.loads(geojson.read_text(encoding="utf-8"))["features"]]
-    nombres = {p["FIRST_IDDP"]: nombre_departamento(p["NOMBDEP"]) for p in props}
-    return ind, nombres
+    if "nombre_categoria" not in ind.columns:
+        raise Falla("indicadores.csv no trae nombre_categoria (diccionario oficial de departamentos). "
+                    "Vuelva a ejecutar la skill limpiando-enaho.")
+    return ind
 
 
 def filas(ind: pd.DataFrame, dimension: str, metodo: str, categorias=None) -> pd.DataFrame:
@@ -161,11 +149,14 @@ def grafico_sexo(raiz, ind):
                              "enaho2024_pobreza_sexo.png")
 
 
-def grafico_departamento(raiz, ind, nombres):
-    d = filas(ind, "departamento", OFICIAL, sorted(nombres))
+def grafico_departamento(raiz, ind):
+    d = filas(ind, "departamento", OFICIAL, DEPARTAMENTOS)
     if len(d) != 25:
         raise Falla(f"Se esperaban 25 departamentos y hay {len(d)}.")
-    d = d.assign(nombre=[nombres[c] for c in d.index]).sort_values("valor_pct", ascending=True)
+    # El nombre viene del diccionario oficial de limpiando-enaho (columna nombre_categoria), nunca de memoria
+    if d["nombre_categoria"].isna().any() or d["nombre_categoria"].duplicated().any():
+        raise Falla("indicadores.csv trae nombres de departamento vacíos o repetidos. Vuelva a ejecutar limpiando-enaho.")
+    d = d.assign(nombre=d["nombre_categoria"]).sort_values("valor_pct", ascending=True)
     nac = nacional(ind)
     alto, bajo = d.iloc[-1], d.iloc[0]
     sobre = int((d["valor_pct"] > nac).sum())
@@ -201,7 +192,7 @@ def main() -> None:
     a = ap.parse_args()
     raiz = a.raiz.resolve()
     try:
-        ind, nombres = cargar(raiz)
+        ind = cargar(raiz)
         if a.grafico in ("area", "todos"):
             ruta, v = grafico_area(raiz, ind)
             print(f"OK {ruta.relative_to(raiz).as_posix()}: urbana {v['Urbano']:.2f} %, rural {v['Rural']:.2f} % (método oficial, hogares)")
@@ -210,7 +201,7 @@ def main() -> None:
             print(f"OK {ruta.relative_to(raiz).as_posix()}: mujeres {v['Mujer']:.2f} %, hombres {v['Hombre']:.2f} % "
                   "(por personas, facpob07; puede diferir levemente del método oficial)")
         if a.grafico in ("departamento", "todos"):
-            ruta, d = grafico_departamento(raiz, ind, nombres)
+            ruta, d = grafico_departamento(raiz, ind)
             print(f"OK {ruta.relative_to(raiz).as_posix()}: 25 departamentos; mayor {d.iloc[-1]['nombre']} "
                   f"{d.iloc[-1]['valor_pct']:.2f} %, menor {d.iloc[0]['nombre']} {d.iloc[0]['valor_pct']:.2f} % (método oficial, hogares)")
     except Falla as e:
