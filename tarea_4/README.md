@@ -67,6 +67,17 @@ Las solicitudes a la API usan caché en memoria y en disco (24 h), pausa mínima
 
 Si una validación esencial falla, `limpiar.py` termina con `ERROR` y no se genera ninguna base.
 
+Resultados de la última validación (`salidas/validacion.txt`: 16 verificaciones aprobadas, 0 fallidas):
+
+| Indicador | Obtenido | Referencia |
+|---|---|---|
+| Residentes habituales | 108,664 de 117,721 filas | 108,664 |
+| Hogares | 33,691 | 33,691 |
+| Unidades territoriales (`ubigeo[:2]`) | 25, de 01 a 25 (Lima 15 y Callao 07 separados) | 25 |
+| Pobreza monetaria nacional (método oficial) | 27.58 % | 27.6 % ± 0.1 pp |
+| Pobreza monetaria urbana (método oficial) | 24.81 % | 24.8 % ± 0.1 pp |
+| Pobreza monetaria rural (método oficial) | 39.30 % | 39.3 % ± 0.1 pp |
+
 ## 5. Fuentes y enlaces de descarga
 
 | Fuente | Uso | Enlace |
@@ -132,7 +143,7 @@ La evaluación invoca `claude -p` por cada pregunta y modo, y escribe `evaluacio
 
 ## 9. Resultados de la evaluación
 
-Resultados de `evaluacion/resultados.csv`: 10 preguntas en cada modo, con el modelo `sonnet`. Detalle de las condiciones en [`evaluacion/comparacion.md`](evaluacion/comparacion.md); ese archivo todavía no incluye la tabla de resultados.
+Resultados de `evaluacion/resultados.csv`: 10 preguntas en cada modo, con el modelo `sonnet`. Detalle de las condiciones en [`evaluacion/comparacion.md`](evaluacion/comparacion.md).
 
 | | Modo A (sin herramientas) | Modo B (MCP + Skills) |
 |---|---|---|
@@ -175,6 +186,11 @@ Antes de ejecutarla se borró `salidas/personas_2024.parquet`. El agente hizo 16
 1. Con `bcrp`: `buscar_series`, la ficha `bcrp://serie/PN01273PM`, `resumen`, `serie` y `graficar_serie` para 2020-01 a 2024-12.
 2. Con las Skills: como faltaba la base procesada, ejecutó `limpiando-enaho` (16 verificaciones aprobadas, 0 fallidas) y luego `graficando-enaho` y `mapeando-enaho`.
 
+Hallazgos principales del informe:
+
+- La inflación a 12 meses de Lima Metropolitana (`PN01273PM`) subió hasta 8.81 % en 2022-06 y terminó el período en 1.97 % (2024-12).
+- En 2024 la pobreza monetaria rural (39.3 %) superó a la urbana (24.8 %) en 14.5 puntos porcentuales, y entre departamentos fue de 6.0 % en Ica a 45.0 % en Cajamarca.
+
 Resultado: gráfico de la serie del BCRP, gráficos de pobreza por área y por departamento, y el mapa departamental. El informe resultante está en `informes/informe_final.md` y sus cifras, en `informes/trazabilidad.md`.
 
 ## 12. Evidencias de IA (`evidencias_ia/`)
@@ -182,7 +198,10 @@ Resultado: gráfico de la serie del BCRP, gráficos de pobreza por área y por d
 | Carpeta | Contenido |
 |---|---|
 | `mcp/` | Sesiones de Claude Code de las fases 0, 1a y 1b (servidor MCP) |
+| `skills/` | Sesiones de las fases 2a y 2b (desarrollo de las tres Skills) |
 | `integracion/` | Prompt, comando y registro saneado (`ejecucion.jsonl`) de la ejecución completa |
 | `evaluacion/` | Registros `.jsonl` de cada pregunta y modo de la evaluación |
+
+Verificación manual: la estudiante comprobó 6 afirmaciones del informe por su cuenta contra el BCRP (serie `PN01273PM`) y la presentación del jefe del INEI. Está al final de [`informes/informe_final.md`](informes/informe_final.md), en la sección «Verificación manual de cifras».
 
 Los registros se sanean con `informes/sanear_registro.py` antes de guardarse (oculta rutas personales y posibles credenciales).
