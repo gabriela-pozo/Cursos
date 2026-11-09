@@ -8,7 +8,7 @@ Pasos, siempre en este orden:
   2. Normalizar los nombres de columna a minúscula («aÑo» pasa a «anio»).
   3. Filtrar residentes habituales: ((p204 == 1) & (p205 == 2)) | ((p204 == 2) & (p206 == 1)).
   4. Unir personas con hogares por conglome, vivienda y hogar con merge(validate="m:1").
-  5. Construir departamento (ubigeo[:2]), área urbano/rural (estrato <= 5), pobre (pobreza <= 2) y sexo.
+  5. Construir departamento (ubigeo[:2]) y su nombre (referencias/departamentos_ubigeo.csv), área urbano/rural (estrato <= 5), pobre (pobreza <= 2) y sexo.
   6. Validar todo y escribir salidas/validacion.txt con cada verificación APROBADA o FALLIDA.
   7. Si NINGUNA verificación esencial falló, guardar salidas/personas_2024.parquet y salidas/indicadores.csv.
 
@@ -30,6 +30,9 @@ SUMARIA = f"sumaria-{ANIO}.dta"              # la elegida: ver reference.md, sec
 SUMARIA_12G = f"sumaria-{ANIO}-12g.dta"      # solo se usa para comprobar que la elección no cambia la pobreza
 MIEMBROS = f"enaho01-{ANIO}-200.dta"
 DEPARTAMENTOS = {f"{i:02d}" for i in range(1, 26)}
+# Diccionario oficial código -> nombre (ubigeo del INEI, 2 dígitos; Lima 15 y Callao 07 separados). Los nombres
+# salen de este archivo, nunca de la memoria del agente ni de adivinarlos a partir del código.
+DICCIONARIO = Path(__file__).resolve().parents[1] / "referencias" / "departamentos_ubigeo.csv"
 
 # Valores de referencia (issue #201 y sesión 16). Son metas contra las que se valida, nunca resultados.
 REF_POBREZA, REF_URBANA, REF_RURAL, TOLERANCIA_PP = 27.6, 24.8, 39.3, 0.1
@@ -69,6 +72,22 @@ def leer(ruta: Path, llaves: list[str], columnas: list[str] | None = None) -> pd
     return df
 
 
+def cargar_diccionario(ruta: Path = DICCIONARIO) -> dict[str, str]:
+    """Lee el diccionario código -> nombre y exige exactamente los 25 códigos 01-25, sin repetidos ni nombres vacíos."""
+    if not ruta.exists():
+        raise Falla(f"Falta el diccionario de departamentos {ruta}.")
+    d = pd.read_csv(ruta, dtype=str, encoding="utf-8")
+    if list(d.columns) != ["codigo", "nombre"]:
+        raise Falla(f"{ruta.name} debe tener las columnas codigo,nombre; trae {list(d.columns)}.")
+    d = d.apply(lambda s: s.str.strip())
+    if d["codigo"].duplicated().any() or d["nombre"].duplicated().any() or d["nombre"].isna().any() \
+            or set(d["codigo"]) != DEPARTAMENTOS:
+        raise Falla(f"{ruta.name} debe traer los 25 códigos 01-25 una sola vez, cada uno con un nombre distinto.")
+    if d.set_index("codigo").loc[["07", "15"], "nombre"].tolist() != ["Callao", "Lima"]:
+        raise Falla(f"{ruta.name}: Callao debe ser 07 y Lima 15, por separado.")
+    return dict(zip(d["codigo"], d["nombre"]))
+
+
 # --------------------------------------------------------------------------------------------- estimaciones
 def tasa_pobreza(df: pd.DataFrame, peso: str, mascara=None) -> float:
     """% de pobres ponderado: suma de pesos de los pobres / suma de pesos de todos (nunca un promedio simple)."""
@@ -96,6 +115,7 @@ class Verificaciones:
 # --------------------------------------------------------------------------------------------- proceso
 def procesar(raiz: Path, datos: Path, salidas: Path) -> None:
     v = Verificaciones()
+    nombres = cargar_diccionario()
     ruta_sum, ruta_mie = buscar_dta(datos, SUMARIA), buscar_dta(datos, MIEMBROS)
     ruta_12g = buscar_dta(datos, SUMARIA_12G, obligatorio=False)
     rel = lambda p: p.relative_to(raiz).as_posix() if p.is_relative_to(raiz) else str(p)  # noqa: E731
@@ -147,6 +167,7 @@ def procesar(raiz: Path, datos: Path, salidas: Path) -> None:
 
     # 5. Variables nuevas
     unido["departamento"] = unido["ubigeo"].str[:2]
+    unido["nombre_departamento"] = unido["departamento"].map(nombres)
     unido["urbano"] = unido["estrato"] <= 5
     unido["area"] = np.where(unido["urbano"], "Urbano", "Rural")
     unido["pobre"] = unido["pobreza"] <= 2
@@ -237,7 +258,7 @@ def procesar(raiz: Path, datos: Path, salidas: Path) -> None:
                     f"Revise {rel(salidas / 'validacion.txt')}. No se ajustó ningún resultado.")
 
     # 7. Guardar la base y los indicadores
-    columnas = LLAVES_PERSONA + ["ubigeo", "departamento", "dominio", "estrato", "area", "urbano", "sexo", "edad",
+    columnas = LLAVES_PERSONA + ["ubigeo", "departamento", "nombre_departamento", "dominio", "estrato", "area", "urbano", "sexo", "edad",
                                  "pobreza", "pobre", "pobre_extremo", "facpob07", "factor07", "mieperho"]
     unido[columnas].to_parquet(parquet, index=False)
 
@@ -247,6 +268,7 @@ def procesar(raiz: Path, datos: Path, salidas: Path) -> None:
     def indicador(nombre, dimension, categoria, tabla, mascara, peso, metodo, col="pobre"):
         d = tabla if mascara is None else tabla[mascara]
         filas.append({"indicador": nombre, "metodo": metodo, "dimension": dimension, "categoria": categoria,
+                      "nombre_categoria": nombres[categoria] if dimension == "departamento" else categoria,
                       "valor_pct": float(100 * d.loc[d[col], peso].sum() / d[peso].sum()), "n_muestra": len(d),
                       "poblacion_expandida": float(d[peso].sum()), "ponderador": peso, "unidad": "% de personas"})
 

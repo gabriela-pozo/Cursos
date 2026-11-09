@@ -74,6 +74,14 @@ ponderar) y la comparación de las dos sumarias.
 `departamento` va de `01` a `25`: Lima (`15`) y Callao (`07`) están separados, como en el GeoJSON departamental
 (`FIRST_IDDP`). Se conserva siempre como texto de 2 caracteres.
 
+El nombre de cada código sale del diccionario oficial [`referencias/departamentos_ubigeo.csv`](referencias/departamentos_ubigeo.csv)
+(columnas `codigo,nombre`; los 25 departamentos del ubigeo del INEI, con tildes). El script lo lee y se detiene con
+`ERROR` si no trae exactamente los códigos `01` a `25`, si hay repetidos o si Callao no es `07` y Lima `15`. Lo usa
+para escribir `nombre_departamento` en el parquet y `nombre_categoria` en `indicadores.csv` (en las filas que no son
+de departamento, `nombre_categoria` repite la categoría: Perú, Urbano, Rural, Hombre, Mujer). Así ningún agente tiene
+que asociar códigos con nombres de memoria. `15` es el departamento de Lima completo (Lima Metropolitana y Lima
+provincias); el Callao (`07`) va aparte.
+
 ## Limitaciones
 
 - Son estimaciones puntuales: no se calculan errores estándar ni intervalos de confianza (la muestra es compleja, con

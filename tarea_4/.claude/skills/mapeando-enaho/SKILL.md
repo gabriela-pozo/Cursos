@@ -29,6 +29,10 @@ Skill) y espera a que termine bien; después sigue con los pasos de abajo. Si `l
 
 - **Une por código, nunca por nombre:** `ubigeo[:2]` (columna `categoria` de `indicadores.csv`) con `FIRST_IDDP`, ambos
   como texto de 2 caracteres. «APURIMAC» no es «Apurímac».
+- **Nombres desde el diccionario, no de memoria:** el nombre de cada departamento es la columna `nombre_categoria` de
+  `indicadores.csv` (diccionario oficial de `limpiando-enaho`). El script lo contrasta con `NOMBDEP` del GeoJSON y se
+  detiene si no coinciden. El mapa rotula cada departamento con su código y su %, y al costado lleva la clave código ·
+  nombre · %. Para nombrar un departamento en la respuesta, tómalo de ahí; no lo deduzcas del código.
 - **25 unidades con dato, Lima (15) y Callao (07) separados.** El script lo verifica y se detiene si no se cumple.
 - **Siempre ponderado:** los valores son el método **oficial del INEI** (hogares, `factor07 × mieperho`), el mismo de
   `validacion.txt`. No recalcules nada a mano.

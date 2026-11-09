@@ -3,7 +3,7 @@
 Generado por `informes/generar_trazabilidad.py`. **Toda cifra del informe debe estar en este archivo**: `informes/verificar_informe.py` falla si el informe contiene un número que no aparece aquí.
 
 - Registro de la ejecución: `evidencias_ia/integracion/ejecucion.jsonl` (sha256 `ac126c881e275fc6`)
-- Indicadores ENAHO: `salidas/indicadores.csv` (sha256 `cd679f1ca3c3411c`)
+- Indicadores ENAHO: `salidas/indicadores.csv` (sha256 `2308ca2a28cdc5c8`)
 - Las cifras del BCRP se tomaron de las respuestas de las herramientas MCP en ese registro; no se reconsultó el BCRP para obtenerlas. Solo la sección H consulta las fuentes de nuevo, y lo declara.
 - Los valores derivados se calculan con los valores sin redondear: restar a mano los valores redondeados puede diferir en una centésima.
 - Limitación de esta verificación: acepta un número del informe si aparece en cualquier parte de este archivo; no comprueba que se use en el contexto correcto. Eso lo revisa la lectura del informe.

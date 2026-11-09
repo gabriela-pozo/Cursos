@@ -26,6 +26,10 @@ ponderación, validación) está en el script; tú solo lo ejecutas y lees el re
 
 ## Reglas que debes respetar al usar los resultados
 
+- **Nombres de departamento, del diccionario.** El código `ubigeo[:2]` se asocia con su nombre solo mediante
+  [referencias/departamentos_ubigeo.csv](referencias/departamentos_ubigeo.csv) (25 códigos, Lima `15` y Callao `07`
+  separados). `indicadores.csv` ya trae la columna `nombre_categoria` y el parquet `nombre_departamento`: úsalas y
+  nunca deduzcas un nombre de memoria.
 - **Siempre ponderado.** Nunca promedios simples: la pobreza sin ponderar sale distinta (el archivo de validación lo muestra).
 - **Dos métodos, rotulados** (columna `metodo` de `indicadores.csv`):
   - `hogares_factor07_x_mieperho`: método oficial del INEI y el que reproduce las cifras de referencia. Úsalo para

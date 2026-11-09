@@ -3,7 +3,8 @@
     uv run .claude/skills/mapeando-enaho/scripts/mapear.py
 
 Une los indicadores con los límites departamentales por CÓDIGO: salidas/indicadores.csv (categoria = ubigeo[:2]) con
-FIRST_IDDP del GeoJSON. Nunca por nombre. Los valores son estimaciones PONDERADAS del método oficial del INEI
+FIRST_IDDP del GeoJSON. Nunca por nombre. El nombre de cada departamento viene de indicadores.csv (nombre_categoria,
+diccionario oficial de limpiando-enaho) y solo se contrasta con NOMBDEP del GeoJSON. Los valores son estimaciones PONDERADAS del método oficial del INEI
 (hogares, factor07 x mieperho), calculadas por la skill limpiando-enaho: aquí no se calcula ninguna cifra a mano.
 
 Se detiene con error explícito si: falta la base procesada (salidas/personas_2024.parquet), validacion.txt registra una
@@ -14,6 +15,7 @@ mapas/comparacion_referencia_2024.csv.
 import argparse
 import sys
 import textwrap
+import unicodedata
 from pathlib import Path
 
 import geopandas as gpd
@@ -30,17 +32,15 @@ OFICIAL = "hogares_factor07_x_mieperho"
 DEPARTAMENTOS = {f"{i:02d}" for i in range(1, 26)}
 TOLERANCIA_REF = 0.05   # la referencia de la sesión 16 está redondeada a 1 decimal: ±0.05 pp
 FUENTE = "Fuente: INEI, ENAHO 2024 (módulos 34 y 02). Elaboración propia."
-ACENTOS = {"Ancash": "Áncash", "Apurimac": "Apurímac", "Huanuco": "Huánuco", "Junin": "Junín", "San Martin": "San Martín"}
 
 
 class Falla(Exception):
     """Error explícito que detiene el proceso."""
 
 
-def nombre_departamento(nombdep: str) -> str:
-    """«SAN MARTIN» -> «San Martín», «MADRE DE DIOS» -> «Madre de Dios»."""
-    t = " ".join(w.lower() if w in ("DE", "DEL", "LA") and i else w.capitalize() for i, w in enumerate(nombdep.split()))
-    return ACENTOS.get(t, t)
+def clave_nombre(texto: str) -> str:
+    """«San Martín» -> «SAN MARTIN»: solo para comparar el nombre del diccionario con NOMBDEP del GeoJSON."""
+    return "".join(c for c in unicodedata.normalize("NFD", texto) if unicodedata.category(c) != "Mn").upper().strip()
 
 
 def cargar(raiz: Path):
@@ -65,7 +65,10 @@ def unir(ind: pd.DataFrame, geo: gpd.GeoDataFrame):
     """Une por código (categoria = ubigeo[:2] con FIRST_IDDP) y exige 25 unidades con dato."""
     geo = geo.assign(FIRST_IDDP=geo["FIRST_IDDP"].astype(str).str.zfill(2))
     d = ind[(ind["dimension"] == "departamento") & (ind["metodo"] == OFICIAL) & (ind["indicador"] == "pobreza monetaria")]
-    d = d[["categoria", "valor_pct", "n_muestra"]]
+    if "nombre_categoria" not in d.columns:
+        raise Falla("indicadores.csv no trae nombre_categoria (diccionario oficial de departamentos). "
+                    "Vuelva a ejecutar la skill limpiando-enaho.")
+    d = d[["categoria", "nombre_categoria", "valor_pct", "n_muestra"]]
     if set(geo["FIRST_IDDP"]) != DEPARTAMENTOS:
         raise Falla(f"El GeoJSON no trae los 25 códigos 01-25 en FIRST_IDDP: {sorted(set(geo['FIRST_IDDP']))}")
     try:
@@ -78,7 +81,12 @@ def unir(ind: pd.DataFrame, geo: gpd.GeoDataFrame):
         raise Falla(f"La unión por código debe dar 25 unidades con dato; sin dato: {sin_dato}; indicadores sin geometría: {sobran}.")
     if not {"07", "15"} <= set(m["FIRST_IDDP"]):
         raise Falla("Lima (15) y Callao (07) deben estar separados.")
-    m["nombre"] = m["NOMBDEP"].map(nombre_departamento)
+    # El nombre viene del diccionario oficial (vía indicadores.csv); el GeoJSON solo sirve para comprobarlo.
+    m["nombre"] = m["nombre_categoria"]
+    distintos = m[m["nombre"].map(clave_nombre) != m["NOMBDEP"].map(clave_nombre)]
+    if not distintos.empty:
+        raise Falla("El diccionario de departamentos y el GeoJSON no coinciden para los códigos "
+                    f"{distintos[['FIRST_IDDP', 'nombre', 'NOMBDEP']].values.tolist()}.")
     return m
 
 
@@ -107,7 +115,7 @@ def dibujar(m: gpd.GeoDataFrame, nac: float, raiz: Path) -> Path:
               f"{alto['nombre']}; {sobre} de 25 departamentos superan el promedio nacional ({nac:.1f} %)")
     fig = Figure(figsize=(9, 10.6))
     ax = fig.add_axes([0.04, 0.12, 0.70, 0.74])
-    cax = fig.add_axes([0.80, 0.25, 0.03, 0.5])
+    cax = fig.add_axes([0.80, 0.60, 0.03, 0.26])
     fig.text(0.04, 0.975, "\n".join(textwrap.wrap(titulo, 78)), fontsize=12.5, fontweight="bold", va="top")
     fig.text(0.04, 0.905, "Pobreza monetaria por departamento, % de personas · Perú, 2024 · Método oficial del INEI\n"
              "(hogares, factor07 × mieperho)", fontsize=9, color="#444444", va="top")
@@ -120,17 +128,22 @@ def dibujar(m: gpd.GeoDataFrame, nac: float, raiz: Path) -> Path:
         xy, offset = (p.x, p.y), None
         if f["FIRST_IDDP"] == "07":   # Callao es muy pequeño: su etiqueta va al mar, con una línea
             offset = (-38, -6)
-        t = ax.annotate(f"{f['valor_pct']:.1f}", xy, xytext=offset, textcoords="offset points" if offset else "data",
-                        fontsize=7.5, ha="center", va="center", color="white" if oscuro and not offset else "#222222",
+        t = ax.annotate(f"{f['FIRST_IDDP']}\n{f['valor_pct']:.1f}", xy, xytext=offset, textcoords="offset points" if offset else "data",
+                        fontsize=7, linespacing=0.95, ha="center", va="center", color="white" if oscuro and not offset else "#222222",
                         arrowprops={"arrowstyle": "-", "color": "#555555", "lw": 0.6} if offset else None, zorder=6)
         if not offset:
             t.set_path_effects([pe.withStroke(linewidth=1.6, foreground="#00000055" if oscuro else "#ffffffaa")])
     barra = fig.colorbar(matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax)
     barra.set_label("% de personas en pobreza monetaria", fontsize=9)
-    barra.set_ticks(range(0, int(vmax) + 1, 5))
+    barra.set_ticks(range(0, int(vmax) + 1, 10))
+    # Clave código -> nombre (diccionario oficial de limpiando-enaho), para leer el mapa sin deducir nombres
+    fig.text(0.78, 0.565, "Código · departamento · %", fontsize=7.5, fontweight="bold", va="top")
+    for i, (_, f) in enumerate(m.sort_values("FIRST_IDDP").iterrows()):
+        fig.text(0.78, 0.545 - i * 0.0165, f"{f['FIRST_IDDP']}  {f['nombre']}  {f['valor_pct']:.1f}", fontsize=7, va="top")
     fig.text(0.04, 0.075, "\n".join(textwrap.wrap(
         "Estimaciones ponderadas. Unión por código: ubigeo[:2] = FIRST_IDDP (25 unidades; Lima 15 y Callao 07 por "
-        "separado). La escala parte de 0. Las diferencias son descriptivas y no establecen causas.", 110)),
+        "separado). En el mapa, código y % de cada departamento; los nombres vienen del diccionario oficial de ubigeo "
+        "(limpiando-enaho). La escala parte de 0. Las diferencias son descriptivas y no establecen causas.", 110)),
         fontsize=8, color="#666666", va="top")
     fig.text(0.04, 0.025, FUENTE, fontsize=8, color="#666666")
     destino = raiz / "mapas"
