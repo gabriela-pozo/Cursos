@@ -1,0 +1,26 @@
+codigo,nombre,calculado_pct,referencia_sesion16_pct,diferencia_pp,coincide
+01,Amazonas,25.7488,25.7000,0.0488,True
+02,Áncash,22.7746,22.8000,-0.0254,True
+03,Apurímac,23.9587,24.0000,-0.0413,True
+04,Arequipa,15.7844,15.8000,-0.0156,True
+05,Ayacucho,32.7633,32.8000,-0.0367,True
+06,Cajamarca,45.0069,45.0000,0.0069,True
+07,Callao,33.8599,33.9000,-0.0401,True
+08,Cusco,18.5413,18.5000,0.0413,True
+09,Huancavelica,33.4034,33.4000,0.0034,True
+10,Huánuco,38.9626,39.0000,-0.0374,True
+11,Ica,6.0142,6.0000,0.0142,True
+12,Junín,18.4994,18.5000,-0.0006,True
+13,La Libertad,30.1903,30.2000,-0.0097,True
+14,Lambayeque,14.0406,14.0000,0.0406,True
+15,Lima,27.0689,27.1000,-0.0311,True
+16,Loreto,42.9726,43.0000,-0.0274,True
+17,Madre de Dios,11.1478,11.1000,0.0478,True
+18,Moquegua,10.9682,11.0000,-0.0318,True
+19,Pasco,38.9720,39.0000,-0.0280,True
+20,Piura,31.8610,31.9000,-0.0390,True
+21,Puno,39.9381,39.9000,0.0381,True
+22,San Martín,22.0215,22.0000,0.0215,True
+23,Tacna,23.9890,24.0000,-0.0110,True
+24,Tumbes,26.9012,26.9000,0.0012,True
+25,Ucayali,27.0701,27.1000,-0.0299,True
