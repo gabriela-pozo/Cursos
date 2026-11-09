@@ -127,6 +127,9 @@ uv run .claude/skills/limpiando-enaho/scripts/limpiar.py
 uv run .claude/skills/graficando-enaho/scripts/graficar.py --grafico todos
 uv run .claude/skills/mapeando-enaho/scripts/mapear.py
 
+# Dashboard HTML con los resultados (lee salidas/indicadores.csv y mapas/comparacion_referencia_2024.csv)
+uv run salidas/generar_dashboard.py
+
 # Pruebas del servidor MCP (10 pruebas; requieren conexión a internet)
 uv run pytest
 
@@ -215,4 +218,4 @@ Los registros se sanean con `informes/sanear_registro.py` antes de guardarse (oc
 - **Robustez ante fallos del BCRP.** El servidor usa caché en memoria y en disco, pausa entre pedidos, hasta 6 reintentos con espera creciente y errores explícitos; nunca rellena ni inventa datos.
 - **Análisis al desactivar herramientas.** El experimento A/B de la Parte 4 compara 10 preguntas sin herramientas (modo A) y con MCP y Skills (modo B); los resultados están en la sección 9 y en `evaluacion/comparacion.md`.
 
-No se implementó ningún dashboard de resultados.
+- **Dashboard HTML autocontenido.** `uv run salidas/generar_dashboard.py` genera `salidas/dashboard.html` (un solo archivo con CSS y JavaScript incrustados; se abre con doble clic). Lee solo `salidas/indicadores.csv` y `mapas/comparacion_referencia_2024.csv`, sin cifras escritas a mano, y termina con un error claro si falta un archivo, una columna o una categoría. Muestra tarjetas de pobreza nacional, urbana y rural (método oficial de hogares) y por sexo (método por personas), una tabla ordenable de los 25 departamentos y las imágenes ya generadas (gráfico del BCRP, gráficos de la ENAHO y el mapa) con rutas relativas. Cada cifra indica su método y su fuente (INEI, ENAHO 2024; BCRP). Se comprobó cargándolo en el navegador: 25 filas, 5 tarjetas, 5 imágenes cargadas, sin desborde horizontal y orden de columnas correcto (no se pudo tomar una captura de pantalla por un fallo de la herramienta del navegador).
