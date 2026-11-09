@@ -29,6 +29,9 @@ Skill) y espera a que termine bien; después sigue con los pasos de abajo. Si `l
 
 - **Siempre ponderado.** Las cifras vienen de `salidas/indicadores.csv`, que genera `limpiando-enaho` con los factores de
   expansión. Nunca hagas promedios simples ni recalcules la pobreza a mano.
+- **Nombres de departamento, del diccionario.** El gráfico por departamento se rotula con la columna `nombre_categoria`
+  de `indicadores.csv` (diccionario oficial de `limpiando-enaho`). Para nombrar un departamento en la respuesta, tómalo
+  de ahí; nunca lo deduzcas del código.
 - **Método de cada gráfico:**
   - Área y departamento: método **oficial del INEI** (hogares, `factor07 × mieperho`), el mismo de `validacion.txt`.
   - **Sexo: cálculo por personas (`facpob07`)**, porque el sexo es un atributo de la persona. El gráfico lo rotula así y

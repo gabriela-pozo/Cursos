@@ -1,6 +1,6 @@
 # Mejoras pendientes
 
-Mejoras para reutilizar el proyecto con otros años, otras fuentes y otras encuestas. **Ninguna está implementada.** Las estimaciones de esfuerzo son aproximadas y suponen una persona que conoce el código.
+Mejoras para reutilizar el proyecto con otros años, otras fuentes y otras encuestas. **La 2 (título de `graficar_serie`) ya está implementada (commit `acb310c`); las demás siguen pendientes.** Las estimaciones de esfuerzo son aproximadas y suponen una persona que conoce el código.
 
 ## 1. Parametrizar el año en las Skills
 
@@ -9,7 +9,9 @@ Mejoras para reutilizar el proyecto con otros años, otras fuentes y otras encue
 - **Cómo.** Recibir `--anio` por línea de comandos; leer las referencias de un CSV por año en lugar de constantes; si un año no tiene referencia, marcar la verificación como `OMITIDA` y decirlo, no aprobarla.
 - **Esfuerzo.** Medio: 1 a 2 días. El grueso es conseguir y validar las cifras oficiales de cada año nuevo, no el código.
 
-## 2. Corregir el título de `graficar_serie`
+## 2. Corregir el título de `graficar_serie` (implementada)
+
+- **Estado.** Implementada en el commit `acb310c`: el título ahora incluye el máximo y el mínimo con su período. La Figura 1 del informe no se regeneró y conserva el título antiguo. Lo que sigue describe el problema original.
 
 - **Problema.** El título automático describe solo el primer y el último dato («subió de 1.89 a 1.97») y no refleja el pico intermedio. Para `PN01273PM`, el máximo fue 8.81 % en 2022-06. El informe ya lo declara como limitación.
 - **Archivo que tocaría.** `mcp/server.py`, función `graficar_serie` (donde se calcula `verbo` y `titulo`), y su prueba en `mcp/test_server.py`.
@@ -39,7 +41,7 @@ Mejoras para reutilizar el proyecto con otros años, otras fuentes y otras encue
 
 ## Orden sugerido
 
-1. Título de `graficar_serie` (rápido y sin riesgo).
+1. ~~Título de `graficar_serie`~~ (ya implementada).
 2. Parametrizar el año.
 3. Funciones reutilizables.
 4. Errores estándar.

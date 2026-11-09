@@ -12,11 +12,11 @@ Informe elaborado con un agente de Claude Code que coordinó el servidor MCP del
 
 ## 2. Fuentes y metodología
 
-**BCRP.** Serie `PN01273PM`, *Índice de precios Lima Metropolitana (var% 12 meses) - IPC*, mensual, de 2020-01 a 2024-12 (60 observaciones). Se consultó con el servidor MCP `bcrp`, usando 5 herramientas distintas: `buscar_series` (para ubicar el código), el recurso `bcrp://serie/PN01273PM` (su ficha), `resumen` (cifras calculadas por Python), `serie` (los valores mensuales) y `graficar_serie` (el gráfico). Fuente de los datos: API de estadísticas del BCRP.
+**BCRP.** Serie `PN01273PM`, *Índice de precios Lima Metropolitana (var% 12 meses) - IPC*, mensual, de 2020-01 a 2024-12 (60 observaciones). Se consultó con el servidor MCP `bcrp`, usando 4 herramientas y 1 recurso: `buscar_series` (para ubicar el código), el recurso `bcrp://serie/PN01273PM` (su ficha), `resumen` (cifras calculadas por Python), `serie` (los valores mensuales) y `graficar_serie` (el gráfico). Fuente de los datos: API de estadísticas del BCRP.
 
 **ENAHO 2024 (INEI).** Módulos 34 (sumaria, hogares) y 02 (miembros). La skill `limpiando-enaho` filtra residentes habituales, une personas y hogares con `merge(validate="m:1")`, construye departamento (`ubigeo[:2]`) y área (urbano si `estrato` ≤ 5) y valida la base: 108,664 residentes habituales y 33,691 hogares, con 16 verificaciones aprobadas y 0 fallidas. Los porcentajes de pobreza son **estimaciones ponderadas** con el método oficial del INEI (a nivel de hogar, `factor07 × mieperho`), expresadas como % de personas. Las skills `graficando-enaho` y `mapeando-enaho` produjeron los gráficos y el mapa; el mapa une por código (`ubigeo[:2]` con `FIRST_IDDP`), no por nombre, y reproduce los 25 departamentos de la referencia de la sesión 16.
 
-**Integración.** Todo ocurrió en una sola ejecución de `claude -p` (16 llamadas a herramientas, 5 herramientas MCP y 3 skills distintas). Al empezar no existía `salidas/personas_2024.parquet`: el agente ejecutó `limpiando-enaho` antes de graficar y mapear. El registro está en `evidencias_ia/integracion/ejecucion.jsonl`. Las cifras del BCRP se tomaron de las respuestas de las herramientas en ese registro, sin reconsultar la API; la sección de verificación sí la consulta de nuevo, y lo declara.
+**Integración.** Todo ocurrió en una sola ejecución de `claude -p` (16 llamadas a herramientas; del MCP, 4 herramientas y 1 recurso; y 3 skills distintas). Al empezar no existía `salidas/personas_2024.parquet`: el agente ejecutó `limpiando-enaho` antes de graficar y mapear. El registro está en `evidencias_ia/integracion/ejecucion.jsonl`. Las cifras del BCRP se tomaron de las respuestas de las herramientas en ese registro, sin reconsultar la API; la sección de verificación sí la consulta de nuevo, y lo declara.
 
 ## 3. Resultados
 
@@ -34,7 +34,7 @@ La brecha entre el departamento con mayor pobreza y el de menor pobreza es de 39
 
 ### Hallazgo 4: la dispersión entre departamentos es mayor que la brecha entre áreas
 
-Solo 3 departamentos (Cajamarca, Loreto y Puno) tienen una pobreza mayor que la rural nacional (39.3 %), y 11 tienen una pobreza menor que la urbana nacional (24.8 %). La brecha entre extremos departamentales (39.0 puntos porcentuales) es más grande que la brecha entre áreas (14.5 puntos porcentuales). Lima (15) y Callao (07), que el mapa mantiene separados, tienen 27.1 % y 33.9 %: el Callao queda por encima del promedio nacional y Lima apenas por debajo del 27.6 % nacional, aunque no se calcula aquí si esa diferencia es estadísticamente distinta de cero.
+Solo 3 departamentos (Cajamarca, Loreto y Puno) tienen una pobreza mayor que la rural nacional (39.3 %), y 11 tienen una pobreza menor que la urbana nacional (24.8 %). La brecha entre extremos departamentales (39.0 puntos porcentuales) es más grande que la brecha entre áreas (14.5 puntos porcentuales). Lima (15) y Callao (07), que el mapa mantiene separados, tienen 27.1 % y 33.9 %: como estimaciones puntuales, el Callao queda por encima del promedio nacional y Lima apenas por debajo del 27.6 % nacional. No se calcula aquí si alguna de esas dos diferencias es estadísticamente distinta de cero: ninguna estimación tiene intervalo de confianza.
 
 ## 4. Visualizaciones
 
@@ -54,6 +54,8 @@ Solo 3 departamentos (Cajamarca, Loreto y Puno) tienen una pobreza mayor que la 
 
 *Figura 4.* Mapa de pobreza monetaria por departamento, ENAHO 2024, con los 25 departamentos. Generada con `mapeando-enaho`.
 
+> **Nota sobre la Figura 4.** El mapa se regeneró el 8 de noviembre, después de la ejecución de la Parte 3, para añadir la leyenda con los nombres del diccionario oficial de departamentos (código · nombre · %). Las cifras son idénticas a las de esa ejecución: `mapas/comparacion_referencia_2024.csv` no cambió. Las figuras 1 a 3 son las de la ejecución.
+
 ## 5. Interpretación
 
 La inflación a 12 meses de Lima Metropolitana siguió una trayectoria en forma de colina: se movió alrededor de 1.83 % en promedio durante 2020, escaló durante 2021 y 2022 hasta su máximo, bajó con fuerza en 2023 y terminó 2024 en un nivel prácticamente igual al de diciembre de 2020 (1.97 % en ambos casos). Los promedios anuales muestran que el año más alto fue 2022 y que 2024 volvió a un nivel cercano al de 2020.
@@ -70,7 +72,7 @@ Los dos conjuntos de resultados se presentan juntos porque la pregunta lo pide, 
 - **Sin intervalos de confianza.** Son estimaciones puntuales. Las muestras departamentales varían mucho: desde 603 hogares en Madre de Dios hasta 4,544 en Lima.
 - **Método de ponderación.** Se usó el oficial del INEI (hogares, `factor07 × mieperho`). El cálculo por personas con `facpob07` difiere unas décimas; la diferencia está documentada en `salidas/validacion.txt`.
 - **Datos del BCRP.** Las cifras corresponden a la consulta hecha durante la ejecución; la ficha del catálogo indica como última actualización 2026-10-08 y el BCRP puede revisar sus series.
-- **Título del gráfico del BCRP.** El título automático de la Figura 1 describe los extremos del período ("subió de 1.89 a 1.97") y no refleja el pico intermedio; la forma de la serie se ve en el propio gráfico y en los hallazgos.
+- **Título del gráfico del BCRP.** El título automático de la Figura 1 describe los extremos del período ("subió de 1.89 a 1.97") y no refleja el pico intermedio; la forma de la serie se ve en el propio gráfico y en los hallazgos. Después de la ejecución se corrigió `graficar_serie` para que el título incluya el máximo y el mínimo con su período, pero la Figura 1 no se regeneró, para conservar la evidencia de la ejecución.
 - **Alcance de la verificación automática.** `verificar_informe.py` comprueba que cada número exista en `trazabilidad.md`, no que se use en el contexto correcto; esa revisión es de lectura.
 - **Fallos de herramientas.** En esta ejecución ninguna herramienta falló. Si alguna lo hubiera hecho, el informe lo habría declarado en lugar de rellenar cifras.
 
@@ -90,19 +92,7 @@ Se compararon cifras del informe con la fuente consultada por un camino independ
 
 Además se compararon uno a uno los 60 periodos de la serie con la API cruda; la diferencia máxima fue 0.000000. Las diferencias entre el valor del informe y el exacto son solo de redondeo.
 
-# Verificación manual de cifras
-
-Verificación hecha por la estudiante, de forma independiente al agente,
-el 8-nov-2026.
-
-| # | Afirmación del informe | Valor del informe | Valor verificado | Fuente / procedimiento | ¿Coincide? | Diferencia |
-|---|---|---|---|---|---|---|
-| 1 | Inflación a 12 meses en Lima, enero 2020 | 1.89 % | 1.89 % | BCRP, serie PN01273PM, consulta directa en la web: https://estadisticas.bcrp.gob.pe/estadisticas/series/mensuales/resultados/PN01273PM/html/2020-1/2026-10/ | Sí | Ninguna |
-| 2 | Mínimo de inflación 2020-2024 (jun-2020) | 1.60 % | 1.60 % | Misma consulta en el BCRP | Sí | Ninguna |
-| 3 | Pobreza urbana 2024 | 24.8 % | 24.8 % | Presentación del jefe del INEI (pág. 9): https://cdn.www.gob.pe/uploads/document/file/8037678/6749463-presentacion-del-jefe-del-inei.pdf?v=1748034226 | Sí | Ninguna |
-| 4 | Pobreza rural 2024 | 39.3 % | 39.3 % | Misma presentación del INEI (pág. 9) | Sí | Ninguna |
-| 5 | Brecha entre el departamento más y menos pobre | 39.0 pp | 39.0 pp (Cajamarca 45.0 % − Ica 6.0 %) | Misma presentación del INEI (pág. 10), cifras departamentales; la resta la hice a mano | Sí | Ninguna |
-| 6 | Ranking departamental: más altos Cajamarca 45.0, Loreto 43.0, Puno 39.9, Pasco 39.0, Huánuco 39.0; más bajos Ica 6.0, Moquegua 11.0, Madre de Dios 11.1, Lambayeque 14.0 | Igual | Igual | Misma presentación del INEI (pág. 10) | Sí | Ninguna |
+**Verificación manual.** Además, la estudiante verificó por su cuenta, sin el agente, 6 afirmaciones del informe: dos cifras de la inflación (consulta directa en la web del BCRP) y la pobreza urbana, rural y departamental (presentación del jefe del INEI). Todas coincidieron. La tabla con fuentes y procedimiento está en [`verificacion.md`](verificacion.md).
 
 ## 8. Reproducibilidad
 
@@ -115,6 +105,8 @@ el 8-nov-2026.
 ```
 uv run datos/descargar.py
 uv run .claude/skills/limpiando-enaho/scripts/limpiar.py
+uv run .claude/skills/graficando-enaho/scripts/graficar.py --grafico todos
+uv run .claude/skills/mapeando-enaho/scripts/mapear.py
 uv run informes/generar_trazabilidad.py
 uv run informes/verificar_informe.py
 ```
