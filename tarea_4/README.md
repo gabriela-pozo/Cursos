@@ -202,6 +202,6 @@ Resultado: gráfico de la serie del BCRP, gráficos de pobreza por área y por d
 | `integracion/` | Prompt, comando y registro saneado (`ejecucion.jsonl`) de la ejecución completa |
 | `evaluacion/` | Registros `.jsonl` de cada pregunta y modo de la evaluación |
 
-Verificación manual: la estudiante comprobó 6 afirmaciones del informe por su cuenta contra el BCRP (serie `PN01273PM`) y la presentación del jefe del INEI. Está al final de [`informes/informe_final.md`](informes/informe_final.md), en la sección «Verificación manual de cifras».
+Verificación manual: la estudiante comprobó 6 afirmaciones del informe por su cuenta contra el BCRP (serie `PN01273PM`) y la presentación del jefe del INEI. Está en [`informes/verificacion.md`](informes/verificacion.md).
 
 Los registros se sanean con `informes/sanear_registro.py` antes de guardarse (oculta rutas personales y posibles credenciales).
