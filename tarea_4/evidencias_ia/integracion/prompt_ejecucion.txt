@@ -1,0 +1,6 @@
+Pregunta de investigación: ¿Cómo evolucionó la inflación a 12 meses en Lima entre 2020 y 2024, y qué diferencias territoriales (urbano/rural y departamental) presentaba la pobreza monetaria en 2024?
+
+Reúne la evidencia con tus herramientas, en este orden, y NO redactes el informe (solo reúne y genera los insumos):
+1. BCRP, con el servidor MCP bcrp: (a) busca la serie del IPC de Lima Metropolitana, variación porcentual a 12 meses, con buscar_series; (b) lee su ficha con el recurso bcrp://serie/PN01273PM; (c) calcula el resumen con resumen(PN01273PM, desde 2020-01, hasta 2024-12); (d) descarga los valores mensuales con serie(PN01273PM, desde 2020-01, hasta 2024-12); (e) genera el gráfico con graficar_serie(PN01273PM, desde 2020-01, hasta 2024-12). Si una herramienta falla o no devuelve datos, dilo tal cual y no inventes.
+2. ENAHO 2024, con las skills del proyecto: genera el gráfico de pobreza urbano/rural, el gráfico de pobreza por departamento y el mapa de pobreza por departamento. Si falta la base procesada, ejecuta primero limpiando-enaho.
+Ninguna cifra sale de tu memoria: todo viene de las herramientas. Al final, lista los archivos generados y cualquier error o limitación que encontraste.

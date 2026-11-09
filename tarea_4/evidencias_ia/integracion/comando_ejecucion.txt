@@ -1,0 +1,7 @@
+# Comando usado para la ejecución de la Parte 3 (desde la carpeta tarea_4/, con salidas/personas_2024.parquet borrado antes).
+# El registro crudo se guardó fuera del repo y se saneó con informes/sanear_registro.py (oculta rutas personales y posibles
+# credenciales): el resultado es evidencias_ia/integracion/ejecucion.jsonl
+claude -p "$(cat evidencias_ia/integracion/prompt_ejecucion.txt)" --output-format stream-json --verbose \
+  --mcp-config .mcp.json --strict-mcp-config --no-session-persistence \
+  --allowedTools "Skill" "Read" "Bash(uv run:*)" "mcp__bcrp" "ReadMcpResourceTool" > registro_crudo.jsonl
+uv run informes/sanear_registro.py registro_crudo.jsonl evidencias_ia/integracion/ejecucion.jsonl
