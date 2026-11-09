@@ -4,7 +4,9 @@
 
 Une los indicadores con los límites departamentales por CÓDIGO: salidas/indicadores.csv (categoria = ubigeo[:2]) con
 FIRST_IDDP del GeoJSON. Nunca por nombre. El nombre de cada departamento viene de indicadores.csv (nombre_categoria,
-diccionario oficial de limpiando-enaho) y solo se contrasta con NOMBDEP del GeoJSON. Los valores son estimaciones PONDERADAS del método oficial del INEI
+diccionario oficial de limpiando-enaho) y solo se contrasta con NOMBDEP del GeoJSON: es una VERIFICACIÓN CRUZADA de que
+cada geometría corresponde al código que lleva (detecta, p. ej., Lima y Callao con los códigos cambiados); limpiar.py no
+abre el GeoJSON, así que no la cubre. Los valores son estimaciones PONDERADAS del método oficial del INEI
 (hogares, factor07 x mieperho), calculadas por la skill limpiando-enaho: aquí no se calcula ninguna cifra a mano.
 
 Se detiene con error explícito si: falta la base procesada (salidas/personas_2024.parquet), validacion.txt registra una
@@ -81,7 +83,8 @@ def unir(ind: pd.DataFrame, geo: gpd.GeoDataFrame):
         raise Falla(f"La unión por código debe dar 25 unidades con dato; sin dato: {sin_dato}; indicadores sin geometría: {sobran}.")
     if not {"07", "15"} <= set(m["FIRST_IDDP"]):
         raise Falla("Lima (15) y Callao (07) deben estar separados.")
-    # El nombre viene del diccionario oficial (vía indicadores.csv); el GeoJSON solo sirve para comprobarlo.
+    # Verificación cruzada: el nombre viene del diccionario oficial; NOMBDEP del GeoJSON solo sirve para comprobar
+    # que la geometría con el código xx es de verdad el departamento xx (la unión se hizo por código).
     m["nombre"] = m["nombre_categoria"]
     distintos = m[m["nombre"].map(clave_nombre) != m["NOMBDEP"].map(clave_nombre)]
     if not distintos.empty:
